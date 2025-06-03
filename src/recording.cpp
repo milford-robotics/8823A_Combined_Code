@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+int smplrt=50;
+
 int dumpSD(std::string fileName){
     
     std::ifstream inFile;
@@ -89,7 +91,7 @@ int recordTo(std::string fileName, std::vector<vex::motor> motors){
         outFile << std::endl;
 
         outFile.close();
-        vex::task::sleep(100);
+        vex::task::sleep(smplrt);
     }
     return 0;
 }
