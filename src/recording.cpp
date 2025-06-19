@@ -5,7 +5,6 @@
 
 int smplrt=50;
 
-
 int dumpSD(std::string fileName){
     
     std::ifstream inFile;
