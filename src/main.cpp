@@ -26,8 +26,9 @@ motor UpperIntake = motor(PORT10, ratio6_1, false);
 motor MiddleIntake = motor(PORT1, ratio6_1, true);
 motor LowerIntakeL = motor(PORT14, ratio6_1, false);
 motor LowerIntakeR = motor(PORT17, ratio6_1, true);
-rotation LeftEncoder = rotation(PORT8, true);
-rotation RightEncoder = rotation(PORT9, true);
+rotation LeftEncoder = rotation(PORT7, true);
+rotation RightEncoder = rotation(PORT8, true);
+rotation BackEncoder = rotation(PORT9, true);
 inertial InertialSensor = inertial(PORT15);
 
 
@@ -41,6 +42,7 @@ inertial InertialSensor = inertial(PORT15);
 /*  not every time that the robot is disabled.                               */
 /*---------------------------------------------------------------------------*/
 
+// LEAVE THIS!!! IF THE OTHER EQUATIONS WORK, THEN YOU CAN SCRAP THIS!!
 
     constexpr double gear_ratio = ((double)1/1);
     constexpr double encoder_wheel_radius = 1.375;
@@ -48,26 +50,22 @@ inertial InertialSensor = inertial(PORT15);
     constexpr double start_heading = 90;
 
     // defines x and y for later
-    double x = 0;
-    double y = 0;
+    float x = 0;
+    float y = 0;
 
-void odometry(double distance_traveled, double heading) {
+void odometry(double , double ) {
 
-    LeftFront.resetPosition();
-    LeftMiddle.resetPosition();
-    LeftRear.resetPosition();
-    RightFront.resetPosition();
-    RightMiddle.resetPosition();
-    RightRear.resetPosition();
+    LeftEncoder.resetPosition();
+    RightEncoder.resetPosition();
 
-    double previous_distance_traveled = 0;
+    float previous_distance_traveled = 0;
 
     while(1) {
         // Using std::fmod to preserve the "wraparound effect" of 0-360 degrees when considering the offset of start heading.
-        double heading = std::fmod((360 - InertialSensor.heading(vex::degrees)) + start_heading, 360); // finds the angle
-        double average_encoder_position = (LeftEncoder.position(vex::degrees) + RightEncoder.position(vex::degrees)) / 2; // finds the encoder position on the robot
-        double distance_traveled = (average_encoder_position / 360) * encoder_wheel_circumference; // pretty self explanatory
-        double change_in_distance = distance_traveled - previous_distance_traveled; // finds the distance traveled
+        float heading = std::fmod((360 - InertialSensor.heading(vex::degrees)) + start_heading, 360); // finds the angle
+        float average_encoder_position = (LeftEncoder.position(vex::degrees) + RightEncoder.position(vex::degrees)) / 2; // finds the encoder position on the robot
+        float distance_traveled = (average_encoder_position / 360) * encoder_wheel_circumference; // pretty self explanatory
+        float change_in_distance = distance_traveled - previous_distance_traveled; // finds the distance traveled
 
         x += change_in_distance * std::cos(heading * (M_PI / 180));
         y += change_in_distance * std::sin(heading * (M_PI / 180));
@@ -78,6 +76,35 @@ void odometry(double distance_traveled, double heading) {
         vex::this_thread::sleep_for(10);
     }
 }
+
+/*void Teo_Odometry () {
+
+  int side_encoder_distance; // The distance between the center of the robot and the left/right encoders
+  int back_encoder_distance; // The distance between the center of the robot and the back encoder
+
+  // side_encoder_distance = 
+  // back_encoder_distance = 
+
+  double Theta = (RightEncoder.angle() - LeftEncoder.angle()) / (2 * side_encoder_distance); // The angle of the arc
+  // The radius of the movement in relation to the center of the robot
+  double R1 = (side_encoder_distance * (RightEncoder.angle() + LeftEncoder.angle())) / (RightEncoder.angle() - LeftEncoder.angle());
+  double R2 = (BackEncoder.angle() / Theta) - back_encoder_distance; // The radius of the movement as read by the back encoder
+  double R3 = R1 - R2; // The difference between the two radii (radiuses for dumbies), represents the amount the robot drifted during the turn
+  
+  // The estimated position of the robot only taking into account the left and right encoders
+  double X1 = R1 * (std::cos(Theta) - 1);
+  double Y1 = R1 * (std::sin(Theta));
+  // The estimated position of the robot taking into account all encoders, this is offset by theta/2
+  double X2 = X1 + R3 * std::sin(Theta);
+  double Y2 = Y1 + R3 * (1 - std::cos(Theta));
+  // The estimated position of the robot fixing the theta/2 offset
+  double X3 = (((X2 - X1) * (std::cos(Theta / 2))) - ((Y2 - Y1) * (std::sin(Theta / 2)) + X1));
+  double Y3 = (((X2 - X1) * (std::sin(Theta / 2))) + ((Y2 - Y1) * (std::cos(Theta / 2)) + Y1));
+
+  // Maybe reset the rotation sensors if it's necessary (i don't know yet)
+
+  vex::this_thread::sleep_for(10);
+} */
 
 void StopDriveTrain (){ // stop motors
   LeftFront.stop ();
@@ -92,12 +119,12 @@ void StopDriveTrain (){ // stop motors
 void Drive (int dist, int speed){ // Drive function
   float rotations;
   rotations = 360.*dist/(encoder_wheel_circumference*gear_ratio);
-  LeftFront.spinFor (forward,rotations, degrees, speed, velocityUnits::pct, false);
-  LeftMiddle.spinFor (forward,rotations, degrees, speed, velocityUnits::pct, false);
-  LeftRear.spinFor (forward,rotations, degrees, speed, velocityUnits::pct, false);
-  RightFront.spinFor (forward,rotations, degrees, speed, velocityUnits::pct, false);
-  RightMiddle.spinFor (forward,rotations, degrees, speed, velocityUnits::pct, false);
-  RightRear.spinFor (forward,rotations, degrees, speed, velocityUnits::pct, false);
+  LeftFront.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
+  LeftMiddle.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
+  LeftRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
+  RightFront.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
+  RightMiddle.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
+  RightRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
 }
 
 void Turn (int angle){ // Turn function
@@ -148,14 +175,20 @@ void Turn (int angle){ // Turn function
   /*---------------------------------------------------------------------------*/
   
   void autonomous(void) {
+
     // Start our odometry thread.
     // The odometry loop will run in the background while we move.
+
+    /*vex::thread Teo_Odometry_thread([](){
+      Teo_Odometry(25,45);
+    });*/
+
     vex::thread odometry_thread([](){
       odometry(25,45);
     });
 
     // Print where we ended up on the coordinate plane onto the brain screen.
-    Brain.Screen.print("(%f, %f)", x, y);
+    // Brain.Screen.print("(%f, %f)", x, y);
 
 }
   
@@ -168,6 +201,11 @@ void Turn (int angle){ // Turn function
   /*                                                                           */
   /*  You must modify the code to add your own robot specific commands here.   */
   /*---------------------------------------------------------------------------*/
+
+  void RELEASE () {
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  }
   
   void usercontrol(void) {
     // User control code here, inside the loop
@@ -180,6 +218,8 @@ void Turn (int angle){ // Turn function
     while (1){
 
       wait (20, msec);
+
+      
   
       // Comms
       J1 = 0.5*Controller1.Axis1.position (percent); //slow down turns
@@ -199,13 +239,13 @@ void Turn (int angle){ // Turn function
       if(Controller1.ButtonR1.pressing()){
         LowerIntakeR.spin(forward,50,pct);
         LowerIntakeL.spin(forward,50,pct);
-        MiddleIntake.spin(forward,35,pct);
-        UpperIntake.spin(forward,5,pct);
-        // wait(1,sec);
-        // MiddleIntake.stop();
-        // UpperIntake.stop();
-        // wait(1,sec);
       }
+
+      if(Controller1.ButtonR1.pressing()){
+        MiddleIntake.spin(forward,100,pct);
+        UpperIntake.spin(forward,100,pct);
+      }
+      Controller1.ButtonR1.released(RELEASE);
 
       // Move Blocks Up
       if(Controller1.ButtonL1.pressing()){
