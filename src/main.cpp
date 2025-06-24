@@ -14,22 +14,7 @@ using namespace vex;
 vex::competition Competition;
 
 // A global instance of vex::brain used for printing to the V5 brain screen
-vex::brain       Brain;
-controller Controller1 = controller(primary);
-motor LeftFront = motor(PORT11, ratio6_1, true);
-motor LeftMiddle = motor(PORT12, ratio6_1, true);
-motor LeftRear = motor(PORT13, ratio6_1, true);
-motor RightFront = motor(PORT18, ratio6_1, false);
-motor RightMiddle = motor(PORT19, ratio6_1, false);
-motor RightRear = motor(PORT20, ratio6_1, false);
-motor UpperIntake = motor(PORT10, ratio6_1, false);
-motor MiddleIntake = motor(PORT1, ratio6_1, true);
-motor LowerIntakeL = motor(PORT14, ratio6_1, false);
-motor LowerIntakeR = motor(PORT17, ratio6_1, true);
-rotation LeftEncoder = rotation(PORT7, true);
-rotation RightEncoder = rotation(PORT8, true);
-rotation BackEncoder = rotation(PORT9, true);
-inertial InertialSensor = inertial(PORT15);
+
 
 
 /*---------------------------------------------------------------------------*/
@@ -105,6 +90,27 @@ void odometry(double , double ) {
 
   vex::this_thread::sleep_for(10);
 } */
+
+void moveToPoint(double ptX, double ptY){
+  //define variables
+  double xDiff=x-ptX;
+  double yDiff=y-ptY;
+  double targetAngle;
+  double targetDist;
+
+  //get angle to point
+  targetAngle=std::atan(xDiff/yDiff);
+  //turn to point
+  
+
+  //get distance to point
+  targetDist=std::sqrt(std::pow(xDiff,2)+std::pow(yDiff,2));
+  //drive there
+
+  std::printf("distance to point: %.3f   angle to point: %.3f rad %.3f deg \n", targetDist, targetAngle, (targetAngle*180/M_PI));
+
+
+}
 
 void StopDriveTrain (){ // stop motors
   LeftFront.stop ();
@@ -294,6 +300,9 @@ int main() {
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
 
+  vex::thread odometry_thread([](){
+      odometry(25,45);
+    });
   // Run the pre-autonomous function.
   pre_auton();
 
