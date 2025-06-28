@@ -8,10 +8,14 @@
 /*----------------------------------------------------------------------------*/
 #include "vex.h"
 #include <cmath>
+#include <robot-config.h>
 
 using namespace vex;
 
 vex::competition Competition;
+extern digital_out Tongue;
+
+void flipTongue(){ Tongue.set(!Tongue.value()); }
 
 // A global instance of vex::brain used for printing to the V5 brain screen
 
@@ -26,6 +30,8 @@ vex::competition Competition;
 /*  function is only called once after the V5 has been powered on and        */
 /*  not every time that the robot is disabled.                               */
 /*---------------------------------------------------------------------------*/
+
+
 
 // LEAVE THIS!!! IF THE OTHER EQUATIONS WORK, THEN YOU CAN SCRAP THIS!!
 
@@ -208,6 +214,8 @@ void Turn (int angle){ // Turn function
   /*  You must modify the code to add your own robot specific commands here.   */
   /*---------------------------------------------------------------------------*/
 
+
+  
   void RELEASE () {
   MiddleIntake.stop();
   UpperIntake.stop();
@@ -215,7 +223,7 @@ void Turn (int angle){ // Turn function
   
   void usercontrol(void) {
     // User control code here, inside the loop
-  
+  Controller1.ButtonX.pressed(flipTongue);
     Brain.Screen.clearScreen();
   
     int J1;
@@ -248,8 +256,8 @@ void Turn (int angle){ // Turn function
       }
 
       if(Controller1.ButtonR1.pressing()){
-        MiddleIntake.spin(forward,100,pct);
-        UpperIntake.spin(forward,100,pct);
+        MiddleIntake.spin(forward,50,pct);
+        UpperIntake.spin(forward,50,pct);
       }
       Controller1.ButtonR1.released(RELEASE);
 
@@ -285,6 +293,10 @@ void Turn (int angle){ // Turn function
         UpperIntake.stop();
       }
   
+      
+      
+      
+
       LeftFront.setStopping(brake);
       LeftMiddle.setStopping(brake);
       LeftRear.setStopping(brake);

@@ -18,3 +18,4 @@ rotation LeftEncoder = rotation(PORT7, true);
 rotation RightEncoder = rotation(PORT8, true);
 rotation BackEncoder = rotation(PORT9, true);
 inertial InertialSensor = inertial(PORT15);
+digital_out Tongue = digital_out(Brain.ThreeWirePort.A);
