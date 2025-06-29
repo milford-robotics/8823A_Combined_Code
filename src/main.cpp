@@ -15,7 +15,6 @@ using namespace vex;
 vex::competition Competition;
 extern digital_out Tongue;
 
-void flipTongue(){ Tongue.set(!Tongue.value()); }
 
 // A global instance of vex::brain used for printing to the V5 brain screen
 
@@ -31,7 +30,8 @@ void flipTongue(){ Tongue.set(!Tongue.value()); }
 /*  not every time that the robot is disabled.                               */
 /*---------------------------------------------------------------------------*/
 
-
+// Makes so if button is pressed once, the Tongue mechanism is enabled, but when button is pressed again, it is disabled
+void flipTongue(){ Tongue.set(!Tongue.value()); }
 
 // LEAVE THIS!!! IF THE OTHER EQUATIONS WORK, THEN YOU CAN SCRAP THIS!!
 
@@ -292,10 +292,6 @@ void Turn (int angle){ // Turn function
         MiddleIntake.stop();
         UpperIntake.stop();
       }
-  
-      
-      
-      
 
       LeftFront.setStopping(brake);
       LeftMiddle.setStopping(brake);
