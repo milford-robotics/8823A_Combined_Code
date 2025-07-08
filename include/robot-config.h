@@ -17,5 +17,8 @@ extern motor LowerIntake;
 extern rotation LeftEncoder;
 extern rotation RightEncoder;
 extern rotation BackEncoder;
-extern inertial InertialSensor;
+extern inertial InertialSensor1;
+extern inertial InertialSensor2;
 extern digital_out Tongue;
+
+float InertialSensor();
