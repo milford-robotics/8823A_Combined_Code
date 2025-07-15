@@ -1,7 +1,5 @@
 #include "vex.h"
-#include <fstream>
-#include <iostream>
-#include <vector>
+
 
 int smplrt=50;
 

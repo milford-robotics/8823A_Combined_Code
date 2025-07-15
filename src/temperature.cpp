@@ -2,6 +2,8 @@
 
 using namespace vex;
 
+int screen=1300;
+
 const char * allianceColor="None";
 const char * autonSelection="None";
 

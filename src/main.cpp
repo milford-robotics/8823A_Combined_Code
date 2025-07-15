@@ -294,16 +294,35 @@ void Turn (int angle){ // Turn function
     }
 }
 
+
 int main() {
 
+  Brain.Screen.released(switchScreen);
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
 
-  vex::thread odometry_thread([](){
-      odometry(25,45);
-    });
+  vex::thread touchscreen_thread([](){
+      while(1){
+        drawAllUi();
+        vex::task::sleep(100);
+      }
+  });
   // Run the pre-autonomous function.
+
+  std::ofstream outFile;
+
+  outFile.open("hello-world.txt");
+
+  outFile << 'Hello!';
+
+  outFile.close();
+
+
+
+
+
+
   pre_auton();
 
     while (1) {
