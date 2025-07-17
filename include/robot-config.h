@@ -14,7 +14,6 @@ extern motor RightRear;
 extern motor UpperIntake;
 extern motor MiddleIntake;
 extern motor LowerIntake;
-extern motor LowerIntakeR;
 extern rotation LeftEncoder;
 extern rotation RightEncoder;
 extern rotation BackEncoder;
@@ -23,3 +22,5 @@ extern inertial InertialSensor;
 int getMotorPort(std::string motorName);
 void setMotorPort(std::string motorName, int port);
 void setAllMotorPorts();
+
+float InertialSensor();

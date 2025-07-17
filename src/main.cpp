@@ -8,10 +8,12 @@
 /*----------------------------------------------------------------------------*/
 #include "vex.h"
 #include <cmath>
+#include <robot-config.h>
 
 using namespace vex;
 
 vex::competition Competition;
+extern digital_out Tongue;
 
 // A global instance of vex::brain used for printing to the V5 brain screen
 
@@ -26,6 +28,9 @@ vex::competition Competition;
 /*  function is only called once after the V5 has been powered on and        */
 /*  not every time that the robot is disabled.                               */
 /*---------------------------------------------------------------------------*/
+
+// Makes so if button is pressed once, the Tongue mechanism is enabled, but when button is pressed again, it is disabled
+void flipTongue(){ Tongue.set(!Tongue.value()); }
 
 // LEAVE THIS!!! IF THE OTHER EQUATIONS WORK, THEN YOU CAN SCRAP THIS!!
 
@@ -47,7 +52,7 @@ void odometry(double , double ) {
 
     while(1) {
         // Using std::fmod to preserve the "wraparound effect" of 0-360 degrees when considering the offset of start heading.
-        float heading = std::fmod((360 - InertialSensor.heading(vex::degrees)) + start_heading, 360); // finds the angle
+        float heading = std::fmod((360 - InertialSensor()) + start_heading, 360); // finds the angle
         float average_encoder_position = (LeftEncoder.position(vex::degrees) + RightEncoder.position(vex::degrees)) / 2; // finds the encoder position on the robot
         float distance_traveled = (average_encoder_position / 360) * encoder_wheel_circumference; // pretty self explanatory
         float change_in_distance = distance_traveled - previous_distance_traveled; // finds the distance traveled
@@ -133,6 +138,8 @@ void Drive (int dist, int speed){ // Drive function
   RightRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
 }
 
+
+
 void Turn (int angle){ // Turn function
   int top_speed = 50;
   float speed;
@@ -141,10 +148,11 @@ void Turn (int angle){ // Turn function
   float Kp = 0.4;
   double Ki = 0.038;
 
-  InertialSensor.resetRotation ();
+  InertialSensor1.resetRotation ();
+  InertialSensor2.resetRotation ();
   while (fabs (error) > 0.5){
     
-    error = angle - InertialSensor.rotation (degrees);
+    error = angle - InertialSensor();
     if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
     speed = Kp*error + Ki*sumError; // slows down as it approaches destination
 
@@ -160,12 +168,14 @@ void Turn (int angle){ // Turn function
     wait(20,msec);
   }
   StopDriveTrain (); // stop motors
-  InertialSensor.resetRotation ();
+  InertialSensor1.resetRotation ();
+  InertialSensor2.resetRotation ();
 }
 
   void pre_auton(void) {
 
-  InertialSensor.calibrate();
+  InertialSensor1.calibrate();
+  InertialSensor2.calibrate();
   
 }
 
@@ -208,6 +218,8 @@ void Turn (int angle){ // Turn function
   /*  You must modify the code to add your own robot specific commands here.   */
   /*---------------------------------------------------------------------------*/
 
+
+  
   void RELEASE () {
   MiddleIntake.stop();
   UpperIntake.stop();
@@ -215,7 +227,7 @@ void Turn (int angle){ // Turn function
   
   void usercontrol(void) {
     // User control code here, inside the loop
-  
+  Controller1.ButtonX.pressed(flipTongue);
     Brain.Screen.clearScreen();
   
     int J1;
@@ -243,34 +255,47 @@ void Turn (int angle){ // Turn function
 
       // Storage
       if(Controller1.ButtonR1.pressing()){
-        LowerIntake.spin(forward,50,pct);
+        LowerIntake.spin(forward,75,pct);
       }
 
       if(Controller1.ButtonR1.pressing()){
-        MiddleIntake.spin(forward,100,pct);
-        UpperIntake.spin(forward,100,pct);
+        MiddleIntake.spin(forward,50,pct);
+        UpperIntake.spin(forward,50,pct);
       }
       Controller1.ButtonR1.released(RELEASE);
 
       // Move Blocks Up
       if(Controller1.ButtonL1.pressing()){
-        LowerIntake.spin(forward,50,pct);
+        LowerIntake.spin(forward,75,pct);
         MiddleIntake.spin(forward,100,pct);
         UpperIntake.spin(forward,100,pct);
       }
 
       // Move Blocks Down
       if(Controller1.ButtonR2.pressing()){
-        LowerIntake.spin(reverse,50,pct);
-        MiddleIntake.spin(reverse,100,pct);
-        UpperIntake.spin(reverse,100,pct);
+        LowerIntake.spin(reverse,25,pct);
+        MiddleIntake.spin(reverse,50,pct);
+        UpperIntake.spin(reverse,50,pct);
       }
 
       // Middle Goal
-        if(Controller1.ButtonL2.pressing()){
+      if(Controller1.ButtonL2.pressing()){
         LowerIntake.spin(forward,50,pct);
-        MiddleIntake.spin(forward,65,pct);
-        UpperIntake.spin(reverse,75,pct);
+        MiddleIntake.spin(forward,75,pct);
+        UpperIntake.spin(reverse,85,pct);
+      }
+
+      // Un-Middle Goal
+      if(Controller1.ButtonB.pressing()){
+        LowerIntake.spin(reverse,50,pct);
+        MiddleIntake.spin(reverse,75,pct);
+        UpperIntake.spin(forward,85,pct);
+      }
+
+      // Unstucky
+      if(Controller1.ButtonY.pressing()){
+        LowerIntake.spin(reverse,100,pct);
+        MiddleIntake.spin(forward,100,pct);
       }
 
       // Stop All
@@ -279,7 +304,7 @@ void Turn (int angle){ // Turn function
         MiddleIntake.stop();
         UpperIntake.stop();
       }
-  
+
       LeftFront.setStopping(brake);
       LeftMiddle.setStopping(brake);
       LeftRear.setStopping(brake);
