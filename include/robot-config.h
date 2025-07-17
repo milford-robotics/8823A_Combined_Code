@@ -23,4 +23,8 @@ int getMotorPort(std::string motorName);
 void setMotorPort(std::string motorName, int port);
 void setAllMotorPorts();
 
-float InertialSensor();
+void Drive (int dist, int speed);
+
+void Turn (int angle);
+
+void StopDriveTrain ();
