@@ -16,10 +16,5 @@ motor LowerIntake = motor(PORT14, ratio6_1, false);
 rotation LeftEncoder = rotation(PORT7, true);
 rotation RightEncoder = rotation(PORT8, true);
 rotation BackEncoder = rotation(PORT9, true);
-inertial InertialSensor1 = inertial(PORT15);
-inertial InertialSensor2 = inertial(PORT16);
+inertial InertialSensor = inertial(PORT15);
 digital_out Tongue = digital_out(Brain.ThreeWirePort.A);
-
-float InertialSensor (){
-  return (InertialSensor1.rotation (degrees) + InertialSensor2.rotation (degrees)) / 2;
-}

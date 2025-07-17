@@ -9,6 +9,7 @@
 #include "vex.h"
 #include <cmath>
 #include <robot-config.h>
+#include <autons.h>
 
 using namespace vex;
 
@@ -52,7 +53,7 @@ void odometry(double , double ) {
 
     while(1) {
         // Using std::fmod to preserve the "wraparound effect" of 0-360 degrees when considering the offset of start heading.
-        float heading = std::fmod((360 - InertialSensor()) + start_heading, 360); // finds the angle
+        float heading = std::fmod((360 - InertialSensor.rotation()) + start_heading, 360); // finds the angle
         float average_encoder_position = (LeftEncoder.position(vex::degrees) + RightEncoder.position(vex::degrees)) / 2; // finds the encoder position on the robot
         float distance_traveled = (average_encoder_position / 360) * encoder_wheel_circumference; // pretty self explanatory
         float change_in_distance = distance_traveled - previous_distance_traveled; // finds the distance traveled
@@ -104,18 +105,65 @@ void moveToPoint(double ptX, double ptY){
   double targetDist;
 
   //get angle to point
-  targetAngle=std::atan(xDiff/yDiff);
+  //targetAngle=std::atan(xDiff/yDiff);
+
   //turn to point
   
 
   //get distance to point
-  targetDist=std::sqrt(std::pow(xDiff,2)+std::pow(yDiff,2));
+  //targetDist=std::sqrt(std::pow(xDiff,2)+std::pow(yDiff,2));
+
   //drive there
+
+
+  //find arc-distance to point
+
 
   std::printf("distance to point: %.3f   angle to point: %.3f rad %.3f deg \n", targetDist, targetAngle, (targetAngle*180/M_PI));
 
 
 }
+
+void draw5Buttons(void) {
+    Brain.Screen.setFillColor(red);
+    Brain.Screen.drawRectangle(0,0,160,120);
+    
+    Brain.Screen.setCursor(3,3);
+    Brain.Screen.print("Win Point L");
+
+    Brain.Screen.setFillColor(orange);
+    Brain.Screen.drawRectangle(160,0,160,120);
+
+    Brain.Screen.setCursor(3,19);
+    Brain.Screen.print("Win Point R");
+
+    Brain.Screen.setFillColor(blue);
+    Brain.Screen.drawRectangle(0,120,160,120);
+
+    Brain.Screen.setCursor(9,3);
+    Brain.Screen.print("Tournament L");
+
+    Brain.Screen.setFillColor(green);
+    Brain.Screen.drawRectangle(160,120,160,120);
+
+    Brain.Screen.setCursor(9,19);
+    Brain.Screen.print("Tournament R");
+
+    Brain.Screen.setFillColor(purple);
+    Brain.Screen.drawRectangle(320,0,160,120);
+
+    Brain.Screen.setCursor(3,38);
+    Brain.Screen.print("Skills");
+
+    Brain.Screen.setCursor(9,38);
+    Brain.Screen.print("Nothing");
+  }
+  
+  bool auton1 = 0;//win point left side
+  bool auton2 = 0;//win point right side
+  bool auton3 = 0;//tournament left side
+  bool auton4 = 0;//tournament right side
+  bool auton5 = 0;//skills
 
 void StopDriveTrain (){ // stop motors
   LeftFront.stop ();
@@ -138,8 +186,6 @@ void Drive (int dist, int speed){ // Drive function
   RightRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
 }
 
-
-
 void Turn (int angle){ // Turn function
   int top_speed = 50;
   float speed;
@@ -148,11 +194,10 @@ void Turn (int angle){ // Turn function
   float Kp = 0.4;
   double Ki = 0.038;
 
-  InertialSensor1.resetRotation ();
-  InertialSensor2.resetRotation ();
+  InertialSensor.resetRotation ();
   while (fabs (error) > 0.5){
     
-    error = angle - InertialSensor();
+    error = angle - InertialSensor.rotation();
     if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
     speed = Kp*error + Ki*sumError; // slows down as it approaches destination
 
@@ -167,15 +212,66 @@ void Turn (int angle){ // Turn function
     RightRear.spin (forward, -speed, pct);
     wait(20,msec);
   }
-  StopDriveTrain (); // stop motors
-  InertialSensor1.resetRotation ();
-  InertialSensor2.resetRotation ();
+  StopDriveTrain(); // stop motors
+  InertialSensor.resetRotation();
 }
 
   void pre_auton(void) {
 
-  InertialSensor1.calibrate();
-  InertialSensor2.calibrate();
+  InertialSensor.calibrate();
+
+  draw5Buttons();
+  waitUntil(Brain.Screen.pressing());
+  if(Brain.Screen.xPosition() < 160) {
+    if(Brain.Screen.yPosition() < 120) {
+      auton1 = 1;
+      Brain.Screen.clearScreen();
+    }
+    else {
+      auton3 = 1;
+      Brain.Screen.clearScreen();
+    }
+  }
+  else if(160 < Brain.Screen.xPosition() && Brain.Screen.xPosition() < 320) {
+    if(Brain.Screen.yPosition() < 120) {
+      auton2 = 1;
+      Brain.Screen.clearScreen();
+    }
+    else {
+      auton4 = 1;
+      Brain.Screen.clearScreen();
+    }
+  }
+  else {
+    if(Brain.Screen.yPosition() < 120) {
+      auton5 = 1;
+      Brain.Screen.clearScreen();
+    }
+    else {
+      Brain.Screen.clearScreen();
+    }
+  }
+
+  if(Controller1.ButtonL1.pressing()){ //L1 win point left
+    auton1 = 1;
+    Brain.Screen.clearScreen();
+  }
+  if(Controller1.ButtonL2.pressing()){ //L2 tournament left
+    auton3 = 1;
+    Brain.Screen.clearScreen();
+  }
+  if(Controller1.ButtonR1.pressing()){ //R1 win point right
+    auton2 = 1;
+    Brain.Screen.clearScreen();
+  }
+  if(Controller1.ButtonR2.pressing()){ //R2 tournament right
+    auton4 = 1;
+    Brain.Screen.clearScreen();
+  }
+  if(Controller1.ButtonA.pressing()){ //skills
+    auton5 = 1;
+    Brain.Screen.clearScreen();
+  }
   
 }
 
@@ -192,6 +288,36 @@ void Turn (int angle){ // Turn function
   
   void autonomous(void) {
 
+  InertialSensor.calibrate();
+
+  void Drive (int dist /*inches*/, int speed /*percent*/);
+  void Turn (int angle);
+  void winPointLeftSide();
+  void winPointRightSide();
+  void tournamentLeftSide();
+  void tournamentRightSide();
+  void autonSkills();
+
+  if (auton1){
+    WinPointLeft();
+  }
+
+ if (auton2){
+    WinPointRight();
+  }
+
+ if (auton3){
+    TournamentLeft();
+  }
+
+ if (auton4){
+    TournamentRight();
+  }
+
+ if (auton5){
+    Skills();
+  }
+
     // Start our odometry thread.
     // The odometry loop will run in the background while we move.
 
@@ -199,9 +325,9 @@ void Turn (int angle){ // Turn function
       Teo_Odometry(25,45);
     });*/
 
-    vex::thread odometry_thread([](){
+    /*vex::thread odometry_thread([](){
       odometry(25,45);
-    });
+    });*/
 
     // Print where we ended up on the coordinate plane onto the brain screen.
     // Brain.Screen.print("(%f, %f)", x, y);

@@ -17,8 +17,11 @@ extern motor LowerIntake;
 extern rotation LeftEncoder;
 extern rotation RightEncoder;
 extern rotation BackEncoder;
-extern inertial InertialSensor1;
-extern inertial InertialSensor2;
+extern inertial InertialSensor;
 extern digital_out Tongue;
 
-float InertialSensor();
+void Drive (int dist, int speed);
+
+void Turn (int angle);
+
+void StopDriveTrain ();
