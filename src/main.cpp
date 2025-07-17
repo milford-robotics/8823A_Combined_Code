@@ -243,8 +243,7 @@ void Turn (int angle){ // Turn function
 
       // Storage
       if(Controller1.ButtonR1.pressing()){
-        LowerIntakeR.spin(forward,50,pct);
-        LowerIntakeL.spin(forward,50,pct);
+        LowerIntake.spin(forward,50,pct);
       }
 
       if(Controller1.ButtonR1.pressing()){
@@ -255,32 +254,28 @@ void Turn (int angle){ // Turn function
 
       // Move Blocks Up
       if(Controller1.ButtonL1.pressing()){
-        LowerIntakeR.spin(forward,50,pct);
-        LowerIntakeL.spin(forward,50,pct);
+        LowerIntake.spin(forward,50,pct);
         MiddleIntake.spin(forward,100,pct);
         UpperIntake.spin(forward,100,pct);
       }
 
       // Move Blocks Down
       if(Controller1.ButtonR2.pressing()){
-        LowerIntakeR.spin(reverse,50,pct);
-        LowerIntakeL.spin(reverse,50,pct);
+        LowerIntake.spin(reverse,50,pct);
         MiddleIntake.spin(reverse,100,pct);
         UpperIntake.spin(reverse,100,pct);
       }
 
       // Middle Goal
         if(Controller1.ButtonL2.pressing()){
-        LowerIntakeR.spin(forward,50,pct);
-        LowerIntakeL.spin(forward,50,pct);
+        LowerIntake.spin(forward,50,pct);
         MiddleIntake.spin(forward,65,pct);
         UpperIntake.spin(reverse,75,pct);
       }
 
       // Stop All
       if(Controller1.ButtonA.pressing()){
-        LowerIntakeR.stop();
-        LowerIntakeL.stop();
+        LowerIntake.stop();
         MiddleIntake.stop();
         UpperIntake.stop();
       }

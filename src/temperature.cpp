@@ -30,8 +30,7 @@ void setMotorNames(){
     motorIndexesShort[RightRear.index()]="BR";
     motorIndexesShort[UpperIntake.index()]="UI";
     motorIndexesShort[MiddleIntake.index()]="MI";
-    motorIndexesShort[LowerIntakeR.index()]="LIR";
-    motorIndexesShort[LowerIntakeL.index()]="LIL";
+    motorIndexesShort[LowerIntake.index()]="LI";
 
     motorIndexes[LeftFront.index()]="Front Left"; //Establish motor names
     motorIndexes[LeftMiddle.index()]="Middle Left";
@@ -41,8 +40,7 @@ void setMotorNames(){
     motorIndexes[RightRear.index()]="Back Right";
     motorIndexes[UpperIntake.index()]="Upper Intake";
     motorIndexes[MiddleIntake.index()]="Middle Intake";
-    motorIndexes[LowerIntakeR.index()]="Lower Intake Left";
-    motorIndexes[LowerIntakeL.index()]="Lower Intake Right";
+    motorIndexes[LowerIntake.index()]="Lower Intake";
 }
 
 void motorInfoScreen(vex::motor selectedMotor){
@@ -50,10 +48,9 @@ void motorInfoScreen(vex::motor selectedMotor){
     Brain.Screen.setFillColor(black); //Big font
     Brain.Screen.setPenColor(white);
     Brain.Screen.setFont(mono40);
+    Brain.Screen.setCursor(4,1);
     Brain.Screen.print(motorIndexes[selectedMotor.index()]); //Print full motor name
-    Brain.Screen.newLine();
-    Brain.Screen.newLine();
-    Brain.Screen.newLine();
+    Brain.Screen.setCursor(1,1);
 
     Brain.Screen.setFont(mono20); //Reset font
     
@@ -149,11 +146,10 @@ void switchScreen(){
             if(screen==1406) RightRear=vex::motor(motorPort,getMotorCartridge(RightRear),isMotorReversed(RightRear));
             if(screen==1407) UpperIntake=vex::motor(motorPort,getMotorCartridge(UpperIntake),isMotorReversed(UpperIntake));
             if(screen==1408) MiddleIntake=vex::motor(motorPort,getMotorCartridge(MiddleIntake),isMotorReversed(MiddleIntake));
-            if(screen==1409) LowerIntakeR=vex::motor(motorPort,getMotorCartridge(LowerIntakeR),isMotorReversed(LowerIntakeR));
-            if(screen==1410) LowerIntakeL=vex::motor(motorPort,getMotorCartridge(LowerIntakeL),isMotorReversed(LowerIntakeL));
+            if(screen==1409) LowerIntake=vex::motor(motorPort,getMotorCartridge(LowerIntake),isMotorReversed(LowerIntake));
         }
 
-        if(clickedOnMotor) screen-=100;
+        if(clickedOnMotor) { screen-=100; setAllMotorPorts(); setMotorNames();};
     }    
 
 
@@ -194,15 +190,6 @@ void switchScreen(){
     }
 
     /* If the screen is set to auton selector (800)... */ if(screen==800){
-        if(Brain.Screen.xPosition()>=25 && Brain.Screen.xPosition()<=175 & Brain.Screen.yPosition()>=150 && Brain.Screen.yPosition()<=210){
-            if(allianceColor=="Red"){
-                allianceColor="Blue";
-            }
-            else{
-                allianceColor="Red";
-            }
-        }
-
         if(Brain.Screen.xPosition()<=465  && Brain.Screen.xPosition()>=440 &&
            Brain.Screen.yPosition()<=39   && Brain.Screen.yPosition()>=19){
             screen=1300;
@@ -210,24 +197,12 @@ void switchScreen(){
 
         if(Brain.Screen.xPosition()>250 && Brain.Screen.xPosition()<390
         && Brain.Screen.yPosition()>20 && Brain.Screen.yPosition()<120){
-            autonSelection="RingSide";
+            autonSelection="RightSide";
         }
 
         if(Brain.Screen.xPosition()>250 && Brain.Screen.xPosition()<390
         && Brain.Screen.yPosition()>130 && Brain.Screen.yPosition()<230){
-            autonSelection="GoalSide";
-        }
-
-        if(Brain.Screen.xPosition()>20 && Brain.Screen.xPosition()<230
-        && Brain.Screen.yPosition()>20 && Brain.Screen.yPosition()<80){
-            autonSelection="New";
-            allianceColor="Red";
-        }
-
-        if(Brain.Screen.xPosition()>20 && Brain.Screen.xPosition()<230
-        && Brain.Screen.yPosition()>90 && Brain.Screen.yPosition()<140){
-            autonSelection="New";
-            allianceColor="Blue";
+            autonSelection="LeftSide";
         }
         
     } 
@@ -255,7 +230,7 @@ void motorReassignScreen(vex::motor selectedMotor){
 
             else if(port-1==LeftFront.index() || port-1==LeftMiddle.index() || port-1==LeftRear.index() || 
                     port-1==RightFront.index() || port-1==RightMiddle.index() || port-1==RightRear.index() || 
-                    port-1==LowerIntakeR.index() || port-1==UpperIntake.index() || port-1==MiddleIntake.index() || port-1==LowerIntakeL.index()){
+                    port-1==UpperIntake.index() || port-1==MiddleIntake.index() || port-1==LowerIntake.index()){
                         Brain.Screen.setFillColor(red);
                     }
             ;
@@ -285,7 +260,7 @@ void drawAllUi(){
         
         displayMotor(UpperIntake,25,90);
         displayMotor(MiddleIntake,150,90);
-        displayMotor(LowerIntakeR,275,90);
+        displayMotor(LowerIntake,275,90);
 
         displayMotor(RightFront,25,154);
         displayMotor(RightMiddle,150,154);
@@ -329,8 +304,7 @@ void drawAllUi(){
                 if(screen==1306){motorInfoScreen(RightRear);}
                 if(screen==1307){motorInfoScreen(UpperIntake);}
                 if(screen==1308){motorInfoScreen(MiddleIntake);}
-                if(screen==1309){motorInfoScreen(LowerIntakeR);}
-                if(screen==1310){motorInfoScreen(LowerIntakeL);}
+                if(screen==1309){motorInfoScreen(LowerIntake);}
             };
 
             /* If on emergency reassign (1401-1406)... */ if(screen>1400 && screen<=1499 ) {
@@ -342,8 +316,7 @@ void drawAllUi(){
                 if(screen==1406){motorReassignScreen(RightRear);}
                 if(screen==1407){motorReassignScreen(UpperIntake);}
                 if(screen==1408){motorReassignScreen(MiddleIntake);}
-                if(screen==1409){motorReassignScreen(LowerIntakeR);}
-                if(screen==1410){motorReassignScreen(LowerIntakeL);}
+                if(screen==1409){motorReassignScreen(LowerIntake);}
             };
 
             if(screen==800){
@@ -351,61 +324,23 @@ void drawAllUi(){
                 Brain.Screen.setPenWidth(3);
                 Brain.Screen.setFillColor(black);
                 
-                Brain.Screen.drawRectangle(25,150,150,60);
-
-                Brain.Screen.setPenWidth(3);
-                if(allianceColor=="Red"){
-                    Brain.Screen.setFillColor(red);
-                    Brain.Screen.drawRectangle(25,150,60,60);
-                }
-                else if(allianceColor=="Blue"){
-                    Brain.Screen.setFillColor(blue);
-                    Brain.Screen.drawRectangle(115,150,60,60);
-                }
-                else{
-                    Brain.Screen.setFillColor(300);
-                    Brain.Screen.drawRectangle(70,150,60,60);
-                }
-
-                Brain.Screen.setPenColor(white);
-
-                if(autonSelection=="RingSide") Brain.Screen.setPenWidth(5);
+                if(autonSelection=="RightSide") Brain.Screen.setPenWidth(5);
                 else Brain.Screen.setPenWidth(1);
-
-                Brain.Screen.setFillColor(black);
 
                 Brain.Screen.drawRectangle(250,20,140,100);
 
-                if(autonSelection=="GoalSide") Brain.Screen.setPenWidth(5);
+                if(autonSelection=="LeftSide") Brain.Screen.setPenWidth(5);
                 else Brain.Screen.setPenWidth(1);
 
                 Brain.Screen.drawRectangle(250,130,140,100);
                 
-                if(autonSelection=="New" && allianceColor=="Red") Brain.Screen.setPenWidth(5);
-                else Brain.Screen.setPenWidth(1);
-
-                Brain.Screen.drawRectangle(20,20,210,60);
-                
-                if(autonSelection=="New" && allianceColor=="Blue") Brain.Screen.setPenWidth(5);
-                else Brain.Screen.setPenWidth(1);
-
-                Brain.Screen.drawRectangle(20,90,210,50);
-
-                
-
-                Brain.Screen.setCursor(3,4);
-                Brain.Screen.print("Blue Goal / Red Ring");
-                
-                Brain.Screen.setCursor(6,4);
-                Brain.Screen.print("Blue Ring / Red Goal");
-
                 Brain.Screen.setCursor(3,27);
 
-                Brain.Screen.print("Ring Side");
+                Brain.Screen.print("Left Side");
 
                 Brain.Screen.setCursor(8,27);
 
-                Brain.Screen.print("Goal Side");
+                Brain.Screen.print("Right Side");
 
                 Brain.Screen.setPenColor(0);
                 Brain.Screen.setPenWidth(5);
