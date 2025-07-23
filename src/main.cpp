@@ -9,7 +9,6 @@
 #include "vex.h"
 #include <cmath>
 #include <robot-config.h>
-#include <autons.h>
 
 using namespace vex;
 
@@ -193,21 +192,18 @@ void Turn (int angle){ // Turn function
   
   void autonomous(void) {
 
-  InertialSensor.calibrate();
+    InertialSensor.calibrate();
 
-    // Start our odometry thread.
-    // The odometry loop will run in the background while we move.
+    if(autonSelection=="RightSide"){
 
-    /*vex::thread Teo_Odometry_thread([](){
-      Teo_Odometry(25,45);
-    });*/
-
-    /*vex::thread odometry_thread([](){
-      odometry(25,45);
-    });*/
-
-    // Print where we ended up on the coordinate plane onto the brain screen.
-    // Brain.Screen.print("(%f, %f)", x, y);
+    }
+    else if(autonSelection=="LeftSide"){
+      
+    }
+    else{
+      //Skills
+      
+    }
 
 }
   

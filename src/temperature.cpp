@@ -1,11 +1,14 @@
 #include <vex.h>
+#include <robot-config.h>
+
+
 
 using namespace vex;
 
+const char * autonSelection="Skills";
+
 int screen=1300;
 
-const char * allianceColor="None";
-const char * autonSelection="None";
 
 const char * motorIndexes[]={"nil1","nil2", "nil3", "nil4", "nil5",
                              "nil6", "nil7", "nil8", "nil9", "nil10", 
@@ -274,15 +277,7 @@ void drawAllUi(){
         Brain.Screen.setPenColor(white);
         Brain.Screen.setPenWidth(3);
         
-        if(allianceColor == "Red"){
-            Brain.Screen.setFillColor(red);
-        }
-        else if(allianceColor == "Blue"){
-            Brain.Screen.setFillColor(blue);
-        }
-        else{
-            Brain.Screen.setFillColor(black);
-        }
+        Brain.Screen.setFillColor(black);
         Brain.Screen.drawRectangle(380,180,90,50);
         Brain.Screen.setCursor(10,39);
         Brain.Screen.print("Auton ");

@@ -4,6 +4,8 @@ int warn(const char * warnMsg);
 
 extern const char * motorIndexesShort[23];
 
+extern const char * autonSelection;
+
 void switchScreen();
 
 void setMotorNames();
