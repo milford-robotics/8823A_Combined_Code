@@ -14,7 +14,6 @@
 using namespace vex;
 
 vex::competition Competition;
-extern digital_out Tongue;
 
 // A global instance of vex::brain used for printing to the V5 brain screen
 
@@ -124,47 +123,6 @@ void moveToPoint(double ptX, double ptY){
 
 }
 
-void draw5Buttons(void) {
-    Brain.Screen.setFillColor(red);
-    Brain.Screen.drawRectangle(0,0,160,120);
-    
-    Brain.Screen.setCursor(3,3);
-    Brain.Screen.print("Win Point L");
-
-    Brain.Screen.setFillColor(orange);
-    Brain.Screen.drawRectangle(160,0,160,120);
-
-    Brain.Screen.setCursor(3,19);
-    Brain.Screen.print("Win Point R");
-
-    Brain.Screen.setFillColor(blue);
-    Brain.Screen.drawRectangle(0,120,160,120);
-
-    Brain.Screen.setCursor(9,3);
-    Brain.Screen.print("Tournament L");
-
-    Brain.Screen.setFillColor(green);
-    Brain.Screen.drawRectangle(160,120,160,120);
-
-    Brain.Screen.setCursor(9,19);
-    Brain.Screen.print("Tournament R");
-
-    Brain.Screen.setFillColor(purple);
-    Brain.Screen.drawRectangle(320,0,160,120);
-
-    Brain.Screen.setCursor(3,38);
-    Brain.Screen.print("Skills");
-
-    Brain.Screen.setCursor(9,38);
-    Brain.Screen.print("Nothing");
-  }
-  
-  bool auton1 = 0;//win point left side
-  bool auton2 = 0;//win point right side
-  bool auton3 = 0;//tournament left side
-  bool auton4 = 0;//tournament right side
-  bool auton5 = 0;//skills
-
 void StopDriveTrain (){ // stop motors
   LeftFront.stop ();
   LeftMiddle.stop ();
@@ -219,59 +177,6 @@ void Turn (int angle){ // Turn function
   void pre_auton(void) {
 
   InertialSensor.calibrate();
-
-  draw5Buttons();
-  waitUntil(Brain.Screen.pressing());
-  if(Brain.Screen.xPosition() < 160) {
-    if(Brain.Screen.yPosition() < 120) {
-      auton1 = 1;
-      Brain.Screen.clearScreen();
-    }
-    else {
-      auton3 = 1;
-      Brain.Screen.clearScreen();
-    }
-  }
-  else if(160 < Brain.Screen.xPosition() && Brain.Screen.xPosition() < 320) {
-    if(Brain.Screen.yPosition() < 120) {
-      auton2 = 1;
-      Brain.Screen.clearScreen();
-    }
-    else {
-      auton4 = 1;
-      Brain.Screen.clearScreen();
-    }
-  }
-  else {
-    if(Brain.Screen.yPosition() < 120) {
-      auton5 = 1;
-      Brain.Screen.clearScreen();
-    }
-    else {
-      Brain.Screen.clearScreen();
-    }
-  }
-
-  if(Controller1.ButtonL1.pressing()){ //L1 win point left
-    auton1 = 1;
-    Brain.Screen.clearScreen();
-  }
-  if(Controller1.ButtonL2.pressing()){ //L2 tournament left
-    auton3 = 1;
-    Brain.Screen.clearScreen();
-  }
-  if(Controller1.ButtonR1.pressing()){ //R1 win point right
-    auton2 = 1;
-    Brain.Screen.clearScreen();
-  }
-  if(Controller1.ButtonR2.pressing()){ //R2 tournament right
-    auton4 = 1;
-    Brain.Screen.clearScreen();
-  }
-  if(Controller1.ButtonA.pressing()){ //skills
-    auton5 = 1;
-    Brain.Screen.clearScreen();
-  }
   
 }
 
@@ -289,34 +194,6 @@ void Turn (int angle){ // Turn function
   void autonomous(void) {
 
   InertialSensor.calibrate();
-
-  void Drive (int dist /*inches*/, int speed /*percent*/);
-  void Turn (int angle);
-  void winPointLeftSide();
-  void winPointRightSide();
-  void tournamentLeftSide();
-  void tournamentRightSide();
-  void autonSkills();
-
-  if (auton1){
-    WinPointLeft();
-  }
-
- if (auton2){
-    WinPointRight();
-  }
-
- if (auton3){
-    TournamentLeft();
-  }
-
- if (auton4){
-    TournamentRight();
-  }
-
- if (auton5){
-    Skills();
-  }
 
     // Start our odometry thread.
     // The odometry loop will run in the background while we move.
