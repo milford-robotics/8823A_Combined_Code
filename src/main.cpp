@@ -315,7 +315,9 @@ void Turn (int angle){ // Turn function
 
 
 int main() {
-
+  if(Brain.SDcard.isInserted()){
+    setPortsFromSD();
+  }
   Brain.Screen.released(switchScreen);
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);

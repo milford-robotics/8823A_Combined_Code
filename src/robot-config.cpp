@@ -76,6 +76,8 @@ void setAllMotorPorts(){
 
 vex::brain       Brain;
 controller Controller1 = controller(primary);
+
+
 motor LeftFront = motor(PORT11, ratio6_1, true);
 motor LeftMiddle = motor(PORT12, ratio6_1, true);
 motor LeftRear = motor(PORT13, ratio6_1, true);
@@ -85,6 +87,21 @@ motor RightRear = motor(PORT20, ratio6_1, false);
 motor UpperIntake = motor(PORT10, ratio6_1, false);
 motor MiddleIntake = motor(PORT1, ratio6_1, true);
 motor LowerIntake = motor(PORT14, ratio6_1, false);
+
+void setPortsFromSD(){
+    motor LeftFront = motor(getMotorPort("LeftFront"), ratio6_1, true);
+    motor LeftMiddle = motor(getMotorPort("LeftMiddle"), ratio6_1, true);
+    motor LeftRear = motor(getMotorPort("LeftRear"), ratio6_1, true);
+    motor RightFront = motor(getMotorPort("RightFront"), ratio6_1, false);
+    motor RightMiddle = motor(getMotorPort("RightMiddle"), ratio6_1, false);
+    motor RightRear = motor(getMotorPort("RightRear"), ratio6_1, false);
+    motor UpperIntake = motor(getMotorPort("UpperIntake"), ratio6_1, false);
+    motor MiddleIntake = motor(getMotorPort("MiddleIntake"), ratio6_1, true);
+    motor LowerIntake = motor(getMotorPort("LowerIntake"), ratio6_1, false);
+}
+
+
+
 rotation LeftEncoder = rotation(PORT7, true);
 rotation RightEncoder = rotation(PORT8, true);
 rotation BackEncoder = rotation(PORT9, true);
