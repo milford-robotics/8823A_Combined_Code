@@ -23,6 +23,7 @@ extern digital_out Tongue;
 int getMotorPort(std::string motorName);
 void setMotorPort(std::string motorName, int port);
 void setAllMotorPorts();
+void setPortsFromSD();
 
 void Drive (int dist, int speed);
 
