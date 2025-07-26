@@ -148,8 +148,8 @@ void Turn (int angle){ // Turn function
   float speed;
   float sumError = 0;
   float error = 999;
-  float Kp = 0.4;
-  double Ki = 0.038;
+  float Kp = 0.3;
+  double Ki = 0.03;
 
   InertialSensor.resetRotation ();
   while (fabs (error) > 0.5){
@@ -170,7 +170,7 @@ void Turn (int angle){ // Turn function
     wait(20,msec);
   }
   StopDriveTrain(); // stop motors
-  InertialSensor.resetRotation();
+  // InertialSensor.resetRotation();
 }
 
   void pre_auton(void) {
@@ -190,20 +190,123 @@ void Turn (int angle){ // Turn function
   /*  You must modify the code to add your own robot specific commands here.   */
   /*---------------------------------------------------------------------------*/
   
-  void autonomous(void) {
+void autonomous(void) {
 
-    InertialSensor.calibrate();
-
-    if(autonSelection=="RightSide"){
-
+  /*vex::thread debug_thread([](){
+    while(1){
+    printf("Inertial: %.4f \n", InertialSensor.rotation());
+    wait(25,msec);
     }
-    else if(autonSelection=="LeftSide"){
+  });*/
+
+
+  InertialSensor.calibrate();
+
+  while (InertialSensor.isCalibrating()){
+    wait(25,msec);
+  }
+
+  // wait(1,sec);
+  // Turn(90);
+  // wait(25,msec);
+
+  LowerIntake.spin(forward,100,pct);
+  MiddleIntake.spin(forward,15,pct);
+  UpperIntake.spin(forward,15,pct);
+  Drive(28,20);
+  wait(3,sec);
+  LowerIntake.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  Turn(80);
+  wait(25,msec);
+  Tongue.set(true);
+  wait(1,sec);
+  Drive(15,30);
+  wait(1,sec);
+  LowerIntake.spin(forward,100,pct);
+  MiddleIntake.spin(forward,75,pct);
+  UpperIntake.spin(reverse,75,pct);
+  wait(3,sec);
+  LowerIntake.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  Drive(-17,55);
+  wait(50,msec);
+  Tongue.set(false);
+  wait(25,msec);
+  Turn(45);
+  wait(50,msec);
+  LowerIntake.spin(forward,100,pct);
+  MiddleIntake.spin(forward,15,pct);
+  UpperIntake.spin(forward,15,pct);
+  Drive(40,25);
+  wait(25,msec);
+  printf("Hello\n");
+  Turn(-135);
+  /*wait(25,msec);
+  Drive(13,30);
+  wait(25,msec);
+  LowerIntake.spin(reverse,100,pct);
+  MiddleIntake.spin(reverse,100,pct);
+  UpperIntake.spin(reverse,100,pct);
+  Drive(-13,55);
+  wait(25,msec);
+  Turn(-45);
+  wait(25,msec);
+  Drive(60,60);
+  wait(25,msec);*/
+  
+
+  /*if(autonSelection=="RightSide"){
+
+  }
+  else if(autonSelection=="LeftSide"){
+  LowerIntake.spin(forward,100,pct);
+  MiddleIntake.spin(forward,15,pct);
+  UpperIntake.spin(forward,15,pct);
+  Drive(28,20);
+  wait(3,sec);
+  LowerIntake.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  Turn(80);
+  wait(25,msec);
+  Tongue.set(true);
+  wait(25,msec);
+  Drive(13,45);
+  wait(25,msec);
+  LowerIntake.spin(forward,100,pct);
+  MiddleIntake.spin(reverse,75,pct);
+  UpperIntake.spin(reverse,75,pct);
+  wait(3,sec);
+
+  Drive(-13,55);
+  wait(25,msec);
+  Turn(45);
+  wait(25,msec);
+  Drive(40,35);
+  wait(25,msec);
+  Turn(-135);
+  wait(25,msec);
+  Drive(13,30);
+  wait(25,msec);
+  LowerIntake.spin(reverse,100,pct);
+  MiddleIntake.spin(reverse,100,pct);
+  UpperIntake.spin(reverse,100,pct);
+
+  Drive(-13,55);
+  wait(25,msec);
+  Turn(-45);
+  wait(25,msec);
+  Drive(60,60);
+  wait(25,msec);
+  
+  }
+  else{
+  //Skills
       
-    }
-    else{
-      //Skills
-      
-    }
+  }*/
 
 }
   
@@ -336,8 +439,6 @@ int main() {
   outFile << 'Hello!';
 
   outFile.close();
-
-
 
 
 
