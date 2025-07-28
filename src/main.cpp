@@ -210,21 +210,21 @@ void autonomous(void) {
   //  Turn(-135);
   //  wait(25,msec);
 
-  LowerIntake.spin(forward,90,pct);
-  MiddleIntake.spin(forward,20,pct);
+  LowerIntake.spin(forward,80,pct);
+  MiddleIntake.spin(forward,25,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(28,20);
+  Drive(30,15);
   wait(2.8,sec);
   UpperIntake.stop();
-  Turn(73);
+  Turn(80);
   wait(25,msec);
   Tongue.set(true);
   wait(1,sec);
-  Drive(14,30);
+  Drive(16,30);
   wait(1,sec);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
-  UpperIntake.spin(reverse,65,pct);
+  UpperIntake.spin(reverse,50,pct);
   wait(2,sec);
   LowerIntake.stop();
   MiddleIntake.stop();
@@ -238,13 +238,13 @@ void autonomous(void) {
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,15,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(40,25);
+  Drive(45,25);
   wait(3,sec);
   //printf("Hello\n");
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Turn(-145);
+  Turn(-150);
   wait(25,msec);
   Drive(16,30);
   wait(25,msec);
@@ -331,7 +331,7 @@ void autonomous(void) {
   
   void usercontrol(void) {
     // User control code here, inside the loop
-  Controller1.ButtonX.pressed(flipTongue);
+    Controller1.ButtonX.pressed(flipTongue);
     Brain.Screen.clearScreen();
   
     int J1;
