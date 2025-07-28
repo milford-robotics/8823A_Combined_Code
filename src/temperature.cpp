@@ -109,11 +109,7 @@ void switchScreen(){
     printf("%i, %i \n",Brain.Screen.xPosition(), Brain.Screen.yPosition());
 
     if(screen>1300 && screen<=1399 ) {
-        if(Brain.Screen.xPosition()<=465  && Brain.Screen.xPosition()>=440 &&
-           Brain.Screen.yPosition()<=39   && Brain.Screen.yPosition()>=19){
-            screen=1300;
-        }
-        else if(Brain.Screen.xPosition()<=395  && Brain.Screen.xPosition()>=270 &&
+        if(Brain.Screen.xPosition()<=395  && Brain.Screen.xPosition()>=270 &&
            Brain.Screen.yPosition()<=60   && Brain.Screen.yPosition()>=10){
             screen+=100;
         }
@@ -193,10 +189,6 @@ void switchScreen(){
     }
 
     /* If the screen is set to auton selector (800)... */ if(screen==800){
-        if(Brain.Screen.xPosition()<=465  && Brain.Screen.xPosition()>=440 &&
-           Brain.Screen.yPosition()<=39   && Brain.Screen.yPosition()>=19){
-            screen=1300;
-        }
 
         if(Brain.Screen.xPosition()>250 && Brain.Screen.xPosition()<390
         && Brain.Screen.yPosition()>20 && Brain.Screen.yPosition()<120){
@@ -210,7 +202,10 @@ void switchScreen(){
         
     } 
 
-
+    if(Brain.Screen.xPosition()>=420 &&
+        Brain.Screen.yPosition()<=55){
+        screen=1300;
+    }
 
 }
 
@@ -227,14 +222,14 @@ void motorReassignScreen(vex::motor selectedMotor){
     for(int ix=0; ix<7; ix++){
         for(int iy=0; iy<3; iy++){
             int port=ix+7*iy+1;
-            Brain.Screen.setFillColor(green);
+            Brain.Screen.setFillColor(red);
             Brain.Screen.setPenWidth(1);
             if(port-1==selectedMotor.index()){ Brain.Screen.setPenWidth(5); }
 
-            else if(port-1==LeftFront.index() || port-1==LeftMiddle.index() || port-1==LeftRear.index() || 
+            if(port-1==LeftFront.index() || port-1==LeftMiddle.index() || port-1==LeftRear.index() || 
                     port-1==RightFront.index() || port-1==RightMiddle.index() || port-1==RightRear.index() || 
                     port-1==UpperIntake.index() || port-1==MiddleIntake.index() || port-1==LowerIntake.index()){
-                        Brain.Screen.setFillColor(red);
+                        Brain.Screen.setFillColor(green);
                     }
             ;
             int x=(ix*68.5)+10;
@@ -291,7 +286,7 @@ void drawAllUi(){
                 Brain.Screen.setPenWidth(5);
                 Brain.Screen.drawLine(465,19,440,39);
                 Brain.Screen.drawLine(465,39,440,19);
-                if(screen==1301){motorInfoScreen(LeftFront);} //Draw all mtotor screens
+                if(screen==1301){motorInfoScreen(LeftFront);} //Draw all motor screens
                 if(screen==1302){motorInfoScreen(LeftMiddle);}
                 if(screen==1303){motorInfoScreen(LeftRear);}
                 if(screen==1304){motorInfoScreen(RightFront);}
@@ -312,6 +307,10 @@ void drawAllUi(){
                 if(screen==1407){motorReassignScreen(UpperIntake);}
                 if(screen==1408){motorReassignScreen(MiddleIntake);}
                 if(screen==1409){motorReassignScreen(LowerIntake);}
+                Brain.Screen.setPenColor(0);
+                Brain.Screen.setPenWidth(5);
+                Brain.Screen.drawLine(465,15,440,25);
+                Brain.Screen.drawLine(465,25,440,15);
             };
 
             if(screen==800){
@@ -341,8 +340,8 @@ void drawAllUi(){
                 Brain.Screen.setPenWidth(5);
                 Brain.Screen.drawLine(465,19,440,39);
                 Brain.Screen.drawLine(465,39,440,19);
-
             }
+        Brain.Screen.render();
 
             
 }

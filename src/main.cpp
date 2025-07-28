@@ -194,8 +194,33 @@ void autonomous(void) {
 
   vex::thread debug_thread([](){
     while(1){
-    printf("Inertial: %.4f \n", InertialSensor.rotation());
-    wait(25,msec);
+      printf("Inertial: %.4f \n", InertialSensor.rotation());
+      vex::wait(25,msec);
+    }
+  });
+
+  vex::thread unstuckThread([](){
+    float oldMotorCommandMid=0;
+    float oldMotorCommandTop=0;
+    float oldMotorCommandBot=0;
+    while(1){
+      if((LowerIntake.torque()>=0.25 && LowerIntake.velocity(rpm)==0)||
+        (UpperIntake.torque()>=0.25 && UpperIntake.velocity(rpm)==0)||
+        (MiddleIntake.torque()>=0.25 && MiddleIntake.velocity(rpm)==0)){
+          UpperIntake.spinFor(reverse,300,degrees,600,rpm,false);
+          MiddleIntake.spinFor(reverse,300,degrees,600,rpm,false);
+          LowerIntake.spinFor(reverse,100,degrees,50,rpm,true);
+          vex::task::sleep(50);
+          UpperIntake.spin(forward,oldMotorCommandTop,rpm);
+          LowerIntake.spin(forward,oldMotorCommandBot,rpm);
+          MiddleIntake.spin(forward,oldMotorCommandMid,rpm);
+      }
+      else{
+        oldMotorCommandMid=MiddleIntake.velocity(rpm);
+        oldMotorCommandTop=UpperIntake.velocity(rpm);
+        oldMotorCommandBot=LowerIntake.velocity(rpm);
+      }
+      vex::task::sleep(100);
     }
   });
 
@@ -203,7 +228,7 @@ void autonomous(void) {
   InertialSensor.calibrate();
 
   while (InertialSensor.isCalibrating()){
-    wait(25,msec);
+    vex::wait(25,msec);
   }
 
   //  wait(1,sec);
@@ -214,50 +239,53 @@ void autonomous(void) {
   MiddleIntake.spin(forward,20,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(28,20);
-  wait(2.8,sec);
+  vex::wait(2.8,sec);
   UpperIntake.stop();
   Turn(73);
-  wait(25,msec);
+  vex::wait(25,msec);
   Tongue.set(true);
-  wait(1,sec);
+  vex::wait(1,sec);
   Drive(14,30);
-  wait(1,sec);
+  vex::wait(1,sec);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(reverse,65,pct);
-  wait(2,sec);
+  vex::wait(2,sec);
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
   Drive(-19,55);
-  wait(75,msec);
+ vex::wait(75,msec);
   Tongue.set(false);
-  wait(25,msec);
+  vex::wait(25,msec);
   Turn(45);
-  wait(1,sec);
+  vex::wait(1,sec);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,15,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(40,25);
-  wait(3,sec);
+  vex::wait(3,sec);
   //printf("Hello\n");
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
   Turn(-145);
-  wait(25,msec);
+  vex::wait(25,msec);
   Drive(16,30);
-  wait(25,msec);
+  vex::wait(25,msec);
   LowerIntake.spin(reverse,70,pct);
   MiddleIntake.spin(reverse,70,pct);
   UpperIntake.spin(reverse,70,pct);
-  wait(2,sec);
+  vex::wait(2,sec);
   /*Drive(-13,55);
   wait(25,msec);
   Turn(-45);
   wait(25,msec);
   Drive(60,60);
   wait(25,msec);*/
+  Drive(-12,30);
+  Turn(-55);
+  Drive(60,40);
   
 
   /*if(autonSelection=="RightSide"){
@@ -333,7 +361,7 @@ void autonomous(void) {
     // User control code here, inside the loop
   Controller1.ButtonX.pressed(flipTongue);
     Brain.Screen.clearScreen();
-  
+
     int J1;
     int J3;
   
@@ -431,7 +459,6 @@ int main() {
   vex::thread touchscreen_thread([](){
       while(1){
         drawAllUi();
-        vex::task::sleep(100);
       }
   });
   // Run the pre-autonomous function.
