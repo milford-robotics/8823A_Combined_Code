@@ -42,7 +42,7 @@ void flipTongue(){ Tongue.set(!Tongue.value()); }
     float x = 0;
     float y = 0;
 
-void odometry(double , double ) {
+/*void odometry(double , double ) {
 
     LeftEncoder.resetPosition();
     RightEncoder.resetPosition();
@@ -64,7 +64,7 @@ void odometry(double , double ) {
         
         vex::this_thread::sleep_for(10);
     }
-}
+}*/
 
 /*void Teo_Odometry () {
 
@@ -192,12 +192,12 @@ void Turn (int angle){ // Turn function
   
 void autonomous(void) {
 
-  /*vex::thread debug_thread([](){
+  vex::thread debug_thread([](){
     while(1){
     printf("Inertial: %.4f \n", InertialSensor.rotation());
     wait(25,msec);
     }
-  });*/
+  });
 
 
   InertialSensor.calibrate();
@@ -206,51 +206,53 @@ void autonomous(void) {
     wait(25,msec);
   }
 
-  // wait(1,sec);
-  // Turn(90);
-  // wait(25,msec);
+  //  wait(1,sec);
+  //  Turn(-135);
+  //  wait(25,msec);
 
-  LowerIntake.spin(forward,100,pct);
-  MiddleIntake.spin(forward,15,pct);
+  LowerIntake.spin(forward,90,pct);
+  MiddleIntake.spin(forward,20,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(28,20);
-  wait(3,sec);
-  LowerIntake.stop();
-  MiddleIntake.stop();
+  wait(2.8,sec);
   UpperIntake.stop();
-  Turn(80);
+  Turn(73);
   wait(25,msec);
   Tongue.set(true);
   wait(1,sec);
-  Drive(15,30);
+  Drive(14,30);
   wait(1,sec);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
-  UpperIntake.spin(reverse,75,pct);
-  wait(3,sec);
+  UpperIntake.spin(reverse,65,pct);
+  wait(2,sec);
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-17,55);
-  wait(50,msec);
+  Drive(-19,55);
+  wait(75,msec);
   Tongue.set(false);
   wait(25,msec);
   Turn(45);
-  wait(50,msec);
+  wait(1,sec);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,15,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(40,25);
+  wait(3,sec);
+  //printf("Hello\n");
+  LowerIntake.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  Turn(-145);
   wait(25,msec);
-  printf("Hello\n");
-  Turn(-135);
-  /*wait(25,msec);
-  Drive(13,30);
+  Drive(16,30);
   wait(25,msec);
-  LowerIntake.spin(reverse,100,pct);
-  MiddleIntake.spin(reverse,100,pct);
-  UpperIntake.spin(reverse,100,pct);
-  Drive(-13,55);
+  LowerIntake.spin(reverse,70,pct);
+  MiddleIntake.spin(reverse,70,pct);
+  UpperIntake.spin(reverse,70,pct);
+  wait(2,sec);
+  /*Drive(-13,55);
   wait(25,msec);
   Turn(-45);
   wait(25,msec);
