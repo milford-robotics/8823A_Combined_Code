@@ -228,12 +228,17 @@ void autonomous(void) {
 
   vex::thread debug_thread([](){
     std::ofstream outFile;
-    outFile.open("record-1.txt");
-
+    outFile.open("record-1.txt",std::ios_base::app);
+    outFile << "NEW \n\n\n";
     outFile.close();
     while(1){
       printf("Inertial: %.4f \n", InertialSensor.rotation());
-      vex::wait(25,msec);
+      
+      outFile.open("record-1.txt",std::ios_base::app);
+      outFile << InertialSensor.rotation();
+      outFile.close();
+
+      vex::wait(100,msec);
     }
   });
 
