@@ -337,7 +337,7 @@ void autonomous(void) {
   Tongue.set(false);
   vex::wait(25,msec);
   //TurnToHeading(200);
-  Turn(133);
+  Turn(129);
   vex::task::sleep(1000);
   Drive(-17,40);
   LowerIntake.spin(forward,100,pct);
