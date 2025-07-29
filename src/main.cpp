@@ -140,7 +140,7 @@ void Drive (int dist, int speed){ // Drive function
   LeftRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
   RightFront.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
   RightMiddle.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
-  RightRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, false);
+  RightRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, true);
 }
 
 void Turn (int angle){ // Turn function
@@ -199,14 +199,14 @@ void autonomous(void) {
     }
   });
 
-  vex::thread unstuckThread([](){
+  /*vex::thread unstuckThread([](){
     float oldMotorCommandMid=0;
     float oldMotorCommandTop=0;
     float oldMotorCommandBot=0;
     while(1){
-      if((LowerIntake.torque()>=0.25 && LowerIntake.velocity(rpm)==0)||
-        (UpperIntake.torque()>=0.25 && UpperIntake.velocity(rpm)==0)||
-        (MiddleIntake.torque()>=0.25 && MiddleIntake.velocity(rpm)==0)){
+      if((LowerIntake.torque()>=0.75 && LowerIntake.velocity(rpm)==0)||
+        (UpperIntake.torque()>=0.5 && UpperIntake.velocity(rpm)==0)||
+        (MiddleIntake.torque()>=0.75 && MiddleIntake.velocity(rpm)==0)){
           UpperIntake.spinFor(reverse,300,degrees,600,rpm,false);
           MiddleIntake.spinFor(reverse,300,degrees,600,rpm,false);
           LowerIntake.spinFor(reverse,100,degrees,50,rpm,true);
@@ -222,8 +222,7 @@ void autonomous(void) {
       }
       vex::task::sleep(100);
     }
-  });
-
+  });*/
 
   InertialSensor.calibrate();
 
@@ -231,112 +230,104 @@ void autonomous(void) {
     vex::wait(25,msec);
   }
 
-  //  wait(1,sec);
-  //  Turn(-135);
-  //  wait(25,msec);
-
+  autonSelection="LeftSide";
+  
+  if(autonSelection=="RightSide"){
   LowerIntake.spin(forward,80,pct);
-  MiddleIntake.spin(forward,25,pct);
+  MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(30,15);
-  wait(2.8,sec);
+  wait(50,msec);
+  MiddleIntake.stop();
   UpperIntake.stop();
-  Turn(80);
+  Turn(-77.65);
   wait(25,msec);
   Tongue.set(true);
   wait(1,sec);
-  Drive(16,30);
-  wait(1,sec);
-  LowerIntake.spin(forward,100,pct);
-  MiddleIntake.spin(forward,75,pct);
-  UpperIntake.spin(reverse,50,pct);
+  Drive(11,30);
+  wait(25,msec);
+  LowerIntake.spin(reverse,20,pct);
+  MiddleIntake.spin(reverse,20,pct);
+  UpperIntake.spin(reverse,30,pct);
   wait(2,sec);
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-19,55);
- vex::wait(75,msec);
+  Drive(-45.75,20);
   Tongue.set(false);
-  vex::wait(25,msec);
-  Turn(45);
   vex::wait(1,sec);
+  Turn(-133);
+  wait(25,msec);
+  Drive(-16,35);
+  wait(25,msec);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntake.spin(forward,15,pct);
-  UpperIntake.spin(forward,15,pct);
-  Drive(45,25);
-  wait(3,sec);
-  //printf("Hello\n");
-  LowerIntake.stop();
-  MiddleIntake.stop();
-  UpperIntake.stop();
-  Turn(-150);
-  wait(25,msec);
-  Drive(16,30);
-  vex::wait(25,msec);
-  LowerIntake.spin(reverse,70,pct);
-  MiddleIntake.spin(reverse,70,pct);
-  UpperIntake.spin(reverse,70,pct);
-  vex::wait(2,sec);
-  /*Drive(-13,55);
-  wait(25,msec);
-  Turn(-45);
-  wait(25,msec);
-  Drive(60,60);
-  wait(25,msec);*/
-  Drive(-12,30);
-  Turn(-55);
-  Drive(60,40);
-  
-
-  /*if(autonSelection=="RightSide"){
-
-  }
-  else if(autonSelection=="LeftSide"){
-  LowerIntake.spin(forward,100,pct);
-  MiddleIntake.spin(forward,15,pct);
-  UpperIntake.spin(forward,15,pct);
-  Drive(28,20);
-  wait(3,sec);
-  LowerIntake.stop();
-  MiddleIntake.stop();
-  UpperIntake.stop();
-  Turn(80);
-  wait(25,msec);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
+  wait(1,sec);
   Tongue.set(true);
   wait(25,msec);
-  Drive(13,45);
+  LowerIntake.spin(forward,90,pct);
+  MiddleIntake.spin(forward,65,pct);
+  UpperIntake.spin(forward,15,pct);
+  Drive(32,25);
+  wait(1.5,sec);
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  Drive(-32,30);
+  LowerIntake.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
+  }
+  else if(autonSelection=="LeftSide"){
+  LowerIntake.spin(forward,80,pct);
+  MiddleIntake.spin(forward,65,pct);
+  UpperIntake.spin(forward,15,pct);
+  Drive(30,25);
+  wait(50,msec);
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  Turn(77.65);
+  wait(25,msec);
+  Tongue.set(true);
+  wait(1,sec);
+  Drive(11,40);
   wait(25,msec);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntake.spin(reverse,75,pct);
-  UpperIntake.spin(reverse,75,pct);
-  wait(3,sec);
-
-  Drive(-13,55);
+  MiddleIntake.spin(forward,55,pct);
+  UpperIntake.spin(reverse,30,pct);
+  wait(2,sec);
+  LowerIntake.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  Drive(-45.75,25);
+  Tongue.set(false);
+  vex::wait(1,sec);
+  Turn(133);
   wait(25,msec);
-  Turn(45);
+  Drive(-16,35);
   wait(25,msec);
-  Drive(40,35);
+  LowerIntake.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
+  wait(1,sec);
+  Tongue.set(true);
   wait(25,msec);
-  Turn(-135);
-  wait(25,msec);
-  Drive(13,30);
-  wait(25,msec);
-  LowerIntake.spin(reverse,100,pct);
-  MiddleIntake.spin(reverse,100,pct);
-  UpperIntake.spin(reverse,100,pct);
-
-  Drive(-13,55);
-  wait(25,msec);
-  Turn(-45);
-  wait(25,msec);
-  Drive(60,60);
-  wait(25,msec);
-  
+  LowerIntake.spin(forward,90,pct);
+  MiddleIntake.spin(forward,65,pct);
+  UpperIntake.spin(forward,15,pct);
+  Drive(32,25);
+  wait(1.5,sec);
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  Drive(-32,30);
+  LowerIntake.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
   }
   else{
   //Skills
       
-  }*/
+  }
 
 }
   
