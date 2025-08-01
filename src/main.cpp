@@ -394,7 +394,7 @@ void autonomous(void) {
   
   void usercontrol(void) {
     // User control code here, inside the loop
-    Controller1.ButtonX.pressed(flipTongue);
+    Controller1.ButtonB.pressed(flipTongue);
     Brain.Screen.clearScreen();
 
     int J1;
@@ -453,7 +453,7 @@ void autonomous(void) {
       }
 
       // Un-Middle Goal
-      if(Controller1.ButtonB.pressing()){
+      if(Controller1.ButtonDown.pressing()){
         LowerIntake.spin(reverse,50,pct);
         MiddleIntake.spin(reverse,75,pct);
         UpperIntake.spin(forward,85,pct);
@@ -466,7 +466,7 @@ void autonomous(void) {
       }
 
       // Stop All
-      if(Controller1.ButtonA.pressing()){
+      if(Controller1.ButtonRight.pressing()){
         LowerIntake.stop();
         MiddleIntake.stop();
         UpperIntake.stop();
