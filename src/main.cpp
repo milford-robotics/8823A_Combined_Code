@@ -257,33 +257,33 @@ void autonomous(void) {
   });*/
   // autonSelection="LeftSide";    
   if(autonSelection=="RightSide"){
-  LowerIntake.spin(forward,80,pct);
-  MiddleIntake.spin(forward,65,pct);
+  LowerIntake.spin(forward,85,pct);
+  MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(30,25);
   wait(50,msec);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Turn(-77.65);
+  Turn(-75);
   wait(25,msec);
   Tongue.set(true);
   wait(1,sec);
-  Drive(11,40);
+  Drive(12,30);
   wait(25,msec);
-  LowerIntake.spin(reverse,20,pct);
-  MiddleIntake.spin(reverse,20,pct);
+  LowerIntake.spin(reverse,100,pct);
+  MiddleIntake.spin(reverse,55,pct);
   UpperIntake.spin(reverse,30,pct);
-  wait(2,sec);
+  wait(1.5,sec);
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-45.75,40);
+  Drive(-47,40);
   Tongue.set(false);
-  vex::wait(1,sec);
+  vex::wait(25,msec);
+  // TurnToHeading(-200);
   Turn(-133);
-  wait(25,msec);
-  Drive(-16,40);
-  wait(25,msec);
+  vex::task::sleep(1000);
+  Drive(-17,50);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
@@ -293,8 +293,8 @@ void autonomous(void) {
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(32,40);
-  wait(1.5,sec);
+  Drive(32.5,40);
+  wait(1,sec);
   MiddleIntake.stop();
   UpperIntake.stop();
   Drive(-32,40);
@@ -326,10 +326,10 @@ void autonomous(void) {
   Drive(-47,40);
   Tongue.set(false);
   vex::wait(25,msec);
-  //TurnToHeading(200);
-  Turn(133);
+  TurnToHeading(200);
+  // Turn(133);
   vex::task::sleep(1000);
-  Drive(-17,40);
+  Drive(-17,50);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
@@ -377,11 +377,15 @@ void autonomous(void) {
   
   void usercontrol(void) {
     // User control code here, inside the loop
-    Controller1.ButtonX.pressed(flipTongue);
+    Controller1.ButtonB.pressed(flipTongue);
     Brain.Screen.clearScreen();
 
     int J1;
     int J3;
+
+    // thread recordThread(){
+    //   recordTo("skills-auto-1.txt",std::vector());
+    // }
   
     while (1){
 
@@ -436,7 +440,7 @@ void autonomous(void) {
       }
 
       // Un-Middle Goal
-      if(Controller1.ButtonB.pressing()){
+      if(Controller1.ButtonDown.pressing()){
         LowerIntake.spin(reverse,50,pct);
         MiddleIntake.spin(reverse,75,pct);
         UpperIntake.spin(forward,85,pct);
@@ -449,7 +453,7 @@ void autonomous(void) {
       }
 
       // Stop All
-      if(Controller1.ButtonA.pressing()){
+      if(Controller1.ButtonRight.pressing()){
         LowerIntake.stop();
         MiddleIntake.stop();
         UpperIntake.stop();
@@ -468,6 +472,7 @@ void autonomous(void) {
 int main() {
   if(Brain.SDcard.isInserted()){
     setPortsFromSD();
+    printf("hello! \n");
   }
   Brain.Screen.released(switchScreen);
   // Set up callbacks for autonomous and driver control periods.
@@ -480,14 +485,6 @@ int main() {
       }
   });
   // Run the pre-autonomous function.
-
-  std::ofstream outFile;
-
-  outFile.open("hello-world.txt");
-
-  outFile << 'Hello!';
-
-  outFile.close();
 
 
 
