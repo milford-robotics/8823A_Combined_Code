@@ -319,13 +319,13 @@ void autonomous(void) {
   }
   else if(autonSelection=="LeftSide"){
   LowerIntake.spin(forward,85,pct);
-  MiddleIntake.spin(forward,75,pct);
-  UpperIntake.spin(forward,15,pct);
+  MiddleIntake.spin(forward,65,pct);
+  UpperIntake.spin(forward,10,pct);
   Drive(30,25);
   wait(50,msec);
+  Turn(75);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Turn(75);
   wait(25,msec);
   Tongue.set(true);
   wait(1,sec);
@@ -342,8 +342,9 @@ void autonomous(void) {
   Tongue.set(false);
   vex::wait(25,msec);
   //TurnToHeading(200);
-  Turn(133);
-  vex::task::sleep(1000);
+  Turn(129);
+  wait(50,msec);
+  //vex::task::sleep(1000);
   Drive(-17,40);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
@@ -354,11 +355,20 @@ void autonomous(void) {
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(32.5,40);
+  Drive(22.5,40);
+  wait(50,msec);
+  // Turn(-2);
+  // wait(25,msec);
+  Drive(10,40);
   wait(1,sec);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-32,40);
+  Drive(-10,40);
+  wait(50,msec);
+  // Turn(2);
+  // wait(25,msec);
+  Drive(-22,40);
+  wait(25,msec);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
@@ -389,7 +399,7 @@ void autonomous(void) {
   
   void usercontrol(void) {
     // User control code here, inside the loop
-    Controller1.ButtonX.pressed(flipTongue);
+    Controller1.ButtonB.pressed(flipTongue);
     Brain.Screen.clearScreen();
 
     int J1;
@@ -448,7 +458,7 @@ void autonomous(void) {
       }
 
       // Un-Middle Goal
-      if(Controller1.ButtonB.pressing()){
+      if(Controller1.ButtonDown.pressing()){
         LowerIntake.spin(reverse,50,pct);
         MiddleIntake.spin(reverse,75,pct);
         UpperIntake.spin(forward,85,pct);
@@ -461,7 +471,7 @@ void autonomous(void) {
       }
 
       // Stop All
-      if(Controller1.ButtonA.pressing()){
+      if(Controller1.ButtonRight.pressing()){
         LowerIntake.stop();
         MiddleIntake.stop();
         UpperIntake.stop();
