@@ -1,7 +1,8 @@
 #include "vex.h"
 
 
-int smplrt=50;
+bool endRecord=false;
+int smplrt=3;
 
 int dumpSD(std::string fileName){
     
@@ -77,8 +78,8 @@ int recordTo(std::string fileName, std::vector<vex::motor> motors){
         return 1;
     }
     
-    while(1){
-        outFile.open(fileName, std::ios_base::app );
+    while(!endRecord){
+        // outFile.open(fileName, std::ios_base::app );
         for(vex::motor Motor:motors){
 
             float command=Motor.voltage();
@@ -88,8 +89,9 @@ int recordTo(std::string fileName, std::vector<vex::motor> motors){
 
         outFile << std::endl;
 
-        outFile.close();
+        // outFile.close();
         vex::task::sleep(smplrt);
     }
+    outFile.close();
     return 0;
 }

@@ -255,7 +255,7 @@ void autonomous(void) {
       vex::task::sleep(100);
     }
   });*/
-  // autonSelection="LeftSide";    
+  autonSelection="LeftSide";    
   if(autonSelection=="RightSide"){
   LowerIntake.spin(forward,85,pct);
   MiddleIntake.spin(forward,75,pct);
@@ -312,7 +312,7 @@ void autonomous(void) {
   UpperIntake.stop();
   Turn(75);
   wait(25,msec);
-  Tongue.set(true);
+  // Tongue.set(true);
   wait(1,sec);
   Drive(12,30);
   wait(25,msec);
@@ -328,7 +328,7 @@ void autonomous(void) {
   vex::wait(25,msec);
   TurnToHeading(200);
   // Turn(133);
-  vex::task::sleep(1000);
+  vex::task::sleep(25);
   Drive(-17,50);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
@@ -383,15 +383,13 @@ void autonomous(void) {
     int J1;
     int J3;
 
-    // thread recordThread(){
-    //   recordTo("skills-auto-1.txt",std::vector());
-    // }
+    // thread recordThread([](){
+    //   recordTo("skills-auto-1.txt",std::vector<vex::motor> {LeftFront,LeftMiddle,LeftRear,RightFront,RightMiddle,RightRear,UpperIntake,MiddleIntake,LowerIntake});
+    // });
   
     while (1){
 
       wait (20, msec);
-
-      
   
       // Comms
       J1 = 0.5*Controller1.Axis1.position (percent); //slow down turns
