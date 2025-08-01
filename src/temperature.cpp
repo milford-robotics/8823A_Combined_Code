@@ -199,6 +199,10 @@ void switchScreen(){
         && Brain.Screen.yPosition()>130 && Brain.Screen.yPosition()<230){
             autonSelection="LeftSide";
         }
+        if(Brain.Screen.xPosition()>20 && Brain.Screen.xPosition()<160
+        && Brain.Screen.yPosition()>130 && Brain.Screen.yPosition()<230){
+            autonSelection="MoveForward";
+        }
         
     } 
 
@@ -328,6 +332,11 @@ void drawAllUi(){
 
                 Brain.Screen.drawRectangle(250,130,140,100);
                 
+                if(autonSelection=="MoveForward") Brain.Screen.setPenWidth(5);
+                else Brain.Screen.setPenWidth(1);
+
+                Brain.Screen.drawRectangle(20,130,140,100);
+                
                 Brain.Screen.setCursor(3,27);
 
                 Brain.Screen.print("Left Side");
@@ -335,6 +344,10 @@ void drawAllUi(){
                 Brain.Screen.setCursor(8,27);
 
                 Brain.Screen.print("Right Side");
+
+                Brain.Screen.setCursor(8,3);
+
+                Brain.Screen.print("Go Forward");
 
                 Brain.Screen.setPenColor(0);
                 Brain.Screen.setPenWidth(5);

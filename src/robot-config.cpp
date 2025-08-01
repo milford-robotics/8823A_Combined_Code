@@ -105,7 +105,7 @@ void setPortsFromSD(){
 rotation LeftEncoder = rotation(PORT7, true);
 rotation RightEncoder = rotation(PORT8, true);
 rotation BackEncoder = rotation(PORT9, true);
-inertial InertialSensor = inertial(PORT15);
+inertial InertialSensor = inertial(PORT2);
 digital_out Tongue = digital_out(Brain.ThreeWirePort.A);
 
 bool isMotorReversed(vex::motor motor){

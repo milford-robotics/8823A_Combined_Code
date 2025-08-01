@@ -225,23 +225,12 @@ void TurnToHeading (int angle){ // Turn function
   /*---------------------------------------------------------------------------*/
   
 void autonomous(void) {
-
   vex::thread debug_thread([](){
-    std::ofstream outFile;
-    outFile.open("record-1.txt",std::ios_base::app);
-    outFile << "NEW \n\n\n";
-    outFile.close();
     while(1){
-      printf("Inertial: %.4f \n", InertialSensor.rotation());
-      
-      outFile.open("record-1.txt",std::ios_base::app);
-      outFile << InertialSensor.rotation();
-      outFile.close();
-
-      vex::wait(100,msec);
+      printf("%.4f \n",InertialSensor.rotation());
+      vex::task::sleep(50);
     }
   });
-
   /*vex::thread unstuckThread([](){
     float oldMotorCommandMid=0;
     float oldMotorCommandTop=0;
@@ -266,11 +255,7 @@ void autonomous(void) {
       vex::task::sleep(100);
     }
   });*/
-
-  
-
-  autonSelection="LeftSide";
-  
+  // autonSelection="LeftSide";    
   if(autonSelection=="RightSide"){
   LowerIntake.spin(forward,80,pct);
   MiddleIntake.spin(forward,65,pct);
@@ -319,13 +304,13 @@ void autonomous(void) {
   }
   else if(autonSelection=="LeftSide"){
   LowerIntake.spin(forward,85,pct);
-  MiddleIntake.spin(forward,65,pct);
-  UpperIntake.spin(forward,10,pct);
+  MiddleIntake.spin(forward,75,pct);
+  UpperIntake.spin(forward,15,pct);
   Drive(30,25);
   wait(50,msec);
-  Turn(75);
   MiddleIntake.stop();
   UpperIntake.stop();
+  Turn(75);
   wait(25,msec);
   Tongue.set(true);
   wait(1,sec);
@@ -342,9 +327,8 @@ void autonomous(void) {
   Tongue.set(false);
   vex::wait(25,msec);
   //TurnToHeading(200);
-  Turn(129);
-  wait(50,msec);
-  //vex::task::sleep(1000);
+  Turn(133);
+  vex::task::sleep(1000);
   Drive(-17,40);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
@@ -355,23 +339,17 @@ void autonomous(void) {
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(22.5,40);
-  wait(50,msec);
-  // Turn(-2);
-  // wait(25,msec);
-  Drive(10,40);
+  Drive(32.5,40);
   wait(1,sec);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-10,40);
-  wait(50,msec);
-  // Turn(2);
-  // wait(25,msec);
-  Drive(-22,40);
-  wait(25,msec);
+  Drive(-32,40);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
+  }
+  else if(autonSelection=="MoveForward"){
+    Drive(6,30);
   }
   else{
   //Skills
@@ -399,7 +377,7 @@ void autonomous(void) {
   
   void usercontrol(void) {
     // User control code here, inside the loop
-    Controller1.ButtonB.pressed(flipTongue);
+    Controller1.ButtonX.pressed(flipTongue);
     Brain.Screen.clearScreen();
 
     int J1;
@@ -458,7 +436,7 @@ void autonomous(void) {
       }
 
       // Un-Middle Goal
-      if(Controller1.ButtonDown.pressing()){
+      if(Controller1.ButtonB.pressing()){
         LowerIntake.spin(reverse,50,pct);
         MiddleIntake.spin(reverse,75,pct);
         UpperIntake.spin(forward,85,pct);
@@ -471,7 +449,7 @@ void autonomous(void) {
       }
 
       // Stop All
-      if(Controller1.ButtonRight.pressing()){
+      if(Controller1.ButtonA.pressing()){
         LowerIntake.stop();
         MiddleIntake.stop();
         UpperIntake.stop();
