@@ -137,18 +137,18 @@ void switchScreen(){
         }
 
         if(motorPort!=-1){
-            if(screen==1401) LeftFront=vex::motor(motorPort,getMotorCartridge(LeftFront),isMotorReversed(LeftFront)); //Set the motor to whatever port was clicked
-            if(screen==1402) LeftMiddle=vex::motor(motorPort,getMotorCartridge(LeftMiddle),isMotorReversed(LeftMiddle));
-            if(screen==1403) LeftRear=vex::motor(motorPort,getMotorCartridge(LeftRear),isMotorReversed(LeftRear));
-            if(screen==1404) RightFront=vex::motor(motorPort,getMotorCartridge(RightFront),isMotorReversed(RightFront));
-            if(screen==1405) RightMiddle=vex::motor(motorPort,getMotorCartridge(RightMiddle),isMotorReversed(RightMiddle));
-            if(screen==1406) RightRear=vex::motor(motorPort,getMotorCartridge(RightRear),isMotorReversed(RightRear));
-            if(screen==1407) UpperIntake=vex::motor(motorPort,getMotorCartridge(UpperIntake),isMotorReversed(UpperIntake));
-            if(screen==1408) MiddleIntake=vex::motor(motorPort,getMotorCartridge(MiddleIntake),isMotorReversed(MiddleIntake));
-            if(screen==1409) LowerIntake=vex::motor(motorPort,getMotorCartridge(LowerIntake),isMotorReversed(LowerIntake));
+            if(screen==1401) {LeftFront=vex::motor(motorPort,getMotorCartridge(LeftFront),isMotorReversed(LeftFront)); setMotorPort("LeftFront",motorPort);} //Set the motor to whatever port was clicked
+            if(screen==1402) {LeftMiddle=vex::motor(motorPort,getMotorCartridge(LeftMiddle),isMotorReversed(LeftMiddle)); setMotorPort("LeftMiddle",motorPort);}
+            if(screen==1403) {LeftRear=vex::motor(motorPort,getMotorCartridge(LeftRear),isMotorReversed(LeftRear)); setMotorPort("LeftRear",motorPort);}
+            if(screen==1404) {RightFront=vex::motor(motorPort,getMotorCartridge(RightFront),isMotorReversed(RightFront)); setMotorPort("RightFront",motorPort);}
+            if(screen==1405) {RightMiddle=vex::motor(motorPort,getMotorCartridge(RightMiddle),isMotorReversed(RightMiddle)); setMotorPort("RightMiddle",motorPort);}
+            if(screen==1406) {RightRear=vex::motor(motorPort,getMotorCartridge(RightRear),isMotorReversed(RightRear)); setMotorPort("RightRear",motorPort);}
+            if(screen==1407) {UpperIntake=vex::motor(motorPort,getMotorCartridge(UpperIntake),isMotorReversed(UpperIntake)); setMotorPort("UpperIntake",motorPort);} 
+            if(screen==1408) {MiddleIntake=vex::motor(motorPort,getMotorCartridge(MiddleIntake),isMotorReversed(MiddleIntake)); setMotorPort("MiddleIntake",motorPort);}
+            if(screen==1409) {LowerIntake=vex::motor(motorPort,getMotorCartridge(LowerIntake),isMotorReversed(LowerIntake)); setMotorPort("LowerIntake",motorPort);}
         }
 
-        if(clickedOnMotor) { screen-=100; setAllMotorPorts(); setMotorNames();};
+        if(clickedOnMotor) { screen-=100; setMotorNames();};
     }    
 
 
@@ -198,6 +198,10 @@ void switchScreen(){
         if(Brain.Screen.xPosition()>250 && Brain.Screen.xPosition()<390
         && Brain.Screen.yPosition()>130 && Brain.Screen.yPosition()<230){
             autonSelection="LeftSide";
+        }
+        if(Brain.Screen.xPosition()>20 && Brain.Screen.xPosition()<160
+        && Brain.Screen.yPosition()>130 && Brain.Screen.yPosition()<230){
+            autonSelection="MoveForward";
         }
         
     } 
@@ -328,6 +332,11 @@ void drawAllUi(){
 
                 Brain.Screen.drawRectangle(250,130,140,100);
                 
+                if(autonSelection=="MoveForward") Brain.Screen.setPenWidth(5);
+                else Brain.Screen.setPenWidth(1);
+
+                Brain.Screen.drawRectangle(20,130,140,100);
+                
                 Brain.Screen.setCursor(3,27);
 
                 Brain.Screen.print("Left Side");
@@ -335,6 +344,10 @@ void drawAllUi(){
                 Brain.Screen.setCursor(8,27);
 
                 Brain.Screen.print("Right Side");
+
+                Brain.Screen.setCursor(8,3);
+
+                Brain.Screen.print("Go Forward");
 
                 Brain.Screen.setPenColor(0);
                 Brain.Screen.setPenWidth(5);

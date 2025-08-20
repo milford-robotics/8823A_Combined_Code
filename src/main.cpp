@@ -233,18 +233,12 @@ void TurnToHeading (int angle){ // Turn function
   /*---------------------------------------------------------------------------*/
   
 void autonomous(void) {
-
   vex::thread debug_thread([](){
-    std::ofstream outFile;
-    outFile.open("record-1.txt");
-
-    outFile.close();
     while(1){
-      printf("Inertial: %.4f \n", InertialSensor.rotation());
-      vex::wait(25,msec);
+      printf("%.4f \n",InertialSensor.rotation());
+      vex::task::sleep(50);
     }
   });
-
   /*vex::thread unstuckThread([](){
     float oldMotorCommandMid=0;
     float oldMotorCommandTop=0;
@@ -269,39 +263,35 @@ void autonomous(void) {
       vex::task::sleep(100);
     }
   });*/
-
-  
-
-  autonSelection="LeftSide";
-  
+  autonSelection="LeftSide";    
   if(autonSelection=="RightSide"){
-  LowerIntake.spin(forward,80,pct);
-  MiddleIntake.spin(forward,65,pct);
+  LowerIntake.spin(forward,85,pct);
+  MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(30,25);
   wait(50,msec);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Turn(-77.65);
+  Turn(-75);
   wait(25,msec);
   Tongue.set(true);
   wait(1,sec);
-  Drive(11,40);
+  Drive(12,30);
   wait(25,msec);
-  LowerIntake.spin(reverse,20,pct);
-  MiddleIntake.spin(reverse,20,pct);
+  LowerIntake.spin(reverse,100,pct);
+  MiddleIntake.spin(reverse,55,pct);
   UpperIntake.spin(reverse,30,pct);
-  wait(2,sec);
+  wait(1.5,sec);
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-45.75,40);
+  Drive(-47,40);
   Tongue.set(false);
-  vex::wait(1,sec);
+  vex::wait(25,msec);
+  // TurnToHeading(-200);
   Turn(-133);
-  wait(25,msec);
-  Drive(-16,40);
-  wait(25,msec);
+  vex::task::sleep(1000);
+  Drive(-17,50);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
@@ -311,8 +301,8 @@ void autonomous(void) {
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(32,40);
-  wait(1.5,sec);
+  Drive(32.5,40);
+  wait(1,sec);
   MiddleIntake.stop();
   UpperIntake.stop();
   Drive(-32,40);
@@ -322,15 +312,15 @@ void autonomous(void) {
   }
   else if(autonSelection=="LeftSide"){
   LowerIntake.spin(forward,85,pct);
-  MiddleIntake.spin(forward,65,pct);
-  UpperIntake.spin(forward,10,pct);
+  MiddleIntake.spin(forward,75,pct);
+  UpperIntake.spin(forward,15,pct);
   Drive(30,25);
   wait(50,msec);
-  Turn(75);
   MiddleIntake.stop();
   UpperIntake.stop();
+  Turn(75);
   wait(25,msec);
-  Tongue.set(true);
+  // Tongue.set(true);
   wait(1,sec);
   Drive(12,30);
   wait(25,msec);
@@ -344,11 +334,10 @@ void autonomous(void) {
   Drive(-47,40);
   Tongue.set(false);
   vex::wait(25,msec);
-  //TurnToHeading(200);
-  Turn(129);
-  wait(50,msec);
-  //vex::task::sleep(1000);
-  Drive(-17,40);
+  TurnToHeading(200);
+  // Turn(133);
+  vex::task::sleep(25);
+  Drive(-17,50);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
@@ -358,23 +347,17 @@ void autonomous(void) {
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(22.5,40);
-  wait(50,msec);
-  // Turn(-2);
-  // wait(25,msec);
-  Drive(10,40);
+  Drive(32.5,40);
   wait(1,sec);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-10,40);
-  wait(50,msec);
-  // Turn(2);
-  // wait(25,msec);
-  Drive(-22,40);
-  wait(25,msec);
+  Drive(-32,40);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
+  }
+  else if(autonSelection=="MoveForward"){
+    Drive(6,30);
   }
   else{
   //Skills
@@ -408,12 +391,14 @@ void autonomous(void) {
 
     int J1;
     int J3;
+
+    // thread recordThread([](){
+    //   recordTo("skills-auto-1.txt",std::vector<vex::motor> {LeftFront,LeftMiddle,LeftRear,RightFront,RightMiddle,RightRear,UpperIntake,MiddleIntake,LowerIntake});
+    // });
   
     while (1){
 
       wait (20, msec);
-
-      
   
       // Comms
       J1 = 0.5*Controller1.Axis1.position (percent); //slow down turns
@@ -494,6 +479,7 @@ void autonomous(void) {
 int main() {
   if(Brain.SDcard.isInserted()){
     setPortsFromSD();
+    printf("hello! \n");
   }
   Brain.Screen.released(switchScreen);
   // Set up callbacks for autonomous and driver control periods.
@@ -506,14 +492,6 @@ int main() {
       }
   });
   // Run the pre-autonomous function.
-
-  std::ofstream outFile;
-
-  outFile.open("hello-world.txt");
-
-  outFile << 'Hello!';
-
-  outFile.close();
 
 
 
