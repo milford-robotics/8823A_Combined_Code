@@ -255,8 +255,8 @@ void autonomous(void) {
       vex::task::sleep(100);
     }
   });*/
-  autonSelection="LeftSide";    
-  if(autonSelection=="RightSide"){
+  //autonSelection="LeftSide";    
+  if(autonSelection=="LeftSide"){
   LowerIntake.spin(forward,85,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
@@ -266,34 +266,34 @@ void autonomous(void) {
   UpperIntake.stop();
   Turn(-75);
   wait(25,msec);
-  Tongue.set(true);
+  // Tongue.set(true);
   wait(1,sec);
   Drive(12,30);
   wait(25,msec);
-  LowerIntake.spin(reverse,100,pct);
-  MiddleIntake.spin(reverse,55,pct);
+  LowerIntake.spin(reverse,35,pct);
+  MiddleIntake.spin(reverse,35,pct);
   UpperIntake.spin(reverse,30,pct);
   wait(1.5,sec);
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
   Drive(-47,40);
-  Tongue.set(false);
+  // Tongue.set(false);
   vex::wait(25,msec);
   // TurnToHeading(-200);
   Turn(-133);
   vex::task::sleep(1000);
-  Drive(-17,50);
+  Drive(-17,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
-  wait(1,sec);
+  wait(0.55,sec);
   Tongue.set(true);
-  wait(25,msec);
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(32.5,40);
+  wait(25,msec);
+  Drive(29,40);
   wait(1,sec);
   MiddleIntake.stop();
   UpperIntake.stop();
@@ -302,8 +302,8 @@ void autonomous(void) {
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
   }
-  else if(autonSelection=="LeftSide"){
-  LowerIntake.spin(forward,85,pct);
+  else if(autonSelection=="RightSide"){
+  LowerIntake.spin(forward,80,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(30,25);
@@ -312,7 +312,7 @@ void autonomous(void) {
   UpperIntake.stop();
   Turn(75);
   wait(25,msec);
-  // Tongue.set(true);
+  Tongue.set(true);
   wait(1,sec);
   Drive(12,30);
   wait(25,msec);
@@ -339,7 +339,7 @@ void autonomous(void) {
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(32.5,40);
+  Drive(30,40);
   wait(1,sec);
   MiddleIntake.stop();
   UpperIntake.stop();
@@ -352,7 +352,7 @@ void autonomous(void) {
     Drive(6,30);
   }
   else{
-  //Skills
+
       
   }
 

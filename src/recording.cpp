@@ -71,7 +71,7 @@ void eraseSD(std::string fileName){
 }
 
 int recordTo(std::string fileName, std::vector<vex::motor> motors){
-    std::ofstream outFile;
+    std::ofstream outFile;  
     outFile.open(fileName);
     if(outFile.fail()){
         printf("Tried to record to file, but it didn't exist \n");

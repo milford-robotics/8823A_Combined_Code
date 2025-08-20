@@ -148,7 +148,7 @@ void switchScreen(){
             if(screen==1409) {LowerIntake=vex::motor(motorPort,getMotorCartridge(LowerIntake),isMotorReversed(LowerIntake)); setMotorPort("LowerIntake",motorPort);}
         }
 
-        if(clickedOnMotor) { screen-=100; setMotorNames();};
+        if(clickedOnMotor) { screen-=100; setMotorNames(); dumpSD("UpperIntake.txt");};
     }    
 
 
