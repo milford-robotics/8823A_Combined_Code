@@ -107,6 +107,7 @@ rotation RightEncoder = rotation(PORT8, true);
 rotation BackEncoder = rotation(PORT9, true);
 inertial InertialSensor = inertial(PORT15);
 digital_out Tongue = digital_out(Brain.ThreeWirePort.A);
+optical OpticalSensor = optical(PORT2);
 
 bool isMotorReversed(vex::motor motor){
     if(motor.index()==LeftFront.index() || motor.index()==LeftMiddle.index() || motor.index()==LeftRear.index() || motor.index()==MiddleIntake.index() ){

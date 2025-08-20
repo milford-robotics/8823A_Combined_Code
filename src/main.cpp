@@ -31,6 +31,14 @@ vex::competition Competition;
 // Makes so if button is pressed once, the Tongue mechanism is enabled, but when button is pressed again, it is disabled
 void flipTongue(){ Tongue.set(!Tongue.value()); }
 
+/*void ColorSort(){
+  OpticalSensor.setLightPower(100, percent);
+  OpticalSensor.setlight(ledState::on);
+  if(color detectcolor = OpticalSensor.color(red)){
+
+  }
+}*/
+
 // LEAVE THIS!!! IF THE OTHER EQUATIONS WORK, THEN YOU CAN SCRAP THIS!!
 
     constexpr double gear_ratio = ((double)1/1);
@@ -395,6 +403,7 @@ void autonomous(void) {
   void usercontrol(void) {
     // User control code here, inside the loop
     Controller1.ButtonB.pressed(flipTongue);
+    //Controller1.ButtonDown.pressed(ColorSort);
     Brain.Screen.clearScreen();
 
     int J1;
@@ -453,7 +462,7 @@ void autonomous(void) {
       }
 
       // Un-Middle Goal
-      if(Controller1.ButtonDown.pressing()){
+      if(Controller1.ButtonUp.pressing()){
         LowerIntake.spin(reverse,50,pct);
         MiddleIntake.spin(reverse,75,pct);
         UpperIntake.spin(forward,85,pct);

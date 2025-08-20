@@ -19,6 +19,7 @@ extern rotation RightEncoder;
 extern rotation BackEncoder;
 extern inertial InertialSensor;
 extern digital_out Tongue;
+extern optical OpticalSensor;
 
 int getMotorPort(std::string motorName);
 void setMotorPort(std::string motorName, int port);
