@@ -31,13 +31,23 @@ vex::competition Competition;
 // Makes so if button is pressed once, the Tongue mechanism is enabled, but when button is pressed again, it is disabled
 void flipTongue(){ Tongue.set(!Tongue.value()); }
 
-/*void ColorSort(){
-  OpticalSensor.setLightPower(100, percent);
-  OpticalSensor.setlight(ledState::on);
-  if(color detectcolor = OpticalSensor.color(red)){
 
+enum sc{
+  blue,
+  red
+};
+sc wrongColor= sc::blue;
+
+void flipSpitColor(){
+  if(wrongColor==sc::blue){
+    wrongColor=sc::red;
   }
-}*/
+  else if(wrongColor==sc::red){
+    wrongColor=sc::blue;
+  }
+}
+
+bool colorSort=false;
 
 // LEAVE THIS!!! IF THE OTHER EQUATIONS WORK, THEN YOU CAN SCRAP THIS!!
 
@@ -384,9 +394,18 @@ void autonomous(void) {
   }
   
   void usercontrol(void) {
+    OpticalSensor2.setLightPower(100, percent);
+    OpticalSensor2.setLight(ledState::on);
+    OpticalSensor1.setLightPower(100, percent);
+    OpticalSensor1.setLight(ledState::on);
+
     // User control code here, inside the loop
     Controller1.ButtonB.pressed(flipTongue);
-    //Controller1.ButtonDown.pressed(ColorSort);
+    Controller1.ButtonA.pressed(flipSpitColor);
+    Controller1.ButtonLeft.pressed([](){
+      colorSort=!colorSort;
+    });
+
     Brain.Screen.clearScreen();
 
     int J1;
@@ -395,10 +414,29 @@ void autonomous(void) {
     // thread recordThread([](){
     //   recordTo("skills-auto-1.txt",std::vector<vex::motor> {LeftFront,LeftMiddle,LeftRear,RightFront,RightMiddle,RightRear,UpperIntake,MiddleIntake,LowerIntake});
     // });
+
+    thread colorThread([](){
+      while(1){
+      if((((OpticalSensor1.hue()<=30 || OpticalSensor2.hue()<=30) && wrongColor==sc::red) ||((OpticalSensor1.hue()>=200 || OpticalSensor2.hue()>=200)  && wrongColor==sc::blue)) && colorSort){
+        for(int i=0; i<=20; i++){
+          LowerIntake.spin(forward,50,pct);
+          MiddleIntake.spin(forward,75,pct);
+          UpperIntake.spin(reverse,60,pct);
+          vex:task::sleep(20);
+        }
+
+        LowerIntake.stop();
+        MiddleIntake.stop();
+        UpperIntake.stop();
+      }
+      vex::task::sleep(100);
+    }
+      // printf("grhoihjgsas\n");
+    });
   
     while (1){
 
-      wait (20, msec);
+      wait (100, msec);
   
       // Comms
       J1 = 0.5*Controller1.Axis1.position (percent); //slow down turns
@@ -447,7 +485,7 @@ void autonomous(void) {
       }
 
       // Un-Middle Goal
-      if(Controller1.ButtonUp.pressing()){
+      if(Controller1.ButtonDown.pressing()){
         LowerIntake.spin(reverse,50,pct);
         MiddleIntake.spin(reverse,75,pct);
         UpperIntake.spin(forward,85,pct);
