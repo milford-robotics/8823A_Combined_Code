@@ -3,12 +3,21 @@
 
 
 
+
+
 using namespace vex;
+
+
+//To anyone, Milford or otherwise, reading this code
+
+//This code is BAD, do NOT follow in my footsteps exactly. I could easily go through this code for like 10 minutes picking apart
+//all of the problems. However, if it ain't broke don't fix it lol
+
+// - Harpster
 
 const char * autonSelection="Skills";
 
 int screen=1300;
-
 
 const char * motorIndexes[]={"nil1","nil2", "nil3", "nil4", "nil5",
                              "nil6", "nil7", "nil8", "nil9", "nil10", 
@@ -74,7 +83,7 @@ void motorInfoScreen(vex::motor selectedMotor){
         Brain.Screen.setPenColor(red);
         Brain.Screen.print("PLUG IN MOTOR!!"); //Tell user to plug motor in
     }
-    Brain.Screen.setPenColor(white);
+    Brain.Screen.setPenColor(white); // Draw emergency reassign button
     Brain.Screen.setFont(mono20);
     Brain.Screen.setFillColor(orange);
     Brain.Screen.drawRectangle(270, 10, 125, 50);
