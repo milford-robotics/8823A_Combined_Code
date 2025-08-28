@@ -167,7 +167,7 @@ void Turn (int angle){ // Turn function
   float sumError = 0;
   float error = 67;
   float Kp = 0.3;
-  double Ki = 0.03;
+  double Ki = 0.031;
 
   double startingRot=InertialSensor.rotation();
 
@@ -274,19 +274,19 @@ void autonomous(void) {
     }
   });*/
   //autonSelection="LeftSide";    
-  if(autonSelection=="LeftSide"){
+  if(autonSelection=="RightSide"){
   LowerIntake.spin(forward,85,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(30,25);
+  Drive(25,25);
   wait(50,msec);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Turn(-75);
+  Turn(-70);
   wait(25,msec);
   // Tongue.set(true);
   wait(1,sec);
-  Drive(12,30);
+  Drive(29,30);
   wait(25,msec);
   LowerIntake.spin(reverse,35,pct);
   MiddleIntake.spin(reverse,35,pct);
@@ -320,19 +320,20 @@ void autonomous(void) {
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
   }
-  else if(autonSelection=="RightSide"){
+  else if(autonSelection=="LeftSide"){
   LowerIntake.spin(forward,80,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(30,25);
+  Drive(28,25);
   wait(50,msec);
+  LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Turn(75);
+  Turn(73);
   wait(25,msec);
   Tongue.set(true);
   wait(1,sec);
-  Drive(12,30);
+  Drive(16,30);
   wait(25,msec);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,55,pct);
