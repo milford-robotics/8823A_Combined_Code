@@ -11,6 +11,7 @@
 #include "recording.h"
 #include "temperature.h"
 #include "robot-config.h"
+#include "odom.h"
 
 
 #define waitUntil(condition)                                                   \

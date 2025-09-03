@@ -102,9 +102,9 @@ void setPortsFromSD(){
 
 
 
-rotation LeftEncoder = rotation(PORT7, true);
+rotation LeftEncoder = rotation(PORT18, true);
 rotation RightEncoder = rotation(PORT8, true);
-rotation BackEncoder = rotation(PORT9, true);
+rotation BackEncoder = rotation(PORT14, true);
 inertial InertialSensor = inertial(PORT15);
 digital_out Tongue = digital_out(Brain.ThreeWirePort.A);
 optical OpticalSensor1 = optical(PORT2);
@@ -121,4 +121,29 @@ vex::gearSetting getMotorCartridge(vex::motor motor){
     return ratio6_1;
 }
 
+//was going to optomize code but now I don't have to lol
+/*
+class motorPlus: public vex::motor{
+    public:
+        int32_t index;
+        vex::gearSetting cartridge;
+        bool isReversed;
+        std::string motorName;
+    
+        motorPlus(int32_t port, vex::gearSetting gear, bool reverse, std::string name) 
+            : motor(port, gear, reverse){
+                index=port;
+                cartridge=gear;
+                isReversed=reverse;
+                motorName=name;
+        }
 
+        motorPlus(vex::gearSetting gear, bool reverse,std::string name) : motorPlus(getMotorPort(name), gear, reverse, name){};
+
+        void spin(){
+
+        }
+
+
+};
+*/
