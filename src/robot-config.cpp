@@ -77,13 +77,25 @@ void setAllMotorPorts(){
 vex::brain       Brain;
 controller Controller1 = controller(primary);
 
-
+/*
 motor LeftFront = motor(PORT11, ratio6_1, true);
 motor LeftMiddle = motor(PORT12, ratio6_1, true);
 motor LeftRear = motor(PORT13, ratio6_1, true);
 motor RightFront = motor(PORT18, ratio6_1, false);
 motor RightMiddle = motor(PORT19, ratio6_1, false);
 motor RightRear = motor(PORT20, ratio6_1, false);
+motor UpperIntake = motor(PORT10, ratio6_1, false);
+motor MiddleIntake = motor(PORT1, ratio6_1, true);
+motor LowerIntake = motor(PORT14, ratio6_1, false);
+*/
+
+
+motor LeftFront = motor(PORT11, ratio6_1, false);
+motor LeftMiddle = motor(PORT12, ratio6_1, true);
+motor LeftRear = motor(PORT13, ratio6_1, false);
+motor RightFront = motor(PORT18, ratio6_1, true);
+motor RightMiddle = motor(PORT19, ratio6_1, false);
+motor RightRear = motor(PORT20, ratio6_1, true);
 motor UpperIntake = motor(PORT10, ratio6_1, false);
 motor MiddleIntake = motor(PORT1, ratio6_1, true);
 motor LowerIntake = motor(PORT14, ratio6_1, false);
@@ -102,10 +114,10 @@ void setPortsFromSD(){
 
 
 
-rotation LeftEncoder = rotation(PORT18, true);
-rotation RightEncoder = rotation(PORT8, true);
-rotation BackEncoder = rotation(PORT14, true);
-inertial InertialSensor = inertial(PORT15);
+rotation LeftEncoder = rotation(PORT16, true);
+rotation RightEncoder = rotation(PORT15, true);
+rotation BackEncoder = rotation(PORT1, true);
+inertial InertialSensor = inertial(PORT9);
 digital_out Tongue = digital_out(Brain.ThreeWirePort.A);
 optical OpticalSensor1 = optical(PORT2);
 optical OpticalSensor2 = optical(PORT3);

@@ -14,8 +14,14 @@ using namespace vex;
 
 vex::competition Competition;
 
+#define hawktuah 1
+
 // A global instance of vex::brain used for printing to the V5 brain screen
 
+    constexpr double gear_ratio = ((double)1/1);
+    constexpr double encoder_wheel_radius = 1.375;
+    constexpr double encoder_wheel_circumference = 2 * M_PI * encoder_wheel_radius;
+    constexpr double start_heading = 90;
 
 
 /*---------------------------------------------------------------------------*/
@@ -320,9 +326,17 @@ void autonomous(void) {
 
     int J1;
     int J3;
+    InertialSensor.calibrate();
+    while(InertialSensor.isCalibrating());
 
-    // thread recordThread([](){
-    //   recordTo("skills-auto-1.txt",std::vector<vex::motor> {LeftFront,LeftMiddle,LeftRear,RightFront,RightMiddle,RightRear,UpperIntake,MiddleIntake,LowerIntake});
+    // thread odomThread([](){
+    //   odometry();
+    // });
+    // thread debugThread([](){
+    //   while(67/41){
+    //   printf("x: %.2f y: %.2f \n",x,y);
+    //   vex::this_thread::sleep_for(100);
+    //   }
     // });
 
     thread colorThread([](){
@@ -344,7 +358,7 @@ void autonomous(void) {
       // printf("grhoihjgsas\n");
     });
   
-    while (1){
+    while (hawktuah){
 
       wait (100, msec);
   
@@ -423,8 +437,32 @@ void autonomous(void) {
     }
 }
 
-
+float time2=0;
+int D=0;
 int main() {
+
+  vex::thread timeThread([](){
+    while(67/41){
+      time2+=0.001;
+      vex::this_thread::sleep_for(1);
+    }
+  });
+
+  vex::thread odomThread([](){
+    InertialSensor.calibrate();
+    while(67/41){
+      // tsHeadingTypeSquirt();
+      vex::task::sleep(10);
+    }
+    
+  });
+  vex::thread debugThread([](){
+    while(67/41){
+      printf("ts odom heading: %.5f   ts inertial heading: %.5f at %.2f \n",robotAngle,InertialSensor.heading(),time2);
+      vex::task::sleep(500);
+    }
+});
+
   if(Brain.SDcard.isInserted()){
     setPortsFromSD();
     printf("hello! \n");
@@ -433,6 +471,16 @@ int main() {
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
+
+  std::ofstream outFile;  
+  outFile.open("recording.txt");
+
+  for(int il=0; il<=100; il++){
+    for(int ir=0; ir<=100;ir++){
+      outFile << ir<<"\t"<<il<<"\t"<<tsHeadingTypeSquirt(ir,il) << std::endl;
+  }
+}
+  outFile.close();
 
   vex::thread touchscreen_thread([](){
       while(1){

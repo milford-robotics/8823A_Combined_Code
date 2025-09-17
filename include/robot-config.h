@@ -14,12 +14,14 @@ extern motor RightRear;
 extern motor UpperIntake;
 extern motor MiddleIntake;
 extern motor LowerIntake;
-extern rotation FrontEncoder;
-extern rotation RearEncoder;
+extern rotation LeftEncoder;
+extern rotation RightEncoder;
+extern rotation BackEncoder;
 extern inertial InertialSensor;
 extern digital_out Tongue;
 extern optical OpticalSensor2;
 extern optical OpticalSensor1;
+
 
 int getMotorPort(std::string motorName);
 void setMotorPort(std::string motorName, int port);

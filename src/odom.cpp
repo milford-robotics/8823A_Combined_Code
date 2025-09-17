@@ -1,5 +1,6 @@
 #include <vex.h>
 #include <cmath>
+#include <math.h>
 
 using namespace vex;
 
@@ -8,28 +9,32 @@ using namespace vex;
 
     constexpr double gear_ratio = ((double)1/1);
     constexpr double encoder_wheel_radius = 1.375;
-    constexpr double encoder_wheel_circumference = 2 * M_PI * encoder_wheel_radius;
+    constexpr double encoder_wheel_circumference = M_TWOPI * encoder_wheel_radius;
     constexpr double start_heading = 90;
+    constexpr double track_width = 9;
 
     // defines x and y for later
     float x = 0;
     float y = 0;
 
+    double left_distance = (LeftEncoder.position(deg) / 360) * encoder_wheel_circumference * gear_ratio;
+    double right_distance = (RightEncoder.position(deg) / 360) * encoder_wheel_circumference * gear_ratio;
 
 
-void odometry(double , double ) {
+void odometry() {
 
-    FrontEncoder.resetPosition();
+    // FrontEncoder.resetPosition();
 
 
     float previous_distance_traveled = 0;
 
     while(1) {
         // Using std::fmod to preserve the "wraparound effect" of 0-360 degrees when considering the offset of start heading.
-        float heading = std::fmod((360 - InertialSensor.rotation()) + start_heading, 360); // finds the angle
 
-        // float average_encoder_position = (LeftEncoder.position(vex::degrees) + RightEncoder.position(vex::degrees)) / 2; // finds the encoder position on the robot
-        float average_encoder_position = (FrontEncoder.position(vex::degrees)); // finds the encoder position on the robot
+        float average_encoder_position = (LeftEncoder.position(vex::degrees) + RightEncoder.position(vex::degrees)) / 2; // finds the encoder position on the robot
+
+        float heading_in_radians = (right_distance - left_distance) / track_width;
+        float heading = std::fmod((M_TWOPI - (heading_in_radians)) + start_heading, M_TWOPI); // finds the angle
 
         float distance_traveled = (average_encoder_position / 360) * encoder_wheel_circumference; // pretty self explanatory
         float change_in_distance = distance_traveled - previous_distance_traveled; // finds the distance traveled
@@ -96,6 +101,133 @@ void moveToPoint(double ptX, double ptY){
 
 
   std::printf("distance to point: %.3f   angle to point: %.3f rad %.3f deg \n", targetDist, targetAngle, (targetAngle*180/M_PI));
+
+
+}
+
+
+
+class Circle{
+  public:
+    float radius, circumfrence, area;
+    Circle(float radius){
+      this->radius=radius;
+      this->circumfrence=radius*2*M_PI;
+      this->area=pow(radius,2)*M_PI;
+    }
+
+    //get the physical length of an arc from the central angle
+    //param: theta (central angle of circle) in RADIANS
+    //return: float arc length in inches (whole curve, not a chord)
+    float arcLength(float theta){
+      return this->circumfrence*theta;
+    }
+
+    //get the physical length of a chord from the central angle
+    //param: theta (central angle of circle) in RADIANS
+    //return: float chord length in inches (chord, not whole curve)
+    float chordLength(float theta){
+      return this->circumfrence*sin(2*theta);
+    }
+
+    //get the proportion of a circle from distance
+    //param: distance (in inches) the distance travelled
+    //return: float percent of circle travelled
+    float ratioFromDistance(float distance){
+      return distance/this->circumfrence;
+    }
+
+    //get the central angle of an arc from the distance travelled
+    //param: distance (in inches) the distance of the circle
+    //return: float arc length in inches (chord, not whole curve)
+    float angleFromDistance(float distance){
+      return this->ratioFromDistance(distance)*M_TWOPI;
+    }
+
+
+
+
+};
+double heading=0;
+double oldRightDist=0, oldLeftDist=0;
+double robotAngle=0;
+
+
+double getTheMotorPositionTsInRotationsTypeSquirtOnGod(vex::turnType direction){
+  if(direction==vex::turnType::left){
+    return (LeftFront.position(rev)+LeftMiddle.position(rev)+LeftRear.position(rev))/3.0;
+   
+  }
+  if(direction==vex::turnType::right){
+    return (RightFront.position(rev)+RightMiddle.position(rev)+RightRear.position(rev))/3.0;
+  }
+  return 6.7;
+}
+
+double tsHeadingTypeSquirt(double leftDist,double rightDist){
+    //Establish physical constants
+    const double wheelDiam=2.75,robotWidth=10.5;
+
+    //Establish return variables
+    double angle=0,xDist=0,yDist=0,rawX=0,rawY=0,centralAngle=0;
+
+    //Get left and right dist
+    double rawRightDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(right)*wheelDiam;
+    double rawLeftDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(left)*wheelDiam;
+
+
+    // double rightDist=rawRightDist-oldRightDist;
+    // double leftDist=rawLeftDist-oldLeftDist;
+
+
+    // if(leftDist==0){ leftDist=0.0000001;}
+    // if(rightDist==0){ rightDist=0.0000001;}
+
+    //Get the radii
+    double centralRadius=(leftDist*robotWidth)/(leftDist-rightDist);
+    double middleRadius=(leftDist*robotWidth)/(leftDist-rightDist)+robotWidth/2.0;
+    double outerRadius=(leftDist*robotWidth)/(leftDist-rightDist)+robotWidth;
+
+    //Establish circles
+    Circle centralCircle(centralRadius);
+    Circle middleCircle(middleRadius);
+    Circle outerCircle(outerRadius);
+
+    //Do circle formulas
+    //Get central angle
+    centralAngle=centralCircle.angleFromDistance(leftDist);
+    angle=centralAngle/2.0; //Might be wrong
+
+    //Get point at end of arc
+    rawX=middleRadius*cos(angle)-middleRadius;
+    rawY=middleRadius*sin(angle);
+    
+    
+
+    //Set old ts
+    oldLeftDist=rawLeftDist;
+    oldRightDist=rawRightDist;
+
+    //AVOID NAN
+    if(angle!=angle){
+      return 0;
+    }
+    //   printf("NAN ERROR NAN ERROR NAN ERROR\n");
+    //   return robotAngle;
+    // }
+    // if(fabs(angle)>=M_PI){
+    //   printf("pmo conditions: r%.3f l%.3f got%.3f\n",rightDist);
+    //   angle=0;
+    // }
+
+    // robotAngle+=angle*180/M_PI; //return the ts in degrees
+
+    // printf("%.3f %.3f %.3f \n",leftDist,rightDist,angle);
+// vex::task::sleep(1000);
+    return centralAngle;
+
+    
+
 
 
 }
