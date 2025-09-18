@@ -169,61 +169,20 @@ double tsHeadingTypeSquirt(double leftDist,double rightDist){
     const double wheelDiam=2.75,robotWidth=10.5;
 
     //Establish return variables
-    double angle=0,xDist=0,yDist=0,rawX=0,rawY=0,centralAngle=0;
+    double angle=0,xDist=0,yDist=0,rawX=0,rawY=0;
 
     //Get left and right dist
     double rawRightDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(right)*wheelDiam;
     double rawLeftDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(left)*wheelDiam;
 
+    double r=(leftDist*robotWidth)/(rightDist-leftDist);
+    double r_left=r+robotWidth;
+    double centralAngle=(rightDist/r_left)*180.0/M_PI;
 
     // double rightDist=rawRightDist-oldRightDist;
     // double leftDist=rawLeftDist-oldLeftDist;
 
 
-    // if(leftDist==0){ leftDist=0.0000001;}
-    // if(rightDist==0){ rightDist=0.0000001;}
-
-    //Get the radii
-    double centralRadius=(leftDist*robotWidth)/(leftDist-rightDist);
-    double middleRadius=(leftDist*robotWidth)/(leftDist-rightDist)+robotWidth/2.0;
-    double outerRadius=(leftDist*robotWidth)/(leftDist-rightDist)+robotWidth;
-
-    //Establish circles
-    Circle centralCircle(centralRadius);
-    Circle middleCircle(middleRadius);
-    Circle outerCircle(outerRadius);
-
-    //Do circle formulas
-    //Get central angle
-    centralAngle=centralCircle.angleFromDistance(leftDist);
-    angle=centralAngle/2.0; //Might be wrong
-
-    //Get point at end of arc
-    rawX=middleRadius*cos(angle)-middleRadius;
-    rawY=middleRadius*sin(angle);
-    
-    
-
-    //Set old ts
-    oldLeftDist=rawLeftDist;
-    oldRightDist=rawRightDist;
-
-    //AVOID NAN
-    if(angle!=angle){
-      return 0;
-    }
-    //   printf("NAN ERROR NAN ERROR NAN ERROR\n");
-    //   return robotAngle;
-    // }
-    // if(fabs(angle)>=M_PI){
-    //   printf("pmo conditions: r%.3f l%.3f got%.3f\n",rightDist);
-    //   angle=0;
-    // }
-
-    // robotAngle+=angle*180/M_PI; //return the ts in degrees
-
-    // printf("%.3f %.3f %.3f \n",leftDist,rightDist,angle);
-// vex::task::sleep(1000);
     return centralAngle;
 
     
