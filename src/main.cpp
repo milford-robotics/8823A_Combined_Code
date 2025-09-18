@@ -83,7 +83,7 @@ void Turn (int angle){ // Turn function
   float sumError = 0;
   float error = 67;
   float Kp = 0.3;
-  double Ki = 0.03;
+  double Ki = 0.031;
 
   double startingRot=InertialSensor.rotation();
 
@@ -113,7 +113,7 @@ void TurnToHeading (int angle){ // Turn function
   float sumError = 0;
   float error = 67;
   float Kp = 0.3;
-  double Ki = 0.03;
+  double Ki = 0.04;
   double startingRot=InertialSensor.rotation();
 
   while (fabs (error) > 0.5){
@@ -190,65 +190,63 @@ void autonomous(void) {
     }
   });*/
   //autonSelection="LeftSide";    
-  if(autonSelection=="LeftSide"){
-  LowerIntake.spin(forward,85,pct);
+  if(autonSelection=="RightSide"){
+  LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(30,25);
+  Drive(28,25);
   wait(50,msec);
   MiddleIntake.stop();
   UpperIntake.stop();
   Turn(-75);
   wait(25,msec);
-  // Tongue.set(true);
-  wait(1,sec);
-  Drive(12,30);
+  Drive(13,30);
   wait(25,msec);
-  LowerIntake.spin(reverse,35,pct);
-  MiddleIntake.spin(reverse,35,pct);
+  LowerIntake.spin(reverse,65,pct);
+  MiddleIntake.spin(reverse,55,pct);
   UpperIntake.spin(reverse,30,pct);
   wait(1.5,sec);
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
   Drive(-47,40);
-  // Tongue.set(false);
   vex::wait(25,msec);
-  // TurnToHeading(-200);
-  Turn(-133);
-  vex::task::sleep(1000);
-  Drive(-17,30);
+  TurnToHeading(-200);
+  vex::task::sleep(75);
+  // Turn(131);
+  // wait(25,msec);
+  Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
-  wait(0.55,sec);
+  wait(1,sec);
   Tongue.set(true);
+  wait(25,msec);
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  wait(25,msec);
-  Drive(29,40);
-  wait(1,sec);
+  Drive(30,50);
+  wait(2,sec);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-32,40);
+  Drive(-32,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
   }
-  else if(autonSelection=="RightSide"){
-  LowerIntake.spin(forward,80,pct);
+  else if(autonSelection=="LeftSide"){
+  LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(30,25);
+  Drive(28,25);
   wait(50,msec);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Turn(75);
+  Turn(73);
   wait(25,msec);
   Tongue.set(true);
   wait(1,sec);
-  Drive(12,30);
+  Drive(16,30);
   wait(25,msec);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,55,pct);
@@ -261,9 +259,10 @@ void autonomous(void) {
   Tongue.set(false);
   vex::wait(25,msec);
   TurnToHeading(200);
-  // Turn(133);
-  vex::task::sleep(25);
-  Drive(-17,50);
+  vex::task::sleep(75);
+  // Turn(131);
+  // wait(25,msec);
+  Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
@@ -274,10 +273,10 @@ void autonomous(void) {
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(30,40);
-  wait(1,sec);
+  wait(2,sec);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-32,40);
+  Drive(-32,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);

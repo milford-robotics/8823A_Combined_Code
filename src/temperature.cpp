@@ -201,12 +201,12 @@ void switchScreen(){
 
         if(Brain.Screen.xPosition()>250 && Brain.Screen.xPosition()<390
         && Brain.Screen.yPosition()>20 && Brain.Screen.yPosition()<120){
-            autonSelection="RightSide";
+            autonSelection="LeftSide";
         }
 
         if(Brain.Screen.xPosition()>250 && Brain.Screen.xPosition()<390
         && Brain.Screen.yPosition()>130 && Brain.Screen.yPosition()<230){
-            autonSelection="LeftSide";
+            autonSelection="RightSide";
         }
         if(Brain.Screen.xPosition()>20 && Brain.Screen.xPosition()<160
         && Brain.Screen.yPosition()>130 && Brain.Screen.yPosition()<230){
@@ -331,12 +331,12 @@ void drawAllUi(){
                 Brain.Screen.setPenWidth(3);
                 Brain.Screen.setFillColor(black);
                 
-                if(autonSelection=="RightSide") Brain.Screen.setPenWidth(5);
+                if(autonSelection=="LeftSide") Brain.Screen.setPenWidth(5);
                 else Brain.Screen.setPenWidth(1);
 
                 Brain.Screen.drawRectangle(250,20,140,100);
 
-                if(autonSelection=="LeftSide") Brain.Screen.setPenWidth(5);
+                if(autonSelection=="RightSide") Brain.Screen.setPenWidth(5);
                 else Brain.Screen.setPenWidth(1);
 
                 Brain.Screen.drawRectangle(250,130,140,100);
