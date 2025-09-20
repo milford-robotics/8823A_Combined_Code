@@ -77,8 +77,38 @@ void Drive (int dist, int speed){ // Drive function
   RightRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, true);
 }
 
+void Turn (int angle){ // Turn function
+  int top_speed = 50;
+  float speed;
+  float sumError = 0;
+  float error = 67;
+  float Kp = 0.3;
+  double Ki = 0.031;
 
-void Turn(int targetAngle){
+  double startingRot=InertialSensor.rotation();
+
+  while (fabs (error) > 0.5){
+    
+    error = angle - (InertialSensor.rotation()-startingRot);
+    if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
+    speed = Kp*error + Ki*sumError; // slows down as it approaches destination
+
+    if(speed > top_speed) speed = top_speed; // doesn't get too fast
+    if(speed < -top_speed) speed = -top_speed; // doesn't get too slow
+
+    LeftFront.spin (forward, speed, pct); // motors on
+    LeftMiddle.spin (forward, speed, pct);
+    LeftRear.spin (forward, speed, pct);
+    RightFront.spin (forward, -speed, pct);
+    RightMiddle.spin (forward, -speed, pct);
+    RightRear.spin (forward, -speed, pct);
+    wait(20,msec);
+  }
+  StopDriveTrain(); // stop motors
+  InertialSensor.resetRotation();
+}
+
+/*void Turn(int targetAngle){
   
   targetAngle=float(targetAngle);
 
@@ -119,7 +149,7 @@ void Turn(int targetAngle){
     vex::task::sleep(5);
   }
   StopDriveTrain();
-}
+}*/
   
 void TurnToHeading(int targetAngle){
   
