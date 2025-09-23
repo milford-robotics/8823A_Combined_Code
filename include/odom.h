@@ -5,8 +5,8 @@
 #pragma once
 
 
-double tsHeadingTypeSquirt(double leftDist,double rightDist);
+double tsHeadingTypeSquirt();
 extern double robotAngle;
 void odometry();
-extern float x;
-extern    float y;
+extern double robotX;
+extern    double robotY;

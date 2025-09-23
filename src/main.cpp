@@ -91,8 +91,10 @@ void Turn(int targetAngle){
 
 
   while(fabs(error)>=0.5){
-    error=targetAngle-(InertialSensor.rotation(degrees)-startRotation);
 
+    
+    error=targetAngle-(InertialSensor.rotation(degrees)-startRotation);
+    printf("%.2f %.2f %.2f %.2f %.2f\n",error,integral,InertialSensor.rotation(degrees)-startRotation,InertialSensor.rotation(degrees),startRotation);
     float motorVel=error*kp+integral*ki;
 
     motorVel=std::min(motorVel,100.0f);
@@ -116,7 +118,7 @@ void Turn(int targetAngle){
     if(fabs(error)<0.5){
       break;
     }
-    vex::task::sleep(5);
+    vex::task::sleep(50);
   }
   StopDriveTrain();
 }
@@ -162,7 +164,7 @@ void TurnToHeading(int targetAngle){
   StopDriveTrain();
 }
 
-  void pre_auton(void) {
+void pre_auton(void) {
 
   InertialSensor.calibrate();
 
@@ -184,12 +186,7 @@ void TurnToHeading(int targetAngle){
   /*---------------------------------------------------------------------------*/
   
 void autonomous(void) {
-  vex::thread debug_thread([](){
-    while(1){
-      printf("%.4f \n",InertialSensor.rotation());
-      vex::task::sleep(50);
-    }
-  });
+
   /*vex::thread unstuckThread([](){
     float oldMotorCommandMid=0;
     float oldMotorCommandTop=0;
@@ -334,6 +331,13 @@ void autonomous(void) {
   }
   
   void usercontrol(void) {
+     thread odomThread([](){
+      while(1){
+        printf("\t%.2f\t\n\n",InertialSensor.rotation(deg));
+        vex::task::sleep(100);
+      }
+    });
+
     OpticalSensor2.setLightPower(100, percent);
     OpticalSensor2.setLight(ledState::on);
     OpticalSensor1.setLightPower(100, percent);
@@ -353,9 +357,7 @@ void autonomous(void) {
     InertialSensor.calibrate();
     while(InertialSensor.isCalibrating());
 
-    // thread odomThread([](){
-    //   odometry();
-    // });
+   
     // thread debugThread([](){
     //   while(67/41){
     //   printf("x: %.2f y: %.2f \n",x,y);
@@ -464,6 +466,8 @@ void autonomous(void) {
 float time2=0;
 int D=0;
 int main() {
+  LeftEncoder.resetPosition();
+  RightEncoder.resetPosition();
 
   vex::thread timeThread([](){
     while(67/41){
@@ -474,17 +478,33 @@ int main() {
 
   vex::thread odomThread([](){
     InertialSensor.calibrate();
+    while(InertialSensor.isCalibrating());
+    vex::task::sleep(1000);
     while(67/41){
-      // tsHeadingTypeSquirt();
+      tsHeadingTypeSquirt();
       vex::task::sleep(10);
     }
     
   });
   vex::thread debugThread([](){
-    while(67/41){
-      printf("ts odom heading: %.5f   ts inertial heading: %.5f at %.2f \n",robotAngle,InertialSensor.heading(),time2);
-      vex::task::sleep(500);
+    std::ofstream outFile;
+    outFile.open("recording.txt");
+    printf("opemn \n");
+    
+    while(!Controller1.ButtonA.pressing()){
+      // outFile << InertialSensor.rotation() << "\t" << robotAngle << "\t" << InertialSensor.rotation()-robotAngle << "\n";
+      outFile << robotX << "\t" << robotY << "\t" << "\n";
+      vex::task::sleep(5);
     }
+    printf("closed\n");
+    outFile.close();
+});
+
+vex::thread debugPrint([](){
+  while(1){
+    // printf("x %.2f\ty %.2f\th %.2f\th2 %.2f %f %f\n",robotX,robotY,robotAngle,InertialSensor.rotation(),LeftEncoder.position(rev),RightEncoder.position(rev));
+    vex::task::sleep(100);
+  }
 });
 
   if(Brain.SDcard.isInserted()){
@@ -496,15 +516,6 @@ int main() {
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
 
-  std::ofstream outFile;  
-  outFile.open("recording.txt");
-
-  for(int il=0; il<=100; il++){
-    for(int ir=0; ir<=100;ir++){
-      outFile << ir<<"\t"<<il<<"\t"<<tsHeadingTypeSquirt(ir,il) << std::endl;
-  }
-}
-  outFile.close();
 
   vex::thread touchscreen_thread([](){
       while(1){
