@@ -77,38 +77,9 @@ void Drive (int dist, int speed){ // Drive function
   RightRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, true);
 }
 
-void Turn (int angle){ // Turn function
-  int top_speed = 50;
-  float speed;
-  float sumError = 0;
-  float error = 67;
-  float Kp = 0.3;
-  double Ki = 0.034;
 
-  double startingRot=InertialSensor.rotation();
 
-  while (fabs (error) > 0.55){
-    
-    error = angle - (InertialSensor.rotation()-startingRot);
-    if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
-    speed = Kp*error + Ki*sumError; // slows down as it approaches destination
-
-    if(speed > top_speed) speed = top_speed; // doesn't get too fast
-    if(speed < -top_speed) speed = -top_speed; // doesn't get too slow
-
-    LeftFront.spin (forward, speed, pct); // motors on
-    LeftMiddle.spin (forward, speed, pct);
-    LeftRear.spin (forward, speed, pct);
-    RightFront.spin (forward, -speed, pct);
-    RightMiddle.spin (forward, -speed, pct);
-    RightRear.spin (forward, -speed, pct);
-    wait(20,msec);
-  }
-  StopDriveTrain(); // stop motors
-  InertialSensor.resetRotation();
-}
-
-/*void Turn(int targetAngle){
+void Turn(int targetAngle){
   
   targetAngle=float(targetAngle);
 
@@ -124,15 +95,13 @@ void Turn (int angle){ // Turn function
 
     
     error=targetAngle-(InertialSensor.rotation(degrees)-startRotation);
-    printf("%.2f %.2f %.2f %.2f %.2f\n",error,integral,InertialSensor.rotation(degrees)-startRotation,InertialSensor.rotation(degrees),startRotation);
     float motorVel=error*kp+integral*ki;
 
     motorVel=std::min(motorVel,100.0f);
     motorVel=std::max(motorVel,-100.0f);
     motorVel*=0.6;
 
-    // printf("current error: %f, current rot: %f \n\n",error,InertialSensor.rotation(degrees));
-
+    
     LeftFront.spin(forward,motorVel,percent);
     LeftRear.spin(forward,motorVel,percent);
     LeftMiddle.spin(forward,motorVel,percent);
@@ -151,11 +120,14 @@ void Turn (int angle){ // Turn function
     vex::task::sleep(50);
   }
   StopDriveTrain();
-}*/
+}
   
+
 void TurnToHeading(int targetAngle){
   
   targetAngle=float(targetAngle);
+
+  float startRotation=InertialSensor.rotation(degrees);
 
   float error=1;
   float integral=0;
@@ -164,16 +136,16 @@ void TurnToHeading(int targetAngle){
 
 
   while(fabs(error)>=0.5){
-    error=targetAngle-(InertialSensor.rotation(degrees));
 
+    
+    error=targetAngle-(InertialSensor.rotation(degrees));
     float motorVel=error*kp+integral*ki;
 
     motorVel=std::min(motorVel,100.0f);
     motorVel=std::max(motorVel,-100.0f);
     motorVel*=0.6;
 
-    // printf("current error: %f, current rot: %f \n\n",error,InertialSensor.rotation(degrees));
-
+    
     LeftFront.spin(forward,motorVel,percent);
     LeftRear.spin(forward,motorVel,percent);
     LeftMiddle.spin(forward,motorVel,percent);
@@ -189,10 +161,11 @@ void TurnToHeading(int targetAngle){
     if(fabs(error)<0.5){
       break;
     }
-    vex::task::sleep(5);
+    vex::task::sleep(50);
   }
   StopDriveTrain();
 }
+  
 
 void pre_auton(void) {
 
