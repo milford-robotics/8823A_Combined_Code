@@ -10,3 +10,7 @@ extern double robotAngle;
 void odometry();
 extern double robotX;
 extern    double robotY;
+extern double rawRightDist;
+extern double rawLeftDist;
+
+extern double oldRightDist, oldLeftDist;

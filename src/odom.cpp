@@ -148,10 +148,17 @@ class Circle{
 
 
 };
+
 double heading=0;
-double oldRightDist=6.7676767, oldLeftDist=6.7676767;
+
 double robotAngle=0;
 double robotX=0, robotY=0;
+const double wheelDiam=2.75,robotWidth=10.+7./16.;
+
+double rawRightDist=RightEncoder.position(rev)*wheelDiam;
+double rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
+
+double oldRightDist=rawRightDist, oldLeftDist=rawLeftDist;
 
 
 double getTheMotorPositionTsInRotationsTypeSquirtOnGod(vex::turnType direction){
@@ -166,9 +173,6 @@ double getTheMotorPositionTsInRotationsTypeSquirtOnGod(vex::turnType direction){
 }
 
 double tsHeadingTypeSquirt(){
-    //Establish physical constants
-    const double wheelDiam=2.75,robotWidth=10.+7./16.;
-
     //Establish return variables
     double angle=0,xDist=0,yDist=0,rawX=0,rawY=0;
 
@@ -176,8 +180,8 @@ double tsHeadingTypeSquirt(){
     // double rawRightDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(right)*wheelDiam;
     // double rawLeftDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(left)*wheelDiam;
 
-    double rawRightDist=RightEncoder.position(rev)*wheelDiam;
-    double rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
+    rawRightDist=RightEncoder.position(rev)*wheelDiam;
+    rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
 
     double rightDist=rawRightDist-oldRightDist;
     double leftDist=rawLeftDist-oldLeftDist;

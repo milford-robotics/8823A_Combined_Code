@@ -495,8 +495,8 @@ int main() {
     printf("opemn \n");
     
     while(!Controller1.ButtonA.pressing()){
-      // outFile << InertialSensor.rotation() << "\t" << robotAngle << "\t" << InertialSensor.rotation()-robotAngle << "\n";
-      outFile << robotX << "\t" << robotY << "\t" << "\n";
+      outFile << InertialSensor.rotation() << "\t" << robotAngle << "\t" << InertialSensor.rotation()-robotAngle << "\t" << oldLeftDist-rawLeftDist << "\t" << oldRightDist-rawRightDist << "\n" ;
+      // outFile << robotX << "\t" << robotY << "\t" << "\n";
       vex::task::sleep(5);
     }
     printf("closed\n");
