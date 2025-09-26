@@ -238,8 +238,8 @@ void autonomous(void) {
   vex::task::sleep(25);
   TurnToHeading(-200);
   vex::task::sleep(75);
-  // Turn(131);
-  // vex::task::sleep(25);
+  // Turn(-131);
+  // vex::task::sleep(50);
   Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
@@ -250,7 +250,7 @@ void autonomous(void) {
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(30,50);
+  Drive(29,50);
   vex::task::sleep(2000);
   MiddleIntake.stop();
   UpperIntake.stop();
@@ -271,11 +271,11 @@ void autonomous(void) {
   vex::task::sleep(25);
   Tongue.set(true);
   vex::task::sleep(1000);
-  Drive(16,30);
+  Drive(15,30);
   vex::task::sleep(25);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntake.spin(forward,55,pct);
-  UpperIntake.spin(reverse,30,pct);
+  MiddleIntake.spin(forward,75,pct);
+  UpperIntake.spin(reverse,85,pct);
   vex::task::sleep(1500);
   LowerIntake.stop();
   MiddleIntake.stop();
@@ -492,7 +492,7 @@ int main() {
   vex::thread debugThread([](){
     std::ofstream outFile;
     outFile.open("recording.txt");
-    printf("opemn \n");
+    printf("open \n");
     
     while(!Controller1.ButtonA.pressing()){
       outFile << InertialSensor.rotation() << "\t" << robotAngle << "\t" << InertialSensor.rotation()-robotAngle << "\t" << oldLeftDist-rawLeftDist << "\t" << oldRightDist-rawRightDist << "\n" ;
