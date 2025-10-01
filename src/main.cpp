@@ -348,7 +348,7 @@ void autonomous(void) {
   UpperIntake.stop();
   Drive(-15,40);
   vex::task::sleep(25);
-  Turn(-46);
+  Turn(-45);
   vex::task::sleep(25);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
