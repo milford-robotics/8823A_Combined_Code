@@ -177,14 +177,14 @@ double tsHeadingTypeSquirt(){
     double angle=0,xDist=0,yDist=0,rawX=0,rawY=0;
 
     //Get left and right dist
-    // double rawRightDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(right)*wheelDiam;
-    // double rawLeftDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(left)*wheelDiam;
+    rawRightDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(right)*wheelDiam;
+    rawLeftDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(left)*wheelDiam;
 
-    rawRightDist=RightEncoder.position(rev)*wheelDiam;
-    rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
+    // rawRightDist=RightEncoder.position(rev)*wheelDiam;
+    // rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
 
-    double rightDist=rawRightDist-oldRightDist;
-    double leftDist=rawLeftDist-oldLeftDist;
+    double rightDist=rawRightDist;
+    double leftDist=rawLeftDist;
 
     
 
@@ -192,22 +192,24 @@ double tsHeadingTypeSquirt(){
     double r=(leftDist*robotWidth)/(rightDist-leftDist);
     double r_left=r+robotWidth;
     double centralAngle=(rightDist/r_left)*180.0/M_PI;
+    // double centralAngle = (leftDist-rightDist)/robotWidth;
 
     if(centralAngle!=centralAngle) centralAngle=0;
 
-    if(centralAngle!=0){
-      robotX+=((r+(robotWidth/2.))*cos(centralAngle*(M_PI/180.))-(r+(robotWidth/2.)))*cos(InertialSensor.rotation()*M_PI/180.);
-      robotY+=((r+(robotWidth/2.))*sin(centralAngle*(M_PI/180.)))*sin(InertialSensor.rotation()*M_PI/180.);
-    }
-    else{
-      robotX+=(leftDist+rightDist)/2*cos(InertialSensor.rotation()*M_PI/180.);
-      robotY+=(leftDist+rightDist)/2*sin(InertialSensor.rotation()*M_PI/180.);
-    }
+    // if(centralAngle!=0){
+    //   robotX+=((r+(robotWidth/2.))*cos(centralAngle*(M_PI/180.))-(r+(robotWidth/2.)))*cos(InertialSensor.rotation()*M_PI/180.);
+    //   robotY+=((r+(robotWidth/2.))*sin(centralAngle*(M_PI/180.)))*sin(InertialSensor.rotation()*M_PI/180.);
+    // }
+    // else{
+    //   robotX+=(leftDist+rightDist)/2*cos(InertialSensor.rotation()*M_PI/180.);
+    //   robotY+=(leftDist+rightDist)/2*sin(InertialSensor.rotation()*M_PI/180.);
+    // }
     // printf("%f %f %f %f \n",r,r+robotWidth/2.,cos(centralAngle*(M_PI/180.)),(r+(robotWidth/2.))*cos(centralAngle*(M_PI/180.)));
-    robotAngle+=centralAngle;
+    
+    robotAngle=centralAngle;
 
-    oldLeftDist=rawLeftDist;
-    oldRightDist=rawRightDist;
+    // oldLeftDist=rawLeftDist;
+    // oldRightDist=rawRightDist;
 
 
 

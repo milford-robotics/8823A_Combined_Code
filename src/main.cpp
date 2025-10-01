@@ -310,6 +310,7 @@ void autonomous(void) {
     Drive(6,30);
   }
   else{
+    //skills auto
 
       
   }
@@ -482,10 +483,9 @@ int main() {
   vex::thread odomThread([](){
     InertialSensor.calibrate();
     while(InertialSensor.isCalibrating());
-    vex::task::sleep(1000);
     while(67/41){
       tsHeadingTypeSquirt();
-      vex::task::sleep(10);
+      vex::task::sleep(50);
     }
     
   });
@@ -495,7 +495,7 @@ int main() {
     printf("open \n");
     
     while(!Controller1.ButtonA.pressing()){
-      outFile << InertialSensor.rotation() << "\t" << robotAngle << "\t" << InertialSensor.rotation()-robotAngle << "\t" << oldLeftDist-rawLeftDist << "\t" << oldRightDist-rawRightDist << "\n" ;
+      outFile << InertialSensor.rotation() << "\t" << robotAngle << "\t" << InertialSensor.rotation()-robotAngle << "\t" << rawLeftDist << "\t" << rawRightDist << "\n" ;
       // outFile << robotX << "\t" << robotY << "\t" << "\n";
       vex::task::sleep(5);
     }

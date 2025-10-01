@@ -212,6 +212,10 @@ void switchScreen(){
         && Brain.Screen.yPosition()>130 && Brain.Screen.yPosition()<230){
             autonSelection="MoveForward";
         }
+        if(Brain.Screen.xPosition()>20 && Brain.Screen.xPosition()<160
+        && Brain.Screen.yPosition()>20 && Brain.Screen.yPosition()<120){
+            autonSelection="Skills";
+        }
         
     } 
 
