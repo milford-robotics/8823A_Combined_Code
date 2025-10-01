@@ -88,6 +88,7 @@ void Turn (int angle){ // Turn function
   double startingRot=InertialSensor.rotation();
 
   while (fabs (error) > 0.55){
+    printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
     
     error = angle - (InertialSensor.rotation()-startingRot);
     if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
@@ -119,7 +120,7 @@ void TurnToHeading (int angle){ // Turn function
   double startingRot=InertialSensor.rotation();
 
   while (fabs (error) > 0.55){
-    
+    printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
     error = angle - (InertialSensor.rotation());
     if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
     speed = Kp*error + Ki*sumError; // slows down as it approaches destination
