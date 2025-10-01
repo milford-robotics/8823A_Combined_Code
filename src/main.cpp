@@ -326,8 +326,6 @@ void autonomous(void) {
   /*                                                                           */
   /*  You must modify the code to add your own robot specific commands here.   */
   /*---------------------------------------------------------------------------*/
-
-
   
   void RELEASE () {
   MiddleIntake.stop();
@@ -368,6 +366,7 @@ void autonomous(void) {
     //   vex::this_thread::sleep_for(100);
     //   }
     // });
+    thePMOThing();
 
     thread colorThread([](){
       while(1){

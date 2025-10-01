@@ -8,6 +8,7 @@
 double tsHeadingTypeSquirt();
 extern double robotAngle;
 void odometry();
+void thePMOThing();
 extern double robotX;
 extern    double robotY;
 extern double rawRightDist;

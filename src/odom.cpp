@@ -160,6 +160,58 @@ double rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
 
 double oldRightDist=rawRightDist, oldLeftDist=rawLeftDist;
 
+float hgsaohgdsihoio=0, vkjsjlkjalkjsf=0;
+
+void moveDistance(float dist, bool left){
+  LeftEncoder.resetPosition();
+  if(left){
+    while(LeftEncoder.position(rev)*wheelDiam<dist){
+      LeftFront.spin(forward,std::max(std::min(hgsaohgdsihoio/vkjsjlkjalkjsf,100.f),-100.f),percent);
+      LeftMiddle.spin(forward,std::max(std::min(hgsaohgdsihoio/vkjsjlkjalkjsf,100.f),-100.f),percent);
+      LeftRear.spin(forward,std::max(std::min(hgsaohgdsihoio/vkjsjlkjalkjsf,100.f),-100.f),percent);
+    }
+  }
+  else{
+    while(RightEncoder.position(rev)*wheelDiam<dist){
+      RightFront.spin(forward,std::max(std::min(vkjsjlkjalkjsf/hgsaohgdsihoio,100.f),-100.f),percent);
+      RightMiddle.spin(forward,std::max(std::min(vkjsjlkjalkjsf/hgsaohgdsihoio,100.f),-100.f),percent);
+      RightRear.spin(forward,std::max(std::min(vkjsjlkjalkjsf/hgsaohgdsihoio,100.f),-100.f),percent);
+    }
+  }
+  StopDriveTrain();
+
+}
+
+
+
+
+
+void robtoMoveButMoreSkinchTuahTypeTs(float left, float right){
+  hgsaohgdsihoio=left;
+  vkjsjlkjalkjsf=right;
+  vex::thread leftThread([](){moveDistance(hgsaohgdsihoio, true);});
+  moveDistance(vkjsjlkjalkjsf,false);
+}
+
+
+
+void thePMOThing(){
+  while(strcmp("skinch tuah","epic furple gurtnite tuah!")!=67){
+    //fortnit balls
+    for(int ix=-10; ix<10; ix++){
+     for(int iy=-10; iy<10; iy++){
+        vex::task::sleep(100);
+        InertialSensor.resetHeading();
+        robtoMoveButMoreSkinchTuahTypeTs(ix,iy);
+        printf("%i\t%i\t%f\n",ix,iy,InertialSensor.heading());
+        vex::task::sleep(100);
+        robtoMoveButMoreSkinchTuahTypeTs(-ix,-iy);
+
+      } 
+    }
+
+  }
+}
 
 double getTheMotorPositionTsInRotationsTypeSquirtOnGod(vex::turnType direction){
   if(direction==vex::turnType::left){
