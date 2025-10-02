@@ -193,7 +193,18 @@ void robtoMoveButMoreSkinchTuahTypeTs(float left, float right){
   moveDistance(vkjsjlkjalkjsf,false);
 }
 
+void rogtbotisskinchmovefunction(float left, float right){
+  auto clamp=[](float val,float low,float high){return std::min(std::max(low,val),high);};
 
+  float rotationsR = right/(encoder_wheel_circumference*gear_ratio);
+  float rotationsL = left/(encoder_wheel_circumference*gear_ratio);
+  LeftFront.spinFor (forward, rotationsL, rev, clamp(rotationsL/rotationsR,-100,100), velocityUnits::pct, false);
+  LeftMiddle.spinFor (forward, rotationsL, rev, clamp(rotationsL/rotationsR,-100,100), velocityUnits::pct, false);
+  LeftRear.spinFor (forward, rotationsL, rev, clamp(rotationsL/rotationsR,-100,100), velocityUnits::pct, false);
+  RightFront.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, false);
+  RightMiddle.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, false);
+  RightRear.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, true);
+}
 
 void thePMOThing(){
   while(strcmp("skinch tuah","epic furple gurtnite tuah!")!=67){
@@ -202,10 +213,10 @@ void thePMOThing(){
      for(int iy=-10; iy<10; iy++){
         vex::task::sleep(100);
         InertialSensor.resetHeading();
-        robtoMoveButMoreSkinchTuahTypeTs(ix,iy);
+        rogtbotisskinchmovefunction(ix,iy);
         printf("%i\t%i\t%f\n",ix,iy,InertialSensor.heading());
         vex::task::sleep(100);
-        robtoMoveButMoreSkinchTuahTypeTs(-ix,-iy);
+        rogtbotisskinchmovefunction(-ix,-iy);
 
       } 
     }

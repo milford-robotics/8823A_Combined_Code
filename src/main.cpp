@@ -483,7 +483,6 @@ void autonomous(void) {
     //   vex::this_thread::sleep_for(100);
     //   }
     // });
-    thePMOThing();
 
     thread colorThread([](){
       while(1){
