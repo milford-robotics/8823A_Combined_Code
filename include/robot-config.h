@@ -11,8 +11,8 @@ extern motor LeftRear;
 extern motor RightFront;
 extern motor RightMiddle;
 extern motor RightRear;
-extern motor UpperIntake;
-extern motor MiddleIntake;
+extern motor MiddleIntakeLeft;
+extern motor MiddleIntakeRight;
 extern motor LowerIntake;
 extern rotation LeftEncoder;
 extern rotation RightEncoder;
@@ -21,6 +21,7 @@ extern inertial InertialSensor;
 extern digital_out Tongue;
 extern optical OpticalSensor2;
 extern optical OpticalSensor1;
+extern motor UpperIntake;
 
 
 int getMotorPort(std::string motorName);

@@ -60,11 +60,11 @@ void setAllMotorPorts(){
     outFile.close();
 
     outFile.open("UpperIntake.txt");
-    outFile << UpperIntake.index();
+    outFile << MiddleIntakeLeft.index();
     outFile.close();
 
     outFile.open("MiddleIntake.txt");
-    outFile << MiddleIntake.index();
+    outFile << MiddleIntakeRight.index();
     outFile.close();
 
     outFile.open("LowerIntake.txt");
@@ -96,9 +96,10 @@ motor LeftRear = motor(PORT13, ratio6_1, true);
 motor RightFront = motor(PORT18, ratio6_1, false);
 motor RightMiddle = motor(PORT19, ratio6_1, false);
 motor RightRear = motor(PORT20, ratio6_1, false);
-motor UpperIntake = motor(PORT10, ratio6_1, false);
-motor MiddleIntake = motor(PORT1, ratio6_1, true);
+motor MiddleIntakeLeft = motor(PORT10, ratio6_1, false);
+motor MiddleIntakeRight = motor(PORT1, ratio6_1, true);
 motor LowerIntake = motor(PORT14, ratio6_1, false);
+motor UpperIntake = motor(PORT15, ratio6_1, false);
 
 void setPortsFromSD(){
     // motor LeftFront = motor(getMotorPort("LeftFront"), ratio6_1, true);
@@ -119,11 +120,15 @@ rotation RightEncoder = rotation(PORT17, false);
 rotation BackEncoder = rotation(PORT16, true);
 inertial InertialSensor = inertial(PORT4);
 digital_out Tongue = digital_out(Brain.ThreeWirePort.A);
+digital_out BasketPiston = digital_out(Brain.ThreeWirePort.A);
+digital_out DingleA = digital_out(Brain.ThreeWirePort.A);
+digital_out DingleB = digital_out(Brain.ThreeWirePort.A);
+
 optical OpticalSensor1 = optical(PORT2);
 optical OpticalSensor2 = optical(PORT3);
 
 bool isMotorReversed(vex::motor motor){
-    if(motor.index()==LeftFront.index() || motor.index()==LeftMiddle.index() || motor.index()==LeftRear.index() || motor.index()==MiddleIntake.index() ){
+    if(motor.index()==LeftFront.index() || motor.index()==LeftMiddle.index() || motor.index()==LeftRear.index() || motor.index()==MiddleIntakeRight.index() ){
         return true;
     }
     return false;

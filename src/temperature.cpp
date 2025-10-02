@@ -40,8 +40,8 @@ void setMotorNames(){
     motorIndexesShort[RightFront.index()]="FR";
     motorIndexesShort[RightMiddle.index()]="MR";
     motorIndexesShort[RightRear.index()]="BR";
-    motorIndexesShort[UpperIntake.index()]="UI";
-    motorIndexesShort[MiddleIntake.index()]="MI";
+    motorIndexesShort[MiddleIntakeLeft.index()]="UI";
+    motorIndexesShort[MiddleIntakeRight.index()]="MI";
     motorIndexesShort[LowerIntake.index()]="LI";
 
     motorIndexes[LeftFront.index()]="Front Left"; //Establish motor names
@@ -50,8 +50,8 @@ void setMotorNames(){
     motorIndexes[RightFront.index()]="Front Right";
     motorIndexes[RightMiddle.index()]="Middle Right";
     motorIndexes[RightRear.index()]="Back Right";
-    motorIndexes[UpperIntake.index()]="Upper Intake";
-    motorIndexes[MiddleIntake.index()]="Middle Intake";
+    motorIndexes[MiddleIntakeLeft.index()]="Upper Intake";
+    motorIndexes[MiddleIntakeRight.index()]="Middle Intake";
     motorIndexes[LowerIntake.index()]="Lower Intake";
 }
 
@@ -152,8 +152,8 @@ void switchScreen(){
             if(screen==1404) {RightFront=vex::motor(motorPort,getMotorCartridge(RightFront),isMotorReversed(RightFront)); setMotorPort("RightFront",motorPort);}
             if(screen==1405) {RightMiddle=vex::motor(motorPort,getMotorCartridge(RightMiddle),isMotorReversed(RightMiddle)); setMotorPort("RightMiddle",motorPort);}
             if(screen==1406) {RightRear=vex::motor(motorPort,getMotorCartridge(RightRear),isMotorReversed(RightRear)); setMotorPort("RightRear",motorPort);}
-            if(screen==1407) {UpperIntake=vex::motor(motorPort,getMotorCartridge(UpperIntake),isMotorReversed(UpperIntake)); setMotorPort("UpperIntake",motorPort);} 
-            if(screen==1408) {MiddleIntake=vex::motor(motorPort,getMotorCartridge(MiddleIntake),isMotorReversed(MiddleIntake)); setMotorPort("MiddleIntake",motorPort);}
+            if(screen==1407) {MiddleIntakeLeft=vex::motor(motorPort,getMotorCartridge(MiddleIntakeLeft),isMotorReversed(MiddleIntakeLeft)); setMotorPort("UpperIntake",motorPort);} 
+            if(screen==1408) {MiddleIntakeRight=vex::motor(motorPort,getMotorCartridge(MiddleIntakeRight),isMotorReversed(MiddleIntakeRight)); setMotorPort("MiddleIntake",motorPort);}
             if(screen==1409) {LowerIntake=vex::motor(motorPort,getMotorCartridge(LowerIntake),isMotorReversed(LowerIntake)); setMotorPort("LowerIntake",motorPort);}
         }
 
@@ -245,7 +245,7 @@ void motorReassignScreen(vex::motor selectedMotor){
 
             if(port-1==LeftFront.index() || port-1==LeftMiddle.index() || port-1==LeftRear.index() || 
                     port-1==RightFront.index() || port-1==RightMiddle.index() || port-1==RightRear.index() || 
-                    port-1==UpperIntake.index() || port-1==MiddleIntake.index() || port-1==LowerIntake.index()){
+                    port-1==MiddleIntakeLeft.index() || port-1==MiddleIntakeRight.index() || port-1==LowerIntake.index()){
                         Brain.Screen.setFillColor(green);
                     }
             ;
@@ -273,8 +273,8 @@ void drawAllUi(){
         displayMotor(LeftMiddle,150,25);
         displayMotor(LeftRear,275,25);        
         
-        displayMotor(UpperIntake,25,90);
-        displayMotor(MiddleIntake,150,90);
+        displayMotor(MiddleIntakeLeft,25,90);
+        displayMotor(MiddleIntakeRight,150,90);
         displayMotor(LowerIntake,275,90);
 
         displayMotor(RightFront,25,154);
@@ -309,8 +309,8 @@ void drawAllUi(){
                 if(screen==1304){motorInfoScreen(RightFront);}
                 if(screen==1305){motorInfoScreen(RightMiddle);}
                 if(screen==1306){motorInfoScreen(RightRear);}
-                if(screen==1307){motorInfoScreen(UpperIntake);}
-                if(screen==1308){motorInfoScreen(MiddleIntake);}
+                if(screen==1307){motorInfoScreen(MiddleIntakeLeft);}
+                if(screen==1308){motorInfoScreen(MiddleIntakeRight);}
                 if(screen==1309){motorInfoScreen(LowerIntake);}
             };
 
@@ -321,8 +321,8 @@ void drawAllUi(){
                 if(screen==1404){motorReassignScreen(RightFront);}
                 if(screen==1405){motorReassignScreen(RightMiddle);}
                 if(screen==1406){motorReassignScreen(RightRear);}
-                if(screen==1407){motorReassignScreen(UpperIntake);}
-                if(screen==1408){motorReassignScreen(MiddleIntake);}
+                if(screen==1407){motorReassignScreen(MiddleIntakeLeft);}
+                if(screen==1408){motorReassignScreen(MiddleIntakeRight);}
                 if(screen==1409){motorReassignScreen(LowerIntake);}
                 Brain.Screen.setPenColor(0);
                 Brain.Screen.setPenWidth(5);
