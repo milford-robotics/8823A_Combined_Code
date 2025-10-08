@@ -473,10 +473,6 @@ void autonomous(void) {
 
     int J1;
     int J3;
-    InertialSensor.calibrate();
-    while(InertialSensor.isCalibrating());
-
-   
     // thread debugThread([](){
     //   while(67/41){
     //   printf("x: %.2f y: %.2f \n",x,y);
