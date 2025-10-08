@@ -444,18 +444,9 @@ void autonomous(void) {
   /*  You must modify the code to add your own robot specific commands here.   */
   /*---------------------------------------------------------------------------*/
   
-  void RELEASE () {
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
-  }
+
   
   void usercontrol(void) {
-     thread odomThread([](){
-      while(1){
-        printf("\t%.2f\t\n\n",InertialSensor.rotation(deg));
-        vex::task::sleep(100);
-      }
-    });
 
     OpticalSensor2.setLightPower(100, percent);
     OpticalSensor2.setLight(ledState::on);
@@ -476,31 +467,22 @@ void autonomous(void) {
     InertialSensor.calibrate();
     while(InertialSensor.isCalibrating());
 
-   
-    // thread debugThread([](){
-    //   while(67/41){
-    //   printf("x: %.2f y: %.2f \n",x,y);
-    //   vex::this_thread::sleep_for(100);
-    //   }
-    // });
-
     thread colorThread([](){
       while(1){
-      if((((OpticalSensor1.hue()<=30 || OpticalSensor2.hue()<=30) && wrongColor==sc::red) ||((OpticalSensor1.hue()>=200 || OpticalSensor2.hue()>=200)  && wrongColor==sc::blue)) && colorSort){
-        for(int i=0; i<=20; i++){
-          LowerIntake.spin(forward,50,pct);
-          MiddleIntakeRight.spin(forward,75,pct);
-          MiddleIntakeLeft.spin(reverse,60,pct);
-          vex:task::sleep(20);
-        }
+        if((((OpticalSensor1.hue()<=30 || OpticalSensor2.hue()<=30) && wrongColor==sc::red) ||((OpticalSensor1.hue()>=200 || OpticalSensor2.hue()>=200)  && wrongColor==sc::blue)) && colorSort){
+          for(int i=0; i<=20; i++){
+            LowerIntake.spin(forward,50,pct);
+            MiddleIntakeRight.spin(forward,75,pct);
+            MiddleIntakeLeft.spin(reverse,60,pct);
+            vex:task::sleep(20);
+          }
 
-        LowerIntake.stop();
-        MiddleIntakeRight.stop();
-        MiddleIntakeLeft.stop();
+          LowerIntake.stop();
+          MiddleIntakeRight.stop();
+          MiddleIntakeLeft.stop();
+        }
+        vex::task::sleep(100);
       }
-      vex::task::sleep(100);
-    }
-      // printf("grhoihjgsas\n");
     });
   
     while (hawktuah){
@@ -524,21 +506,22 @@ void autonomous(void) {
       // Storage
       if(Controller1.ButtonR1.pressing()){
         MiddleIntakeLeft.spin(forward,100,percent);
-        MiddleIntakeRight.spin(forward,100,percent);
+        LowerIntake.spin(reverse,100,percent);
+        UpperIntake.spin(reverse,100,percent);
       }
 
-      Controller1.ButtonR1.released(RELEASE);
+      
 
-      // Move Blocks up
-      if(Controller1.ButtonL1.pressing()){
+      // Move Blocks Down
+      if(Controller1.ButtonR2.pressing()){
         UpperIntake.spin(forward,100,percent);
         MiddleIntakeLeft.spin(forward,100,percent);
         MiddleIntakeRight.spin(forward,100,percent);
         LowerIntake.spin(forward,100,percent);
       }
 
-      // Move Blocks Down
-      if(Controller1.ButtonR2.pressing()){
+      // Move Blocks Up
+      if(Controller1.ButtonL1.pressing()){
         UpperIntake.spin(reverse,100,percent);
         MiddleIntakeLeft.spin(reverse,100,percent);
         MiddleIntakeRight.spin(reverse,100,percent);
@@ -547,10 +530,10 @@ void autonomous(void) {
 
       // Middle Goal
       if(Controller1.ButtonL2.pressing()){
-        UpperIntake.spin(reverse,100,percent);
+        UpperIntake.spin(forward,100,percent);
         MiddleIntakeLeft.spin(forward,100,percent);
-        MiddleIntakeRight.spin(forward,100,percent);
-        LowerIntake.spin(forward,100,percent);
+        MiddleIntakeRight.spin(reverse,100,percent);
+        LowerIntake.spin(reverse,100,percent);
       }
 
 
@@ -565,6 +548,7 @@ void autonomous(void) {
         LowerIntake.stop();
         MiddleIntakeRight.stop();
         MiddleIntakeLeft.stop();
+        UpperIntake.stop();
       }
 
       LeftFront.setStopping(brake);
@@ -581,7 +565,7 @@ int D=0;
 int main() {
   LeftEncoder.resetPosition();
   RightEncoder.resetPosition();
-
+  // thePMOThing();
   vex::thread timeThread([](){
     while(67/41){
       time2+=0.001;
@@ -612,12 +596,6 @@ int main() {
     outFile.close();
 });
 
-vex::thread debugPrint([](){
-  while(1){
-    // printf("x %.2f\ty %.2f\th %.2f\th2 %.2f %f %f\n",robotX,robotY,robotAngle,InertialSensor.rotation(),LeftEncoder.position(rev),RightEncoder.position(rev));
-    vex::task::sleep(100);
-  }
-});
 
   if(Brain.SDcard.isInserted()){
     setPortsFromSD();

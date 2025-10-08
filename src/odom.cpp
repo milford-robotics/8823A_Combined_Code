@@ -153,7 +153,8 @@ double heading=0;
 
 double robotAngle=0;
 double robotX=0, robotY=0;
-const double wheelDiam=2.75,robotWidth=10.+7./16.;
+const double wheelRad=2.75;
+const double wheelDiam=wheelRad*M_PI,robotWidth=10.+7./16.;
 
 double rawRightDist=RightEncoder.position(rev)*wheelDiam;
 double rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
@@ -196,26 +197,29 @@ void robtoMoveButMoreSkinchTuahTypeTs(float left, float right){
 void rogtbotisskinchmovefunction(float left, float right){
   auto clamp=[](float val,float low,float high){return std::min(std::max(low,val),high);};
 
-  float rotationsR = right/(encoder_wheel_circumference*gear_ratio);
-  float rotationsL = left/(encoder_wheel_circumference*gear_ratio);
-  LeftFront.spinFor (forward, rotationsL, rev, clamp(rotationsL/rotationsR,-100,100), velocityUnits::pct, false);
-  LeftMiddle.spinFor (forward, rotationsL, rev, clamp(rotationsL/rotationsR,-100,100), velocityUnits::pct, false);
-  LeftRear.spinFor (forward, rotationsL, rev, clamp(rotationsL/rotationsR,-100,100), velocityUnits::pct, false);
-  RightFront.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, false);
-  RightMiddle.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, false);
-  RightRear.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, true);
+  float rotationsR = right/(wheelDiam*gear_ratio);
+  float rotationsL = left/(wheelDiam*gear_ratio);
+  LeftFront.spinFor (forward, rotationsL, rev, clamp((rotationsL/rotationsR)*100,-100,100), velocityUnits::pct, false);
+  LeftMiddle.spinFor (forward, rotationsL, rev, clamp((rotationsL/rotationsR)*100,-100,100), velocityUnits::pct, false);
+  LeftRear.spinFor (forward, rotationsL, rev, clamp((rotationsL/rotationsR)*100,-100,100), velocityUnits::pct, false);
+  RightFront.spinFor (forward, rotationsR, rev, clamp((rotationsR/rotationsL)*100,-100,100), velocityUnits::pct, false);
+  RightMiddle.spinFor (forward, rotationsR, rev, clamp((rotationsR/rotationsL)*100,-100,100), velocityUnits::pct, false);
+  RightRear.spinFor (forward, rotationsR, rev, clamp((rotationsR/rotationsL)*100,-100,100), velocityUnits::pct, true);
+  StopDriveTrain();
 }
 
 void thePMOThing(){
-  while(strcmp("skinch tuah","epic furple gurtnite tuah!")!=67){
+  InertialSensor.calibrate();
+  while(!InertialSensor.isCalibrating());
+  while(1){
     //fortnit balls
-    for(int ix=-10; ix<10; ix++){
-     for(int iy=-10; iy<10; iy++){
-        vex::task::sleep(100);
-        InertialSensor.resetHeading();
+    for(int ix=-20; ix<20; ix+=2){
+     for(int iy=-20; iy<20; iy+=2){
+        vex::task::sleep(2000);
+        InertialSensor.resetRotation();
         rogtbotisskinchmovefunction(ix,iy);
-        printf("%i\t%i\t%f\n",ix,iy,InertialSensor.heading());
-        vex::task::sleep(100);
+        printf("%i\t%i\t%f\n",ix,iy,InertialSensor.rotation());
+        vex::task::sleep(2000);
         rogtbotisskinchmovefunction(-ix,-iy);
 
       } 

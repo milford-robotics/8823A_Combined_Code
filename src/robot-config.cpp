@@ -90,16 +90,16 @@ motor LowerIntake = motor(PORT14, ratio6_1, false);
 */
 
 
-motor LeftFront = motor(PORT11, ratio6_1, true);
-motor LeftMiddle = motor(PORT12, ratio6_1, true);
-motor LeftRear = motor(PORT13, ratio6_1, true);
-motor RightFront = motor(PORT18, ratio6_1, false);
-motor RightMiddle = motor(PORT19, ratio6_1, false);
-motor RightRear = motor(PORT20, ratio6_1, false);
-motor MiddleIntakeLeft = motor(PORT10, ratio6_1, false);
-motor MiddleIntakeRight = motor(PORT1, ratio6_1, true);
-motor LowerIntake = motor(PORT14, ratio6_1, false);
-motor UpperIntake = motor(PORT15, ratio6_1, false);
+motor LeftFront = motor(PORT5, ratio6_1, false);
+motor LeftMiddle = motor(PORT8, ratio6_1, true);
+motor LeftRear = motor(PORT6, ratio6_1, false);
+motor RightFront = motor(PORT7, ratio6_1, true);
+motor RightMiddle = motor(PORT9, ratio6_1, false);
+motor RightRear = motor(PORT10, ratio6_1, true);
+motor MiddleIntakeLeft = motor(PORT12, ratio18_1, false);
+motor MiddleIntakeRight = motor(PORT13, ratio18_1, true);
+motor LowerIntake = motor(PORT11, ratio18_1, true);
+motor UpperIntake = motor(PORT14, ratio18_1, false);
 
 void setPortsFromSD(){
     // motor LeftFront = motor(getMotorPort("LeftFront"), ratio6_1, true);
