@@ -520,7 +520,7 @@ void autonomous(void) {
         LowerIntake.spin(forward,100,percent);
       }
 
-      // Move Blocks Up
+      // Middle Score
       if(Controller1.ButtonL1.pressing()){
         UpperIntake.spin(reverse,100,percent);
         MiddleIntakeLeft.spin(reverse,100,percent);
@@ -528,10 +528,10 @@ void autonomous(void) {
         LowerIntake.spin(reverse,100,percent);
       }
 
-      // Middle Goal
+      // Top Score
       if(Controller1.ButtonL2.pressing()){
         UpperIntake.spin(forward,100,percent);
-        MiddleIntakeLeft.spin(forward,100,percent);
+        MiddleIntakeLeft.spin(reverse,100,percent);
         MiddleIntakeRight.spin(reverse,100,percent);
         LowerIntake.spin(reverse,100,percent);
       }
