@@ -106,7 +106,8 @@ void Turn (int angle){ // Turn function
     wait(20,msec);
   }
   StopDriveTrain(); // stop motors
-  InertialSensor.resetRotation();
+  printf("\n\n\n");
+
 }
 
 void TurnToHeading (int angle){ // Turn function
@@ -137,7 +138,7 @@ void TurnToHeading (int angle){ // Turn function
     wait(20,msec);
   }
   StopDriveTrain(); // stop motors
-  InertialSensor.resetRotation();
+  printf("\n\n\n");
 }
 
 /*void Turn(int targetAngle){
@@ -338,9 +339,9 @@ void autonomous(void) {
   UpperIntake.stop();
   Turn(-75);
   vex::task::sleep(25);
-  Drive(13,30);
+  Drive(14,30);
   vex::task::sleep(25);
-  LowerIntake.spin(reverse,70,pct);
+  LowerIntake.spin(reverse,60,pct);
   MiddleIntake.spin(reverse,50,pct);
   UpperIntake.spin(reverse,30,pct);
   vex::task::sleep(1500);
@@ -349,7 +350,7 @@ void autonomous(void) {
   UpperIntake.stop();
   Drive(-15,40);
   vex::task::sleep(25);
-  Turn(-45);
+  Turn(-46);
   vex::task::sleep(25);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
@@ -365,16 +366,16 @@ void autonomous(void) {
   Drive(16,30);
   vex::task::sleep(25);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntake.spin(forward,75,pct);
+  MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(reverse,85,pct);
   vex::task::sleep(1500);
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-49,40);
+  Drive(-48,40);
   Tongue.set(false);
   vex::task::sleep(25);
-  TurnToHeading(123);
+  TurnToHeading(139);
   vex::task::sleep(75);
   Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
@@ -395,14 +396,14 @@ void autonomous(void) {
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
   vex::task::sleep(1500);
+  Tongue.set(false);
   Drive(17,25);
   vex::task::sleep(50);
-  LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
   Turn(-90);
   vex::task::sleep(25);
-  Drive(120,20);
+  Drive(95,20);
   vex::task::sleep(1000);
   Turn(90);
   vex::task::sleep(75);
