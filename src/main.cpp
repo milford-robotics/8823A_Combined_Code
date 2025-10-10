@@ -78,15 +78,19 @@ void Drive (int dist, int speed){ // Drive function
 }
 
 void Turn (int angle){ // Turn function
-  int top_speed = 50;
-  float speed;
-  float sumError = 0;
-  float error = 67;
-  float Kp = 0.3;
-  double Ki = 0.04;
+  auto clamp=[](float val,float bottom,float top){return std::min(std::max(val,bottom),top);};
+  float error=0, tol=0.2,start=InertialSensor.rotation(), speed=0, ki=0.2,kp=0.1,integral=0,oldError;
 
-  double startingRot=InertialSensor.rotation();
+  do{
+    oldError=error;
+    
+    vex::task::sleep(10);
 
+    printf("e: %.2f h: %.2f i: %.2f s: %.2f \n",error,InertialSensor.rotation(),integral, speed);
+    error=angle-(InertialSensor.rotation()-start);
+    speed=ki*integral+kp*error;
+    speed=clamp(speed,-80,80);
+    if(error<=20) integral+=error*0.005;
   while (fabs (error) > 0.55){
     // printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
     
@@ -97,6 +101,17 @@ void Turn (int angle){ // Turn function
     if(speed > top_speed) speed = top_speed; // doesn't get too fast
     if(speed < -top_speed) speed = -top_speed; // doesn't get too slow
 
+    LeftFront.spin(forward,speed,percent);
+    LeftMiddle.spin(forward,speed,percent);
+    LeftRear.spin(forward,speed,percent);
+    RightFront.spin(reverse,speed,percent);
+    RightMiddle.spin(reverse,speed,percent);
+    RightRear.spin(reverse,speed,percent);
+
+  }while(fabs(error)+fabs(oldError)>tol);
+  StopDriveTrain();
+  printf("done \n\n\n");
+  vex::task::sleep(1000);
     LeftFront.spin (forward, speed, pct); // motors on
     LeftMiddle.spin (forward, speed, pct);
     LeftRear.spin (forward, speed, pct);
@@ -111,6 +126,19 @@ void Turn (int angle){ // Turn function
 }
 
 void TurnToHeading (int angle){ // Turn function
+  auto clamp=[](float val,float bottom,float top){return std::min(std::max(val,bottom),top);};
+  float error=0, tol=0.2, speed=0, ki=0.2,kp=0.1,integral=0,oldError;
+
+  do{
+    oldError=error;
+    
+    vex::task::sleep(10);
+
+    printf("e: %.2f h: %.2f i: %.2f s: %.2f \n",error,InertialSensor.rotation(),integral, speed);
+    error=angle-(InertialSensor.rotation());
+    speed=ki*integral+kp*error;
+    speed=clamp(speed,-80,80);
+    if(error<=20) integral+=error*0.005;
   int top_speed = 50;
   float speed=0;
   float sumError = 0;
@@ -126,6 +154,18 @@ void TurnToHeading (int angle){ // Turn function
 
     if(speed > top_speed) speed = top_speed; // doesn't get too fast
     if(speed < -top_speed) speed = -top_speed; // doesn't get too slow
+
+    LeftFront.spin(forward,speed,percent);
+    LeftMiddle.spin(forward,speed,percent);
+    LeftRear.spin(forward,speed,percent);
+    RightFront.spin(reverse,speed,percent);
+    RightMiddle.spin(reverse,speed,percent);
+    RightRear.spin(reverse,speed,percent);
+
+  }while(fabs(error)+fabs(oldError)>tol);
+  StopDriveTrain();
+  printf("done \n\n\n");
+  vex::task::sleep(1000);
 
     LeftFront.spin (forward, speed, pct); // motors on
     LeftMiddle.spin (forward, speed, pct);
@@ -208,7 +248,10 @@ void pre_auton(void) {
   /*---------------------------------------------------------------------------*/
   
 void autonomous(void) {
-
+  Turn(90);
+  vex::task::sleep(1000);
+  Turn(90);
+  vex::task::sleep(1000);
   /*vex::thread unstuckThread([](){
     float oldMotorCommandMid=0;
     float oldMotorCommandTop=0;
@@ -474,10 +517,6 @@ void autonomous(void) {
 
     int J1;
     int J3;
-    InertialSensor.calibrate();
-    while(InertialSensor.isCalibrating());
-
-   
     // thread debugThread([](){
     //   while(67/41){
     //   printf("x: %.2f y: %.2f \n",x,y);
