@@ -88,7 +88,7 @@ void Turn (int angle){ // Turn function
   double startingRot=InertialSensor.rotation();
 
   while (fabs (error) > 0.55){
-    printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
+    // printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
     
     error = angle - (InertialSensor.rotation()-startingRot);
     if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
@@ -106,23 +106,21 @@ void Turn (int angle){ // Turn function
     wait(20,msec);
   }
   StopDriveTrain(); // stop motors
-  printf("\n\n\n");
+  printf("stopped turning at %.2f (abs heading: %.2f) \n\n\n",InertialSensor.rotation()-startingRot,InertialSensor.rotation());
 
 }
 
 void TurnToHeading (int angle){ // Turn function
   int top_speed = 50;
-  float speed;
+  float speed=0;
   float sumError = 0;
   float error = 67;
   float Kp = 0.3;
   double Ki = 0.04;
 
-  double startingRot=InertialSensor.rotation();
-
   while (fabs (error) > 0.55){
     printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
-    error = angle - (InertialSensor.rotation());
+    error = -angle-(InertialSensor.rotation());
     if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
     speed = Kp*error + Ki*sumError; // slows down as it approaches destination
 
@@ -138,7 +136,8 @@ void TurnToHeading (int angle){ // Turn function
     wait(20,msec);
   }
   StopDriveTrain(); // stop motors
-  printf("\n\n\n");
+  printf("stopped turning at %.2f (abs heading: %.2f) \n\n\n",InertialSensor.rotation(),InertialSensor.rotation());
+
 }
 
 /*void Turn(int targetAngle){
@@ -234,7 +233,7 @@ void autonomous(void) {
       vex::task::sleep(100);
     }
   });*/
-  //autonSelection="LeftSide";    
+  autonSelection="LeftSide";    
   if(autonSelection=="RightSide"){
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
@@ -281,13 +280,13 @@ void autonomous(void) {
   }
   else if(autonSelection=="LeftSide"){
   LowerIntake.spin(forward,100,pct);
-  MiddleIntake.spin(forward,75,pct);
+  MiddleIntake.spin(forward,45,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(28,25);
+  Drive(27,25);
   vex::task::sleep(50);
   MiddleIntake.stop();
   UpperIntake.stop();
-  Turn(73);
+  Turn(75);
   vex::task::sleep(25);
   Tongue.set(true);
   vex::task::sleep(1000);
@@ -300,10 +299,10 @@ void autonomous(void) {
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-47,40);
+  Drive(-49,40);
   Tongue.set(false);
   vex::task::sleep(25);
-  TurnToHeading(123);
+  TurnToHeading(124);
   vex::task::sleep(75);
   // Turn(131);
   // vex::task::sleep(25);
@@ -335,31 +334,32 @@ void autonomous(void) {
   UpperIntake.spin(forward,15,pct);
   Drive(28,25);
   vex::task::sleep(50);
-  MiddleIntake.spin(forward,25,pct);
-  UpperIntake.stop();
-  Turn(-75);
+  LowerIntake.spin(forward,75,pct);
+  MiddleIntake.spin(forward,30,pct);
+  UpperIntake.spin(forward,5,pct);
+  Turn(-77);
   vex::task::sleep(25);
-  Drive(14,30);
+  Drive(15,30);
   vex::task::sleep(25);
-  LowerIntake.spin(reverse,60,pct);
-  MiddleIntake.spin(reverse,50,pct);
+  LowerIntake.spin(reverse,40,pct);
+  MiddleIntake.spin(reverse,40,pct);
   UpperIntake.spin(reverse,30,pct);
   vex::task::sleep(1500);
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-15,40);
+  Drive(-16,40);
   vex::task::sleep(25);
-  Turn(-46);
+  Turn(-43);
   vex::task::sleep(25);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(50,30);
   vex::task::sleep(1000);
-  MiddleIntake.stop();
+  MiddleIntake.spin(forward,15,pct);
   UpperIntake.stop();
-  Turn(130);
+  Turn(137);
   vex::task::sleep(25);
   Tongue.set(true);
   vex::task::sleep(1000);
@@ -451,12 +451,12 @@ void autonomous(void) {
   }
   
   void usercontrol(void) {
-     thread odomThread([](){
-      while(1){
-        printf("\t%.2f\t\n\n",InertialSensor.rotation(deg));
-        vex::task::sleep(100);
-      }
-    });
+
+    //   while(1){
+    //     printf("\t%.2f\t\n\n",InertialSensor.rotation(deg));
+    //     vex::task::sleep(100);
+    //   }
+    // });
 
     OpticalSensor2.setLightPower(100, percent);
     OpticalSensor2.setLight(ledState::on);
