@@ -89,15 +89,16 @@ motor MiddleIntake = motor(PORT1, ratio6_1, true);
 motor LowerIntake = motor(PORT14, ratio6_1, false);
 
 void setPortsFromSD(){
-    // motor LeftFront = motor(getMotorPort("LeftFront"), ratio6_1, true);
-    // motor LeftMiddle = motor(getMotorPort("LeftMiddle"), ratio6_1, true);
-    // motor LeftRear = motor(getMotorPort("LeftRear"), ratio6_1, true);
-    // motor RightFront = motor(getMotorPort("RightFront"), ratio6_1, false);
-    // motor RightMiddle = motor(getMotorPort("RightMiddle"), ratio6_1, false);
-    // motor RightRear = motor(getMotorPort("RightRear"), ratio6_1, false);
-    // motor UpperIntake = motor(getMotorPort("UpperIntake"), ratio6_1, false);
-    // motor MiddleIntake = motor(getMotorPort("MiddleIntake"), ratio6_1, true);
-    // motor LowerIntake = motor(getMotorPort("LowerIntake"), ratio6_1, false);
+    LeftFront = motor(getMotorPort("LeftFront"), ratio6_1, true);
+    LeftMiddle = motor(getMotorPort("LeftMiddle"), ratio6_1, true);
+    LeftRear = motor(getMotorPort("LeftRear"), ratio6_1, true);
+    RightFront = motor(getMotorPort("RightFront"), ratio6_1, false);
+    RightMiddle = motor(getMotorPort("RightMiddle"), ratio6_1, false);
+    RightRear = motor(getMotorPort("RightRear"), ratio6_1, false);
+    UpperIntake = motor(getMotorPort("UpperIntake"), ratio6_1, false);
+    MiddleIntake = motor(getMotorPort("MiddleIntake"), ratio6_1, true);
+    LowerIntake = motor(getMotorPort("LowerIntake"), ratio6_1, false);
+    printf("%i %i\n",getMotorPort("LowerIntake"),getMotorPort("UpperIntake"));
 }
 
 
