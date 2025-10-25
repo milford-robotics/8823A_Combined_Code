@@ -230,7 +230,7 @@ void autonomous(void) {
   vex::task::sleep(50);
   MiddleIntake.spin(forward,25,pct);
   UpperIntake.stop();
-  Turn(-75);
+  Turn(-73);
   vex::task::sleep(25);
   Drive(13,30);
   vex::task::sleep(25);
@@ -337,10 +337,10 @@ void autonomous(void) {
   Drive(18,20);
   vex::task::sleep(25);
   //score
-  LowerIntake.spin(reverse,40,pct);
+  LowerIntake.spin(reverse,20,pct);
   MiddleIntake.spin(reverse,40,pct);
   UpperIntake.spin(reverse,30,pct);
-  vex::task::sleep(1500);
+  vex::task::sleep(3000);
   //stop that
   LowerIntake.stop();
   MiddleIntake.stop();
@@ -356,6 +356,8 @@ void autonomous(void) {
   UpperIntake.spin(forward,15,pct);
   //drive across field
   Drive(51,30);
+  vex::task::sleep(100);
+  Drive(-2,30);
   vex::task::sleep(1000);
   MiddleIntake.spin(forward,15,pct);
   UpperIntake.stop();
@@ -365,7 +367,7 @@ void autonomous(void) {
   Tongue.set(true);
   vex::task::sleep(1000);
   //go to mid goal
-  Drive(20,40);
+  Drive(17,40);
   vex::task::sleep(25);
   //score the ts
   LowerIntake.spin(forward,100,pct);
@@ -376,7 +378,7 @@ void autonomous(void) {
   MiddleIntake.stop();
   UpperIntake.stop();
   //high goal time
-  Drive(-48,40);
+  Drive(-47,40);
   Tongue.set(false);
   vex::task::sleep(25);
   //go to the high goal to align
@@ -422,9 +424,9 @@ void autonomous(void) {
   UpperIntake.spin(forward,100,pct);
   Drive(20,30);
   vex::task::sleep(100);
-  TurnP(90);
+  TurnP(-90);
   vex::task::sleep(75);
-  Drive(30,100);
+  Drive(40,100);
   }
 
 }
