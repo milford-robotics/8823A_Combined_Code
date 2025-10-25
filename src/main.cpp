@@ -221,7 +221,7 @@ void autonomous(void) {
       vex::task::sleep(100);
     }
   });*/
-  autonSelection="hawk tuah!";    
+  // autonSelection="hawk tuah!";    
   if(autonSelection=="RightSide"){
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
