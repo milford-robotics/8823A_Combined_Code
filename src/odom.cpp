@@ -154,6 +154,7 @@ double heading=0;
 double robotAngle=0;
 double robotX=0, robotY=0;
 const double wheelDiam=2.75,robotWidth=10.+7./16.;
+const double wheelRad=wheelDiam*M_PI;
 
 double rawRightDist=RightEncoder.position(rev)*wheelDiam;
 double rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
@@ -240,8 +241,8 @@ double tsHeadingTypeSquirt(){
     double angle=0,xDist=0,yDist=0,rawX=0,rawY=0;
 
     //Get left and right dist
-    rawRightDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(right)*wheelDiam;
-    rawLeftDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(left)*wheelDiam;
+    rawRightDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(right)*wheelRad;
+    rawLeftDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(left)*wheelRad;
 
     // rawRightDist=RightEncoder.position(rev)*wheelDiam;
     // rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
