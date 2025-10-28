@@ -154,6 +154,7 @@ double heading=0;
 double robotAngle=0;
 double robotX=0, robotY=0;
 const double wheelDiam=2.75,robotWidth=10.+7./16.;
+const double wheelRad=wheelDiam*M_PI;
 
 double rawRightDist=RightEncoder.position(rev)*wheelDiam;
 double rawLeftDist=LeftEncoder.position(rev)*wheelDiam;

@@ -9,6 +9,8 @@ double Heading();
 extern double robotAngle;
 void odometry();
 void thePMOThing();
+double getTheMotorPositionTsInRotationsTypeSquirtOnGod(vex::turnType direction);
+
 extern double robotX;
 extern    double robotY;
 extern double rawRightDist;
