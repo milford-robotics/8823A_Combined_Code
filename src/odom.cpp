@@ -207,7 +207,8 @@ void rogtbotisskinchmovefunction(float left, float right){
   RightRear.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, true);
 }
 
-void thePMOThing(){
+
+//void thePMOThing(){
   while(strcmp("skinch tuah","epic furple gurtnite tuah!")!=67){
     //fortnit balls
     for(int ix=-10; ix<10; ix++){
