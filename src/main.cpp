@@ -121,6 +121,8 @@ void Turn2 (int angle){ // Turn function
     printf("e: %.2f h: %.2f i: %.2f s: %.2f \n",error,InertialSensor.rotation(),integral, speed);
     error=angle-(InertialSensor.rotation()-start);
     speed=ki*integral+kp*error;
+    speed=clamp(speed,-20,20);
+    if(fabs(error)<=fabs((angle-start)*0.4)) integral+=error*0.005;
     speed=clamp(speed,-80,80);
     if(fabs(error)<=fabs(angle*0.3)) integral+=error*0.005;
 
@@ -262,6 +264,7 @@ void autonomous(void) {
   UpperIntake.stop();
   Turn(-81);
   vex::task::sleep(25);
+  Drive(15,30);
   Drive(15,30);
   vex::task::sleep(25);
   LowerIntake.spin(reverse,40,pct);
