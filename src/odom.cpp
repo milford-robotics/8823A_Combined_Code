@@ -186,14 +186,14 @@ void moveDistance(float dist, bool left){
 
 
 
-void robtoMoveButMoreSkinchTuahTypeTs(float left, float right){
-  hgsaohgdsihoio=left;
-  vkjsjlkjalkjsf=right;
-  vex::thread leftThread([](){moveDistance(hgsaohgdsihoio, true);});
-  moveDistance(vkjsjlkjalkjsf,false);
-}
+// void robtoMoveButMoreSkinchTuahTypeTs(float left, float right){
+//   hgsaohgdsihoio=left;
+//   vkjsjlkjalkjsf=right;
+//   vex::thread leftThread([](){moveDistance(hgsaohgdsihoio, true);});
+//   moveDistance(vkjsjlkjalkjsf,false);
+// }
 
-void rogtbotisskinchmovefunction(float left, float right){
+void moveTo(float left, float right){
   auto clamp=[](float val,float low,float high){return std::min(std::max(low,val),high);};
 
   float rotationsR = right/(encoder_wheel_circumference*gear_ratio);
@@ -206,25 +206,25 @@ void rogtbotisskinchmovefunction(float left, float right){
   RightRear.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, true);
 }
 
-void thePMOThing(){
-  while(strcmp("skinch tuah","epic furple gurtnite tuah!")!=67){
-    //fortnit balls
-    for(int ix=-10; ix<10; ix++){
-     for(int iy=-10; iy<10; iy++){
-        vex::task::sleep(100);
-        InertialSensor.resetHeading();
-        rogtbotisskinchmovefunction(ix,iy);
-        printf("%i\t%i\t%f\n",ix,iy,InertialSensor.heading());
-        vex::task::sleep(100);
-        rogtbotisskinchmovefunction(-ix,-iy);
+// void thePMOThing(){
+//   while(strcmp("skinch tuah","epic furple gurtnite tuah!")!=67){
+//     //fortnit balls
+//     for(int ix=-10; ix<10; ix++){
+//      for(int iy=-10; iy<10; iy++){
+//         vex::task::sleep(100);
+//         InertialSensor.resetHeading();
+//         rogtbotisskinchmovefunction(ix,iy);
+//         printf("%i\t%i\t%f\n",ix,iy,InertialSensor.heading());
+//         vex::task::sleep(100);
+//         rogtbotisskinchmovefunction(-ix,-iy);
 
-      } 
-    }
+//       } 
+//     }
 
-  }
-}
+//   }
+// }
 
-double getTheMotorPositionTsInRotationsTypeSquirtOnGod(vex::turnType direction){
+double getMotorPosition(vex::turnType direction){
   if(direction==vex::turnType::left){
     return (LeftFront.position(rev)+LeftMiddle.position(rev)+LeftRear.position(rev))/3.0;
    
@@ -235,13 +235,13 @@ double getTheMotorPositionTsInRotationsTypeSquirtOnGod(vex::turnType direction){
   return 6.7;
 }
 
-double tsHeadingTypeSquirt(){
+double Heading(){
     //Establish return variables
     double angle=0,xDist=0,yDist=0,rawX=0,rawY=0;
 
     //Get left and right dist
-    rawRightDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(right)*wheelDiam;
-    rawLeftDist=getTheMotorPositionTsInRotationsTypeSquirtOnGod(left)*wheelDiam;
+    rawRightDist=getMotorPosition(right)*wheelDiam;
+    rawLeftDist=getMotorPosition(left)*wheelDiam;
 
     // rawRightDist=RightEncoder.position(rev)*wheelDiam;
     // rawLeftDist=LeftEncoder.position(rev)*wheelDiam;

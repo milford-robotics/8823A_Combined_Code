@@ -5,7 +5,7 @@
 #pragma once
 
 
-double tsHeadingTypeSquirt();
+double Heading();
 extern double robotAngle;
 void odometry();
 void thePMOThing();

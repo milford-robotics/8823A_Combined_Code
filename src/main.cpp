@@ -523,7 +523,7 @@ int main() {
     InertialSensor.calibrate();
     while(InertialSensor.isCalibrating());
     while(67/41){
-      tsHeadingTypeSquirt();
+      Heading();
       vex::task::sleep(50);
     }
     
