@@ -78,36 +78,52 @@ vex::brain       Brain;
 controller Controller1 = controller(primary);
 
 
-motor LeftFront = motor(PORT11, ratio6_1, true);
+motor LeftFront = motor(PORT11, ratio6_1, false);
 motor LeftMiddle = motor(PORT12, ratio6_1, true);
-motor LeftRear = motor(PORT13, ratio6_1, true);
-motor RightFront = motor(PORT18, ratio6_1, false);
+motor LeftRear = motor(PORT13, ratio6_1, false);
+motor RightFront = motor(PORT18, ratio6_1, true);
 motor RightMiddle = motor(PORT19, ratio6_1, false);
-motor RightRear = motor(PORT20, ratio6_1, false);
+motor RightRear = motor(PORT20, ratio6_1, true);
 motor UpperIntake = motor(PORT10, ratio6_1, false);
-motor MiddleIntake = motor(PORT1, ratio6_1, true);
-motor LowerIntake = motor(PORT14, ratio6_1, false);
+motor55 MiddleIntake = motor55(PORT1, true);
+motor55 LowerIntake = motor55(PORT14, false);
+
+
+
+/*motor LeftFront = motor(PORT11, ratio6_1, false);
+motor LeftMiddle = motor(PORT12, ratio6_1, true);
+motor LeftRear = motor(PORT13, ratio6_1, false);
+motor RightFront = motor(PORT18, ratio6_1, true);
+motor RightMiddle = motor(PORT19, ratio6_1, false);
+motor RightRear = motor(PORT20, ratio6_1, true);
+motor UpperIntake = motor(PORT15, ratio18_1, false);
+motor MiddleIntake = motor(PORT16, ratio18_1, true);
+motor LowerIntake = motor(PORT17, ratio18_1, true);
+motor UpperIntake = motor(PORT14, ratio18_1, false);*/
 
 void setPortsFromSD(){
-    LeftFront = motor(getMotorPort("LeftFront"), ratio6_1, true);
-    LeftMiddle = motor(getMotorPort("LeftMiddle"), ratio6_1, false);
-    LeftRear = motor(getMotorPort("LeftRear"), ratio6_1, true);
-    RightFront = motor(getMotorPort("RightFront"), ratio6_1, false);
-    RightMiddle = motor(getMotorPort("RightMiddle"), ratio6_1, true);
-    RightRear = motor(getMotorPort("RightRear"), ratio6_1, false);
-    UpperIntake = motor(getMotorPort("UpperIntake"), ratio6_1, false);
-    MiddleIntake = motor(getMotorPort("MiddleIntake"), ratio6_1, true);
-    LowerIntake = motor(getMotorPort("LowerIntake"), ratio6_1, false);
-    printf("%i %i\n",getMotorPort("LowerIntake"),getMotorPort("UpperIntake"));
+    // motor LeftFront = motor(getMotorPort("LeftFront"), ratio6_1, true);
+    // motor LeftMiddle = motor(getMotorPort("LeftMiddle"), ratio6_1, true);
+    // motor LeftRear = motor(getMotorPort("LeftRear"), ratio6_1, true);
+    // motor RightFront = motor(getMotorPort("RightFront"), ratio6_1, false);
+    // motor RightMiddle = motor(getMotorPort("RightMiddle"), ratio6_1, false);
+    // motor RightRear = motor(getMotorPort("RightRear"), ratio6_1, false);
+    // motor UpperIntake = motor(getMotorPort("UpperIntake"), ratio6_1, false);
+    // motor MiddleIntake = motor(getMotorPort("MiddleIntake"), ratio6_1, true);
+    // motor LowerIntake = motor(getMotorPort("LowerIntake"), ratio6_1, false);
 }
 
 
 
-rotation LeftEncoder = rotation(PORT15, true);
-rotation RightEncoder = rotation(PORT16, false);
-rotation BackEncoder = rotation(PORT17, true);
-inertial InertialSensor = inertial(PORT4);
+rotation LeftEncoder = rotation(PORT5, true);
+rotation RightEncoder = rotation(PORT4, false);
+rotation BackEncoder = rotation(PORT9, true);
+inertial InertialSensor = inertial(PORT15);
 digital_out Tongue = digital_out(Brain.ThreeWirePort.A);
+digital_out BasketPiston = digital_out(Brain.ThreeWirePort.A);
+digital_out DingleA = digital_out(Brain.ThreeWirePort.A);
+digital_out DingleB = digital_out(Brain.ThreeWirePort.A);
+
 optical OpticalSensor1 = optical(PORT2);
 optical OpticalSensor2 = optical(PORT3);
 
