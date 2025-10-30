@@ -236,23 +236,23 @@ void autonomous(void) {
   //autonSelection="LeftSide";    
   if(autonSelection=="RightSide"){
   LowerIntake.spin(forward);
-  MiddleIntakeRight.spin(forward,75,pct);
-  MiddleIntakeLeft.spin(forward,15,pct);
+  MiddleIntake.spin(forward,75,pct);
+  UpperIntake.spin(forward,15,pct);
   Drive(28,25);
   vex::task::sleep(50);
-  MiddleIntakeRight.spin(forward,25,pct);
-  MiddleIntakeLeft.stop();
+  MiddleIntake.spin(forward,25,pct);
+  UpperIntake.stop();
   Turn(-75);
   vex::task::sleep(25);
   Drive(13,30);
   vex::task::sleep(25);
   LowerIntake.spin(reverse,70,pct);
-  MiddleIntakeRight.spin(reverse,50,pct);
-  MiddleIntakeLeft.spin(reverse,30,pct);
+  MiddleIntake.spin(reverse,50,pct);
+  UpperIntake.spin(reverse,30,pct);
   vex::task::sleep(1500);
   LowerIntake.stop();
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Drive(-47,40);
   vex::task::sleep(25);
   TurnToHeading(-123);
@@ -261,31 +261,31 @@ void autonomous(void) {
   // vex::task::sleep(50);
   Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,100,pct);
-  MiddleIntakeLeft.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
   vex::task::sleep(1000);
   Tongue.set(true);
   vex::task::sleep(25);
   LowerIntake.spin(forward,90,pct);
-  MiddleIntakeRight.spin(forward,65,pct);
-  MiddleIntakeLeft.spin(forward,15,pct);
+  MiddleIntake.spin(forward,65,pct);
+  UpperIntake.spin(forward,15,pct);
   Drive(29,50);
   vex::task::sleep(2000);
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Drive(-32,30);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,100,pct);
-  MiddleIntakeLeft.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
   }
   else if(autonSelection=="LeftSide"){
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,75,pct);
-  MiddleIntakeLeft.spin(forward,15,pct);
+  MiddleIntake.spin(forward,75,pct);
+  UpperIntake.spin(forward,15,pct);
   Drive(28,25);
   vex::task::sleep(50);
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Turn(73);
   vex::task::sleep(25);
   Tongue.set(true);
@@ -293,12 +293,12 @@ void autonomous(void) {
   Drive(15,30);
   vex::task::sleep(25);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,75,pct);
-  MiddleIntakeLeft.spin(reverse,85,pct);
+  MiddleIntake.spin(forward,75,pct);
+  UpperIntake.spin(reverse,85,pct);
   vex::task::sleep(1500);
   LowerIntake.stop();
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Drive(-47,40);
   Tongue.set(false);
   vex::task::sleep(25);
@@ -308,56 +308,56 @@ void autonomous(void) {
   // vex::task::sleep(25);
   Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,100,pct);
-  MiddleIntakeLeft.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
   vex::task::sleep(1000);
   Tongue.set(true);
   vex::task::sleep(25);
   LowerIntake.spin(forward,90,pct);
-  MiddleIntakeRight.spin(forward,65,pct);
-  MiddleIntakeLeft.spin(forward,15,pct);
+  MiddleIntake.spin(forward,65,pct);
+  UpperIntake.spin(forward,15,pct);
   Drive(30,40);
   vex::task::sleep(2000);
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Drive(-32,30);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,100,pct);
-  MiddleIntakeLeft.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
   }
   else if(autonSelection=="MoveForward"){
     Drive(6,30);
   }
   else{ // Skills
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,75,pct);
-  MiddleIntakeLeft.spin(forward,15,pct);
+  MiddleIntake.spin(forward,75,pct);
+  UpperIntake.spin(forward,15,pct);
   Drive(28,25);
   vex::task::sleep(50);
-  MiddleIntakeRight.spin(forward,25,pct);
-  MiddleIntakeLeft.stop();
+  MiddleIntake.spin(forward,25,pct);
+  UpperIntake.stop();
   Turn(-75);
   vex::task::sleep(25);
   Drive(13,30);
   vex::task::sleep(25);
   LowerIntake.spin(reverse,70,pct);
-  MiddleIntakeRight.spin(reverse,50,pct);
-  MiddleIntakeLeft.spin(reverse,30,pct);
+  MiddleIntake.spin(reverse,50,pct);
+  UpperIntake.spin(reverse,30,pct);
   vex::task::sleep(1500);
   LowerIntake.stop();
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Drive(-15,40);
   vex::task::sleep(25);
   Turn(-45);
   vex::task::sleep(25);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,75,pct);
-  MiddleIntakeLeft.spin(forward,15,pct);
+  MiddleIntake.spin(forward,75,pct);
+  UpperIntake.spin(forward,15,pct);
   Drive(50,30);
   vex::task::sleep(1000);
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Turn(130);
   vex::task::sleep(25);
   Tongue.set(true);
@@ -365,12 +365,12 @@ void autonomous(void) {
   Drive(16,30);
   vex::task::sleep(25);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,75,pct);
-  MiddleIntakeLeft.spin(reverse,85,pct);
+  MiddleIntake.spin(forward,75,pct);
+  UpperIntake.spin(reverse,85,pct);
   vex::task::sleep(1500);
   LowerIntake.stop();
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Drive(-49,40);
   Tongue.set(false);
   vex::task::sleep(25);
@@ -378,28 +378,28 @@ void autonomous(void) {
   vex::task::sleep(75);
   Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,100,pct);
-  MiddleIntakeLeft.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
   vex::task::sleep(1000);
   Tongue.set(true);
   vex::task::sleep(25);
   LowerIntake.spin(forward,90,pct);
-  MiddleIntakeRight.spin(forward,65,pct);
-  MiddleIntakeLeft.spin(forward,15,pct);
+  MiddleIntake.spin(forward,65,pct);
+  UpperIntake.spin(forward,15,pct);
   Drive(30,40);
   vex::task::sleep(3500);
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Drive(-32,30);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,100,pct);
-  MiddleIntakeLeft.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
   vex::task::sleep(1500);
   Drive(17,25);
   vex::task::sleep(50);
   LowerIntake.stop();
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Turn(-90);
   vex::task::sleep(25);
   Drive(120,20);
@@ -408,28 +408,28 @@ void autonomous(void) {
   vex::task::sleep(75);
   Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,100,pct);
-  MiddleIntakeLeft.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
   vex::task::sleep(1000);
   Tongue.set(true);
   vex::task::sleep(25);
   LowerIntake.spin(forward,90,pct);
-  MiddleIntakeRight.spin(forward,65,pct);
-  MiddleIntakeLeft.spin(forward,25,pct);
+  MiddleIntake.spin(forward,65,pct);
+  UpperIntake.spin(forward,25,pct);
   Drive(30,40);
   vex::task::sleep(3500);
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   Drive(-32,30);
   LowerIntake.spin(forward,100,pct);
-  MiddleIntakeRight.spin(forward,100,pct);
-  MiddleIntakeLeft.spin(forward,100,pct);
+  MiddleIntake.spin(forward,100,pct);
+  UpperIntake.spin(forward,100,pct);
   vex::task::sleep(1500);
   Drive(17,25);
   vex::task::sleep(50);
   LowerIntake.stop();
-  MiddleIntakeRight.stop();
-  MiddleIntakeLeft.stop();
+  MiddleIntake.stop();
+  UpperIntake.stop();
   }
 
 }
@@ -472,14 +472,14 @@ void autonomous(void) {
         if((((OpticalSensor1.hue()<=30 || OpticalSensor2.hue()<=30) && wrongColor==sc::red) ||((OpticalSensor1.hue()>=200 || OpticalSensor2.hue()>=200)  && wrongColor==sc::blue)) && colorSort){
           for(int i=0; i<=20; i++){
             LowerIntake.spin(forward,50,pct);
-            MiddleIntakeRight.spin(forward,75,pct);
-            MiddleIntakeLeft.spin(reverse,60,pct);
+            MiddleIntake.spin(forward,75,pct);
+            UpperIntake.spin(reverse,60,pct);
             vex:task::sleep(20);
           }
 
           LowerIntake.stop();
-          MiddleIntakeRight.stop();
-          MiddleIntakeLeft.stop();
+          MiddleIntake.stop();
+          UpperIntake.stop();
         }
         vex::task::sleep(100);
       }
@@ -505,7 +505,7 @@ void autonomous(void) {
 
       // Storage
       if(Controller1.ButtonR1.pressing()){
-        MiddleIntakeLeft.spin(forward,100,percent);
+        UpperIntake.spin(forward,100,percent);
         LowerIntake.spin(reverse,100,percent);
         UpperIntake.spin(reverse,100,percent);
       }
@@ -515,24 +515,24 @@ void autonomous(void) {
       // Move Blocks Down
       if(Controller1.ButtonR2.pressing()){
         UpperIntake.spin(forward,100,percent);
-        MiddleIntakeLeft.spin(forward,100,percent);
-        MiddleIntakeRight.spin(forward,100,percent);
+        UpperIntake.spin(forward,100,percent);
+        MiddleIntake.spin(forward,100,percent);
         LowerIntake.spin(forward,100,percent);
       }
 
       // Middle Score
       if(Controller1.ButtonL1.pressing()){
         UpperIntake.spin(reverse,100,percent);
-        MiddleIntakeLeft.spin(reverse,100,percent);
-        MiddleIntakeRight.spin(reverse,100,percent);
+        UpperIntake.spin(reverse,100,percent);
+        MiddleIntake.spin(reverse,100,percent);
         LowerIntake.spin(reverse,100,percent);
       }
 
       // Top Score
       if(Controller1.ButtonL2.pressing()){
         UpperIntake.spin(forward,100,percent);
-        MiddleIntakeLeft.spin(reverse,100,percent);
-        MiddleIntakeRight.spin(reverse,100,percent);
+        UpperIntake.spin(reverse,100,percent);
+        MiddleIntake.spin(reverse,100,percent);
         LowerIntake.spin(reverse,100,percent);
       }
 
@@ -540,14 +540,14 @@ void autonomous(void) {
       // Unstucky
       if(Controller1.ButtonY.pressing()){
         LowerIntake.spin(reverse,100,pct);
-        MiddleIntakeRight.spin(forward,100,pct);
+        MiddleIntake.spin(forward,100,pct);
       }
 
       // Stop All
       if(Controller1.ButtonRight.pressing()){
         LowerIntake.stop();
-        MiddleIntakeRight.stop();
-        MiddleIntakeLeft.stop();
+        MiddleIntake.stop();
+        UpperIntake.stop();
         UpperIntake.stop();
       }
 
