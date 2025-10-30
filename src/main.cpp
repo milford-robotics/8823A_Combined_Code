@@ -235,7 +235,7 @@ void autonomous(void) {
   });*/
   //autonSelection="LeftSide";    
   if(autonSelection=="RightSide"){
-  LowerIntake.spin(forward);
+  LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
   Drive(28,25);
@@ -576,8 +576,7 @@ int main() {
   vex::thread odomThread([](){
     InertialSensor.calibrate();
     while(InertialSensor.isCalibrating());
-    while(67/41){
-      tsHeadingTypeSquirt();
+    while(1){
       vex::task::sleep(50);
     }
     

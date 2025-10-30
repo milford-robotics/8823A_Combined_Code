@@ -85,8 +85,8 @@ motor RightFront = motor(PORT18, ratio6_1, true);
 motor RightMiddle = motor(PORT19, ratio6_1, false);
 motor RightRear = motor(PORT20, ratio6_1, true);
 motor UpperIntake = motor(PORT10, ratio6_1, false);
-motor55 MiddleIntake = motor55(PORT1, true);
-motor55 LowerIntake = motor55(PORT14, false);
+motor MiddleIntake = motor(PORT1, ratio18_1, true);
+motor LowerIntake = motor(PORT14, ratio18_1, false);
 
 
 
@@ -128,7 +128,7 @@ optical OpticalSensor1 = optical(PORT2);
 optical OpticalSensor2 = optical(PORT3);
 
 bool isMotorReversed(vex::motor motor){
-    if(motor.index()==LeftFront.index() || motor.index()==LeftMiddle.index() || motor.index()==LeftRear.index() || motor.index()==MiddleIntake.index() ){
+    if(motor.index()==LeftFront.index() || motor.index()==RightMiddle.index() || motor.index()==LeftRear.index() || motor.index()==MiddleIntake.index() ){
         return true;
     }
     return false;
