@@ -14,8 +14,6 @@ using namespace vex;
 
 vex::competition Competition;
 
-#define hawktuah 1
-
 // A global instance of vex::brain used for printing to the V5 brain screen
 
     constexpr double gear_ratio = ((double)1/1);
@@ -542,7 +540,7 @@ void autonomous(void) {
       // printf("grhoihjgsas\n");
     });
   
-    while (hawktuah){
+    while (true){
 
       vex::task::sleep (100);
   
