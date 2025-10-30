@@ -23,9 +23,6 @@ using namespace vex;
 
 void odometry() {
 
-    // FrontEncoder.resetPosition();
-
-
     float previous_distance_traveled = 0;
 
     while(1) {
@@ -49,61 +46,6 @@ void odometry() {
     }
 }
 
-/*void Teo_Odometry () {
-
-  int side_encoder_distance; // The distance between the center of the robot and the left/right encoders
-  int back_encoder_distance; // The distance between the center of the robot and the back encoder
-
-  // side_encoder_distance = 
-  // back_encoder_distance = 
-
-  double Theta = (RightEncoder.angle() - LeftEncoder.angle()) / (2 * side_encoder_distance); // The angle of the arc
-  // The radius of the movement in relation to the center of the robot
-  double R1 = (side_encoder_distance * (RightEncoder.angle() + LeftEncoder.angle())) / (RightEncoder.angle() - LeftEncoder.angle());
-  double R2 = (BackEncoder.angle() / Theta) - back_encoder_distance; // The radius of the movement as read by the back encoder
-  double R3 = R1 - R2; // The difference between the two radii (radiuses for dumbies), represents the amount the robot drifted during the turn
-  
-  // The estimated position of the robot only taking into account the left and right encoders
-  double X1 = R1 * (std::cos(Theta) - 1);
-  double Y1 = R1 * (std::sin(Theta));
-  // The estimated position of the robot taking into account all encoders, this is offset by theta/2
-  double X2 = X1 + R3 * std::sin(Theta);
-  double Y2 = Y1 + R3 * (1 - std::cos(Theta));
-  // The estimated position of the robot fixing the theta/2 offset
-  double X3 = (((X2 - X1) * (std::cos(Theta / 2))) - ((Y2 - Y1) * (std::sin(Theta / 2)) + X1));
-  double Y3 = (((X2 - X1) * (std::sin(Theta / 2))) + ((Y2 - Y1) * (std::cos(Theta / 2)) + Y1));
-
-  // Maybe reset the rotation sensors if it's necessary (i don't know yet)
-
-  vex::this_thread::sleep_for(10);
-} */
-
-void moveToPoint(double ptX, double ptY){
-  //define variables
-  double xDiff=x-ptX;
-  double yDiff=y-ptY;
-  double targetAngle;
-  double targetDist;
-
-  //get angle to point
-  //targetAngle=std::atan(xDiff/yDiff);
-
-  //turn to point
-  
-
-  //get distance to point
-  //targetDist=std::sqrt(std::pow(xDiff,2)+std::pow(yDiff,2));
-
-  //drive there
-
-
-  //find arc-distance to point
-
-
-  std::printf("distance to point: %.3f   angle to point: %.3f rad %.3f deg \n", targetDist, targetAngle, (targetAngle*180/M_PI));
-
-
-}
 
 
 
@@ -112,7 +54,7 @@ class Circle{
     float radius, circumfrence, area;
     Circle(float radius){
       this->radius=radius;
-      this->circumfrence=radius*2*M_PI;
+      this->circumfrence=radius*M_TWOPI;
       this->area=pow(radius,2)*M_PI;
     }
 
@@ -143,10 +85,6 @@ class Circle{
     float angleFromDistance(float distance){
       return this->ratioFromDistance(distance)*M_TWOPI;
     }
-
-
-
-
 };
 
 double heading=0;
@@ -154,45 +92,35 @@ double heading=0;
 double robotAngle=0;
 double robotX=0, robotY=0;
 const double wheelDiam=2.75,robotWidth=10.+7./16.;
-const double wheelRad=wheelDiam*M_PI;
+const double wheelCirc=wheelDiam*M_PI;
+// Radius isn't Diameter times Pi?? Is this Radius?
 
-double rawRightDist=RightEncoder.position(rev)*wheelDiam;
-double rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
+double rawRightDist=RightEncoder.position(rev)*wheelCirc;
+double rawLeftDist=LeftEncoder.position(rev)*wheelCirc;
 
 double oldRightDist=rawRightDist, oldLeftDist=rawLeftDist;
 
-float hgsaohgdsihoio=0, vkjsjlkjalkjsf=0;
+float rotationsLeft=0, rotationsRight=0;
 
 void moveDistance(float dist, bool left){
   LeftEncoder.resetPosition();
   if(left){
     while(LeftEncoder.position(rev)*wheelDiam<dist){
-      LeftFront.spin(forward,std::max(std::min(hgsaohgdsihoio/vkjsjlkjalkjsf,100.f),-100.f),percent);
-      LeftMiddle.spin(forward,std::max(std::min(hgsaohgdsihoio/vkjsjlkjalkjsf,100.f),-100.f),percent);
-      LeftRear.spin(forward,std::max(std::min(hgsaohgdsihoio/vkjsjlkjalkjsf,100.f),-100.f),percent);
+      LeftFront.spin(forward,std::max(std::min(rotationsLeft/rotationsRight,100.f),-100.f),percent);
+      LeftMiddle.spin(forward,std::max(std::min(rotationsLeft/rotationsRight,100.f),-100.f),percent);
+      LeftRear.spin(forward,std::max(std::min(rotationsLeft/rotationsRight,100.f),-100.f),percent);
     }
   }
   else{
     while(RightEncoder.position(rev)*wheelDiam<dist){
-      RightFront.spin(forward,std::max(std::min(vkjsjlkjalkjsf/hgsaohgdsihoio,100.f),-100.f),percent);
-      RightMiddle.spin(forward,std::max(std::min(vkjsjlkjalkjsf/hgsaohgdsihoio,100.f),-100.f),percent);
-      RightRear.spin(forward,std::max(std::min(vkjsjlkjalkjsf/hgsaohgdsihoio,100.f),-100.f),percent);
+      RightFront.spin(forward,std::max(std::min(rotationsRight/rotationsLeft,100.f),-100.f),percent);
+      RightMiddle.spin(forward,std::max(std::min(rotationsRight/rotationsLeft,100.f),-100.f),percent);
+      RightRear.spin(forward,std::max(std::min(rotationsRight/rotationsLeft,100.f),-100.f),percent);
     }
   }
   StopDriveTrain();
 
 }
-
-
-
-
-
-// void robtoMoveButMoreSkinchTuahTypeTs(float left, float right){
-//   hgsaohgdsihoio=left;
-//   vkjsjlkjalkjsf=right;
-//   vex::thread leftThread([](){moveDistance(hgsaohgdsihoio, true);});
-//   moveDistance(vkjsjlkjalkjsf,false);
-// }
 
 void moveTo(float left, float right){
   auto clamp=[](float val,float low,float high){return std::min(std::max(low,val),high);};
@@ -207,24 +135,6 @@ void moveTo(float left, float right){
   RightRear.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, true);
 }
 
-// void thePMOThing(){
-//   while(strcmp("skinch tuah","epic furple gurtnite tuah!")!=67){
-//     //fortnit balls
-//     for(int ix=-10; ix<10; ix++){
-//      for(int iy=-10; iy<10; iy++){
-//         vex::task::sleep(100);
-//         InertialSensor.resetHeading();
-//         rogtbotisskinchmovefunction(ix,iy);
-//         printf("%i\t%i\t%f\n",ix,iy,InertialSensor.heading());
-//         vex::task::sleep(100);
-//         rogtbotisskinchmovefunction(-ix,-iy);
-
-//       } 
-//     }
-
-//   }
-// }
-
 double getMotorPosition(vex::turnType direction){
   if(direction==vex::turnType::left){
     return (LeftFront.position(rev)+LeftMiddle.position(rev)+LeftRear.position(rev))/3.0;
@@ -233,59 +143,29 @@ double getMotorPosition(vex::turnType direction){
   if(direction==vex::turnType::right){
     return (RightFront.position(rev)+RightMiddle.position(rev)+RightRear.position(rev))/3.0;
   }
-  return 6.7;
+  return 10;
 }
 
 double Heading(){
+  
     //Establish return variables
     double angle=0,xDist=0,yDist=0,rawX=0,rawY=0;
 
     //Get left and right dist
-    rawRightDist=getMotorPosition(right)*wheelDiam;
-    rawLeftDist=getMotorPosition(left)*wheelDiam;
-
-    // rawRightDist=RightEncoder.position(rev)*wheelDiam;
-    // rawLeftDist=LeftEncoder.position(rev)*wheelDiam;
+    rawRightDist=getMotorPosition(right)*wheelCirc;
+    rawLeftDist=getMotorPosition(left)*wheelCirc;
 
     double rightDist=rawRightDist;
     double leftDist=rawLeftDist;
 
-    
-
-    
     double r=(leftDist*robotWidth)/(rightDist-leftDist);
     double r_left=r+robotWidth;
     double centralAngle=(rightDist/r_left)*180.0/M_PI;
-    // double centralAngle = (leftDist-rightDist)/robotWidth;
 
     if(centralAngle!=centralAngle) centralAngle=0;
-
-    // if(centralAngle!=0){
-    //   robotX+=((r+(robotWidth/2.))*cos(centralAngle*(M_PI/180.))-(r+(robotWidth/2.)))*cos(InertialSensor.rotation()*M_PI/180.);
-    //   robotY+=((r+(robotWidth/2.))*sin(centralAngle*(M_PI/180.)))*sin(InertialSensor.rotation()*M_PI/180.);
-    // }
-    // else{
-    //   robotX+=(leftDist+rightDist)/2*cos(InertialSensor.rotation()*M_PI/180.);
-    //   robotY+=(leftDist+rightDist)/2*sin(InertialSensor.rotation()*M_PI/180.);
-    // }
-    // printf("%f %f %f %f \n",r,r+robotWidth/2.,cos(centralAngle*(M_PI/180.)),(r+(robotWidth/2.))*cos(centralAngle*(M_PI/180.)));
     
     robotAngle=centralAngle;
 
-    // oldLeftDist=rawLeftDist;
-    // oldRightDist=rawRightDist;
-
-
-
     return centralAngle;
 
-
 }
-
-
-
-
-
-
-//Implemented using 5225's odom framework (http://thepilons.ca/wp-content/uploads/2018/10/Tracking.pdf)
-// double 
