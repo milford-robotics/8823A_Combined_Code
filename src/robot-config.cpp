@@ -90,10 +90,10 @@ motor LowerIntake = motor(PORT14, ratio6_1, false);
 
 void setPortsFromSD(){
     LeftFront = motor(getMotorPort("LeftFront"), ratio6_1, true);
-    LeftMiddle = motor(getMotorPort("LeftMiddle"), ratio6_1, true);
+    LeftMiddle = motor(getMotorPort("LeftMiddle"), ratio6_1, false);
     LeftRear = motor(getMotorPort("LeftRear"), ratio6_1, true);
     RightFront = motor(getMotorPort("RightFront"), ratio6_1, false);
-    RightMiddle = motor(getMotorPort("RightMiddle"), ratio6_1, false);
+    RightMiddle = motor(getMotorPort("RightMiddle"), ratio6_1, true);
     RightRear = motor(getMotorPort("RightRear"), ratio6_1, false);
     UpperIntake = motor(getMotorPort("UpperIntake"), ratio6_1, false);
     MiddleIntake = motor(getMotorPort("MiddleIntake"), ratio6_1, true);
@@ -103,9 +103,9 @@ void setPortsFromSD(){
 
 
 
-rotation LeftEncoder = rotation(PORT16, true);
-rotation RightEncoder = rotation(PORT17, false);
-rotation BackEncoder = rotation(PORT16, true);
+rotation LeftEncoder = rotation(PORT15, true);
+rotation RightEncoder = rotation(PORT16, false);
+rotation BackEncoder = rotation(PORT17, true);
 inertial InertialSensor = inertial(PORT4);
 digital_out Tongue = digital_out(Brain.ThreeWirePort.A);
 optical OpticalSensor1 = optical(PORT2);
