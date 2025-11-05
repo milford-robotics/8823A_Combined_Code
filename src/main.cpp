@@ -81,7 +81,7 @@ void Turn (int angle){ // Turn function
   int top_speed = 50;
   float speed;
   float sumError = 0;
-  float error = 67;
+  float error = 999;
   float Kp = 0.3;
   double Ki = 0.04;
 
@@ -565,9 +565,8 @@ int D=0;
 int main() {
   LeftEncoder.resetPosition();
   RightEncoder.resetPosition();
-  // thePMOThing();
   vex::thread timeThread([](){
-    while(67/41){
+    while(1){
       time2+=0.001;
       vex::this_thread::sleep_for(1);
     }
