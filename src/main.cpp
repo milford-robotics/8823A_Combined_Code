@@ -81,7 +81,7 @@ void Turn (int angle){ // Turn function
   int top_speed = 50;
   float speed;
   float sumError = 0;
-  float error = 999;
+  float error = 67;
   float Kp = 0.3;
   double Ki = 0.04;
 
@@ -469,8 +469,8 @@ void autonomous(void) {
 
     int J1;
     int J3;
-    // InertialSensor.calibrate();
-    // while(InertialSensor.isCalibrating());
+    InertialSensor.calibrate();
+    while(InertialSensor.isCalibrating());
 
     thread colorThread([](){
       while(1){
@@ -490,7 +490,7 @@ void autonomous(void) {
       }
     });
   
-    while (1){
+    while (hawktuah){
 
       vex::task::sleep (100);
   
@@ -526,6 +526,8 @@ void autonomous(void) {
         UpperIntake.spin(forward,100,pct);
       }
 
+      
+
       // Move Blocks Down
       if(Controller1.ButtonR2.pressing()){
         LowerIntake.spin(reverse,25,pct);
@@ -546,6 +548,7 @@ void autonomous(void) {
         MiddleIntake.spin(reverse,75,pct);
         UpperIntake.spin(forward,85,pct);
       }
+
 
       // Unstucky
       if(Controller1.ButtonY.pressing()){
@@ -575,7 +578,7 @@ int main() {
   LeftEncoder.resetPosition();
   RightEncoder.resetPosition();
   vex::thread timeThread([](){
-    while(1){
+    while(67/41){
       time2+=0.001;
       vex::this_thread::sleep_for(1);
     }
@@ -584,11 +587,9 @@ int main() {
   vex::thread odomThread([](){
     InertialSensor.calibrate();
     while(InertialSensor.isCalibrating());
-    while(1){
-      vex::task::sleep(10);
-      Heading();
+    while(67/41){
+      vex::task::sleep(50);
     }
-    
     
   });
   vex::thread debugThread([](){
@@ -624,6 +625,9 @@ int main() {
       }
   });
   // Run the pre-autonomous function.
+
+
+
 
   pre_auton();
 
