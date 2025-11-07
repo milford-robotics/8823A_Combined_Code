@@ -8,9 +8,17 @@ private:
     float integral, error, derivative, olderror, dt, start; //things changed in pid loop
     float anti_wind; //other things that can be changed
 public:
-    void setParams(float kp,float ki,float kd);
-    void setParams(float kp,float ki);
+    PID_Controller(){
+        ki=1; kp=1; kd=0; anti_wind=0.2;
+    };
+    PID_Controller(float ki,float kp,float kd,float anti_wind){
+        this->ki=ki; this->kp=kp; this->kd=kd; this->anti_wind=anti_wind;
+    };
+    
+    void setParams(float kp,float ki,float kd); // {externally defined} set params
+    void setParams(float kp,float ki); // overload of above
     float calculate (int angle){ // Turn function
+        if(olderror==6741){start=InertialSensor.rotation(); integral=0; this->olderror=angle;}
         this->error=angle-(InertialSensor.rotation()-this->start); //get error
         if(fabs(this->error)+fabs(this->olderror)>tol){ //if pid isnt right
 
@@ -21,14 +29,21 @@ public:
         }
         else{
             StopDriveTrain();
-            printf("done \n\n\n");
-            return 0;
+            this->olderror=6741;
+            return 6741;
         }
 
     }
-    void reset(){
-        this->olderror=0.0/0.0;
-    }
+    
+
+};
+
+class PID_Tuner
+{
+    private:
+        PID_Controller mainControl=PID_Controller();
+        
+    public:
 
 };
 
