@@ -101,7 +101,7 @@ double robotAngle=0;
 double robotX=0, robotY=0;
 // Get rid of magic numbers
 // These can also be constexpr
-const double wheelDiam=2.75,robotWidth=10.+7./16.;
+const double wheelDiam=2.75,robotWidth=10.+1./2.;
 const double wheelCirc=wheelDiam*M_PI;
 
 // This does not get a new value every time it is read, instead it just reads a (most likley garbage) value at the start of the program only.
@@ -161,11 +161,9 @@ double getMotorPosition(vex::turnType direction){
     return (LeftFront.position(rev)+LeftMiddle.position(rev)+LeftRear.position(rev))/3.0;
    
   }
-  if(direction==vex::turnType::right){
+  else{
     return (RightFront.position(rev)+RightMiddle.position(rev)+RightRear.position(rev))/3.0;
   }
-  // ??????? This code is unreachable, it will never return 10, signify this by changing the two if statements to an if + else if or a switch
-  return 10;
 }
 
 // From what I remember if this function is not ran continuously with the results summed up it will diverge from the actual value
@@ -187,9 +185,12 @@ double Heading(){
     double r_left=r+robotWidth;
     double centralAngle=(rightDist/r_left)*180.0/M_PI;
 
-    if(centralAngle!=centralAngle) centralAngle=0;
+    if(centralAngle!=centralAngle){
+      centralAngle=0;
+    }
+    centralAngle*=2./3.;
     
-    robotAngle=centralAngle;
+    robotAngle=-centralAngle;
 
     return centralAngle;
 

@@ -109,7 +109,7 @@ void Turn (int angle){ // Turn function
   InertialSensor.resetRotation();
 }
 
-void TurnToHeading (int angle){ // Turn function
+/*void TurnToHeading (int angle){ // Turn function
   int top_speed = 50;
   float speed;
   float sumError = 0;
@@ -138,7 +138,7 @@ void TurnToHeading (int angle){ // Turn function
   }
   StopDriveTrain(); // stop motors
   InertialSensor.resetRotation();
-}
+}*/
 
 /*void Turn(int targetAngle){
   
@@ -238,7 +238,7 @@ void autonomous(void) {
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(28,25);
+  Drive(32,25);
   vex::task::sleep(50);
   MiddleIntake.spin(forward,25,pct);
   UpperIntake.stop();
@@ -255,10 +255,10 @@ void autonomous(void) {
   UpperIntake.stop();
   Drive(-47,40);
   vex::task::sleep(25);
-  TurnToHeading(-123);
-  vex::task::sleep(75);
-  // Turn(-131);
-  // vex::task::sleep(50);
+  // TurnToHeading(-123);
+  // vex::task::sleep(75);
+  Turn(-131);
+  vex::task::sleep(50);
   Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
@@ -282,7 +282,7 @@ void autonomous(void) {
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(28,25);
+  Drive(32,25);
   vex::task::sleep(50);
   MiddleIntake.stop();
   UpperIntake.stop();
@@ -302,10 +302,10 @@ void autonomous(void) {
   Drive(-47,40);
   Tongue.set(false);
   vex::task::sleep(25);
-  TurnToHeading(123);
-  vex::task::sleep(75);
-  // Turn(131);
-  // vex::task::sleep(25);
+  // TurnToHeading(123);
+  // vex::task::sleep(75);
+  Turn(131);
+  vex::task::sleep(25);
   Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
@@ -332,7 +332,7 @@ void autonomous(void) {
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(28,25);
+  Drive(38,25);
   vex::task::sleep(50);
   MiddleIntake.spin(forward,25,pct);
   UpperIntake.stop();
@@ -374,8 +374,10 @@ void autonomous(void) {
   Drive(-49,40);
   Tongue.set(false);
   vex::task::sleep(25);
-  TurnToHeading(123);
-  vex::task::sleep(75);
+  // TurnToHeading(123);
+  // vex::task::sleep(75);
+  Turn(131);
+  vex::task::sleep(25);  
   Drive(-18,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
@@ -444,7 +446,10 @@ void autonomous(void) {
   /*  You must modify the code to add your own robot specific commands here.   */
   /*---------------------------------------------------------------------------*/
   
-
+  void RELEASE () {
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  }
   
   void usercontrol(void) {
 
@@ -464,8 +469,8 @@ void autonomous(void) {
 
     int J1;
     int J3;
-    InertialSensor.calibrate();
-    while(InertialSensor.isCalibrating());
+    // InertialSensor.calibrate();
+    // while(InertialSensor.isCalibrating());
 
     thread colorThread([](){
       while(1){
@@ -485,7 +490,7 @@ void autonomous(void) {
       }
     });
   
-    while (hawktuah){
+    while (1){
 
       vex::task::sleep (100);
   
@@ -505,37 +510,42 @@ void autonomous(void) {
 
       // Storage
       if(Controller1.ButtonR1.pressing()){
-        UpperIntake.spin(forward,100,percent);
-        LowerIntake.spin(reverse,100,percent);
-        UpperIntake.spin(reverse,100,percent);
+        LowerIntake.spin(forward,75,pct);
       }
 
-      
+      if(Controller1.ButtonR1.pressing()){
+        MiddleIntake.spin(forward,50,pct);
+        UpperIntake.spin(forward,50,pct);
+      }
+      Controller1.ButtonR1.released(RELEASE);
+
+      // Move Blocks Up
+      if(Controller1.ButtonL1.pressing()){
+        LowerIntake.spin(forward,75,pct);
+        MiddleIntake.spin(forward,100,pct);
+        UpperIntake.spin(forward,100,pct);
+      }
 
       // Move Blocks Down
       if(Controller1.ButtonR2.pressing()){
-        UpperIntake.spin(forward,100,percent);
-        UpperIntake.spin(forward,100,percent);
-        MiddleIntake.spin(forward,100,percent);
-        LowerIntake.spin(forward,100,percent);
+        LowerIntake.spin(reverse,25,pct);
+        MiddleIntake.spin(reverse,50,pct);
+        UpperIntake.spin(reverse,50,pct);
       }
 
-      // Middle Score
-      if(Controller1.ButtonL1.pressing()){
-        UpperIntake.spin(reverse,100,percent);
-        UpperIntake.spin(reverse,100,percent);
-        MiddleIntake.spin(reverse,100,percent);
-        LowerIntake.spin(reverse,100,percent);
-      }
-
-      // Top Score
+      // Middle Goal
       if(Controller1.ButtonL2.pressing()){
-        UpperIntake.spin(forward,100,percent);
-        UpperIntake.spin(reverse,100,percent);
-        MiddleIntake.spin(reverse,100,percent);
-        LowerIntake.spin(reverse,100,percent);
+        LowerIntake.spin(forward,50,pct);
+        MiddleIntake.spin(forward,75,pct);
+        UpperIntake.spin(reverse,85,pct);
       }
 
+      // Un-Middle Goal
+      if(Controller1.ButtonDown.pressing()){
+        LowerIntake.spin(reverse,50,pct);
+        MiddleIntake.spin(reverse,75,pct);
+        UpperIntake.spin(forward,85,pct);
+      }
 
       // Unstucky
       if(Controller1.ButtonY.pressing()){
@@ -547,7 +557,6 @@ void autonomous(void) {
       if(Controller1.ButtonRight.pressing()){
         LowerIntake.stop();
         MiddleIntake.stop();
-        UpperIntake.stop();
         UpperIntake.stop();
       }
 
@@ -576,8 +585,10 @@ int main() {
     InertialSensor.calibrate();
     while(InertialSensor.isCalibrating());
     while(1){
-      vex::task::sleep(50);
+      vex::task::sleep(10);
+      Heading();
     }
+    
     
   });
   vex::thread debugThread([](){
@@ -586,9 +597,11 @@ int main() {
     printf("open \n");
     
     while(!Controller1.ButtonA.pressing()){
-      outFile << InertialSensor.rotation() << "\t" << robotAngle << "\t" << InertialSensor.rotation()-robotAngle << "\t" << rawLeftDist << "\t" << rawRightDist << "\n" ;
+      // std::printf("inert: %.2f\tangle: %.2f\tdiff: %.2f\n",InertialSensor.rotation(),robotAngle, InertialSensor.rotation()-robotAngle,rawLeftDist, rawRightDist);
+      std::printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",robotAngle,InertialSensor.rotation(), InertialSensor.rotation()-robotAngle,rawLeftDist, rawRightDist);
+      
       // outFile << robotX << "\t" << robotY << "\t" << "\n";
-      vex::task::sleep(5);
+      vex::task::sleep(100);
     }
     printf("closed\n");
     outFile.close();
@@ -611,9 +624,6 @@ int main() {
       }
   });
   // Run the pre-autonomous function.
-
-
-
 
   pre_auton();
 
