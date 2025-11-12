@@ -439,7 +439,6 @@ void autonomous(void) {
   }
   
   void usercontrol(void) {
-    tune();
 
     OpticalSensor2.setLightPower(100, percent);
     OpticalSensor2.setLight(ledState::on);
