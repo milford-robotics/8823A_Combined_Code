@@ -81,13 +81,13 @@ void Turn (int angle){ // Turn function
   int top_speed = 50;
   float speed;
   float sumError = 0;
-  float error = 67;
+  float error = 999;
   float Kp = 0.3;
   double Ki = 0.04;
 
   double startingRot=InertialSensor.rotation();
 
-  while (fabs (error) > 0.55){
+  while (fabs (error) > 0.45){
     printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
     
     error = angle - (InertialSensor.rotation()-startingRot);
@@ -233,27 +233,27 @@ void autonomous(void) {
       vex::task::sleep(100);
     }
   });*/
-  //autonSelection="LeftSide";    
+  autonSelection="RightSide";
   if(autonSelection=="RightSide"){
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(32,25);
-  vex::task::sleep(50);
+  Drive(29,25);
+  vex::task::sleep(100);
   MiddleIntake.spin(forward,25,pct);
   UpperIntake.stop();
   Turn(-75);
   vex::task::sleep(25);
-  Drive(13,30);
+  Drive(15,30);
   vex::task::sleep(25);
-  LowerIntake.spin(reverse,70,pct);
+  LowerIntake.spin(reverse,40,pct);
   MiddleIntake.spin(reverse,50,pct);
   UpperIntake.spin(reverse,30,pct);
   vex::task::sleep(1500);
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-47,40);
+  Drive(-49,30);
   vex::task::sleep(25);
   // TurnToHeading(-123);
   // vex::task::sleep(75);
@@ -269,14 +269,17 @@ void autonomous(void) {
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(29,50);
-  vex::task::sleep(2000);
+  Drive(30,50);
+  vex::task::sleep(1500);
   MiddleIntake.stop();
   UpperIntake.stop();
   Drive(-32,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
+  vex::task::sleep(500);
+  MiddleIntake.stop();
+  UpperIntake.stop();
   }
   else if(autonSelection=="LeftSide"){
   LowerIntake.spin(forward,100,pct);
@@ -526,8 +529,6 @@ void autonomous(void) {
         UpperIntake.spin(forward,100,pct);
       }
 
-      
-
       // Move Blocks Down
       if(Controller1.ButtonR2.pressing()){
         LowerIntake.spin(reverse,25,pct);
@@ -624,11 +625,8 @@ int main() {
         drawAllUi();
       }
   });
+
   // Run the pre-autonomous function.
-
-
-
-
   pre_auton();
 
     while (1) {
