@@ -77,37 +77,24 @@ void Drive (int dist, int speed){ // Drive function
   RightRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, true);
 }
 
+PID_Controller mainControl=PID_Controller(0.3,0.04,0.2);
+
 void Turn (int angle){ // Turn function
-  int top_speed = 50;
-  float speed;
-  float sumError = 0;
-  float error = 67;
-  float Kp = 0.3;
-  double Ki = 0.04;
+  mainControl.reset();
+  float spd=0;
+  do{
+    spd=mainControl.calculate(angle);
+    LeftFront.spin(forward,spd,percent);
+    LeftMiddle.spin(forward,spd,percent);
+    LeftRear.spin(forward,spd,percent);
+    RightFront.spin(reverse,spd,percent);
+    RightMiddle.spin(reverse,spd,percent);
+    RightRear.spin(reverse,spd,percent); 
+    vex::task::sleep(50);
 
-  double startingRot=InertialSensor.rotation();
-
-  while (fabs (error) > 0.55){
-    printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
-    
-    error = angle - (InertialSensor.rotation()-startingRot);
-    if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
-    speed = Kp*error + Ki*sumError; // slows down as it approaches destination
-
-    if(speed > top_speed) speed = top_speed; // doesn't get too fast
-    if(speed < -top_speed) speed = -top_speed; // doesn't get too slow
-
-    LeftFront.spin (forward, speed, pct); // motors on
-    LeftMiddle.spin (forward, speed, pct);
-    LeftRear.spin (forward, speed, pct);
-    RightFront.spin (forward, -speed, pct);
-    RightMiddle.spin (forward, -speed, pct);
-    RightRear.spin (forward, -speed, pct);
-    wait(20,msec);
-  }
-  StopDriveTrain(); // stop motors
-  InertialSensor.resetRotation();
+  }while(spd!=6741);
 }
+
 
 /*void TurnToHeading (int angle){ // Turn function
   int top_speed = 50;
@@ -452,6 +439,7 @@ void autonomous(void) {
   }
   
   void usercontrol(void) {
+    tune();
 
     OpticalSensor2.setLightPower(100, percent);
     OpticalSensor2.setLight(ledState::on);
@@ -599,7 +587,7 @@ int main() {
     
     while(!Controller1.ButtonA.pressing()){
       // std::printf("inert: %.2f\tangle: %.2f\tdiff: %.2f\n",InertialSensor.rotation(),robotAngle, InertialSensor.rotation()-robotAngle,rawLeftDist, rawRightDist);
-      std::printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",robotAngle,InertialSensor.rotation(), InertialSensor.rotation()-robotAngle,rawLeftDist, rawRightDist);
+      // std::printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",robotAngle,InertialSensor.rotation(), InertialSensor.rotation()-robotAngle,rawLeftDist, rawRightDist);
       
       // outFile << robotX << "\t" << robotY << "\t" << "\n";
       vex::task::sleep(100);
