@@ -6,28 +6,30 @@
 
 
 double Heading();
-extern double robotAngle;
+extern long double robotAngle;
 void odometry();
 void thePMOThing();
-double getTheMotorPositionTsInRotationsTypeSquirtOnGod(vex::turnType direction);
+long double getTheMotorPositionTsInRotationsTypeSquirtOnGod(vex::turnType direction);
 
-extern double robotX;
-extern    double robotY;
-extern double rawRightDist;
-extern double rawLeftDist;
+extern long double robotX;
+extern    long double robotY;
+extern long double rawRightDist;
+extern long double rawLeftDist;
+extern long double rightDist;
+extern long double leftDist;
 
-extern double oldRightDist, oldLeftDist;
+extern long double oldRightDist, oldLeftDist;
 void tune();
 
 
 class PID_Controller
 {
 private:
-    float tol=0.1,maxspd=40; //constants
+    float tol=0.5,maxspd=40; //constants
     float ki=0, kp=0, kd=0; //the big three
     float integral=0, error=0, olderror=0, dt=0, start=0; //things changed in pid loop
     float anti_wind=0; //other things that can be changed
-    float fitness=0; //for tuning
+    float fitness=99999; //for tuning
 public:
     PID_Controller(){
         ki=1; kp=1; kd=0; anti_wind=0.2;
@@ -36,7 +38,7 @@ public:
         this->ki=ki; this->kp=kp; this->kd=kd; this->anti_wind=anti_wind;
     };
     PID_Controller(float ki,float kp,float anti_wind){
-        this->ki=ki; this->kp=kp; this->kd=0; this->anti_wind=anti_wind;
+        this->ki=ki>0?ki:0; this->kp=kp>0?kp:0; this->kd=kd>0?kp:0; this->anti_wind=anti_wind;
     };
     
     void setParams(float kp,float ki); // {externally defined} set params
@@ -44,18 +46,16 @@ public:
     float calculate (int angle){ // Turn function
         if(olderror==6741){start=InertialSensor.rotation(); integral=0; this->olderror=angle;}
         this->error=angle-(InertialSensor.rotation()-this->start); //get error
-        if(fabs(this->error)+fabs(this->olderror)>tol){ //if pid isnt right
+        if(fabs(this->error)+fabs(this->olderror)>tol*2){ //if pid isnt right
 
             float speed=ki*integral+kp*error; //calculate target speed
             if(fabs(this->error)<=fabs(angle*this->anti_wind)) integral+=error*0.005; //update integral
             this->olderror=this->error; //set old error
-            // printf("%.1f %.1f %.1f\n",error,speed,integral);
             return speed<-maxspd?-maxspd:speed>maxspd?maxspd:speed; //return (-80<error<80)
         }
         else{
             StopDriveTrain();
-            this->olderror=6741;
-            return 6741;
+            return 0;
         }
 
     }
@@ -63,10 +63,13 @@ public:
         return PID_Controller(this->kp+kpM,this->ki+kiM,this->anti_wind+awM);
     }
     void reset(){
-        
+        this->start=InertialSensor.rotation();
+        this->integral=0;
+        this->olderror=99;
+        this->error=99;
     }
     void setFitness(float fitness){this->fitness=fitness;}
-    void addFitness(float toAdd){this->fitness+=toAdd;}
+    void addFitness(float toAdd){this->fitness+=fabs(toAdd);}
     float getFitness(){return this->fitness;}
     float getError(){return this->error;}
     float getOldError(){return this->olderror;}
@@ -102,10 +105,12 @@ class PID_Tuner
             
             mainControl.setParams(startkp,startki,startwind);
             double step=starting_step;
-            test(mainControl);
+            mainControl=test(mainControl);
             mainControl.printController();
             double bestFitness=mainControl.getFitness();
             while(step>=too_small){
+                mainControl=test(mainControl);
+                mainControl.printController();
                 bool didntchange=true;
                 otherControls[0]=mainControl.makeSimilar(step,0,0);
                 otherControls[1]=mainControl.makeSimilar(-step,0,0);
@@ -115,14 +120,18 @@ class PID_Tuner
                 otherControls[5]=mainControl.makeSimilar(0,0,-step);
 
                 for(PID_Controller control : otherControls){
+                    control.setFitness(1);
+                    control.reset();
                     control=test(control);
                     control.printController();
                     if(control.getFitness()<mainControl.getFitness()){ mainControl=control; didntchange=false; printf("New best \n");}
-                    vex::task::sleep(1000);
+                    vex::task::sleep(10000);
                 }
                 if(didntchange){
                     step/=2;
+                    printf("step is now %f\n",step);
                 }
+                vex::task::sleep(2000);
 
             }
 
@@ -132,11 +141,11 @@ class PID_Tuner
         //function that tests the fitness of turn params by turning it and punishing based on values
         PID_Controller test(PID_Controller control){
             runtime=0; //initialize values
-            control.getError();
+            control.reset();
             float spd=control.calculate(90);
             pidStart=control.getError();
 
-            while(spd!=6741){ //while error is not in acceptable margin
+            while(spd!=0){ //while error is not in acceptable margin
                 float spd=control.calculate(90); //main inertial turn loop
                 LeftFront.spin(forward,spd,percent);
                 LeftMiddle.spin(forward,spd,percent);
@@ -150,8 +159,7 @@ class PID_Tuner
                 control.addFitness(runtime++*timeVal); //add to runtime and punish based on time taken
                 if(pidStart<0!=control.getError()<0) control.addFitness(control.getError()*overshootVal); //if the signs of the start and current errors don't match, punish for overshoot
                 if(control.getError()<0!=control.getOldError()<0) control.addFitness(flipVal); //if the sign of the error just flipped, punish for flipping
-                
-                if(runtime>=75) {control.addFitness(100000); break;};
+                if(runtime>=300) {control.addFitness(1000000000*pow(control.getError(),2)); printf("DNF %i %f \n",runtime,control.getError()); break;};
                 vex::task::sleep(50); //give motors time to respond
             }
             StopDriveTrain(); //after loop, stop

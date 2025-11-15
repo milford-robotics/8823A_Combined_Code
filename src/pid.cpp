@@ -17,6 +17,6 @@ void PID_Controller::setParams(float kp,float ki){
 void tune(){
     InertialSensor.calibrate();
     while(InertialSensor.isCalibrating());
-    PID_Tuner tuner=PID_Tuner(20, 20,100,3);
+    PID_Tuner tuner=PID_Tuner(20, 20,10,3);
     tuner.tune();
 }

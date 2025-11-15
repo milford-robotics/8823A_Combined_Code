@@ -481,7 +481,7 @@ void autonomous(void) {
     });
   
     while (hawktuah){
-
+      if(Controller1.ButtonLeft.pressing() && Controller1.ButtonRight.pressing() && Controller1.ButtonX.pressing() && Controller1.ButtonB.pressing()) tune();
       vex::task::sleep (100);
   
       // Comms
@@ -572,29 +572,30 @@ int main() {
     }
   });
 
-  vex::thread odomThread([](){
-    InertialSensor.calibrate();
-    while(InertialSensor.isCalibrating());
-    while(67/41){
-      vex::task::sleep(50);
-    }
+//   vex::thread odomThread([](){
+//     InertialSensor.calibrate();
+//     while(InertialSensor.isCalibrating());
+//     while(67/41){
+//       vex::task::sleep(50);
+//       Heading();
+//     }
     
-  });
-  vex::thread debugThread([](){
-    std::ofstream outFile;
-    outFile.open("recording.txt");
-    printf("open \n");
+//   });
+//   vex::thread debugThread([](){
+//     std::ofstream outFile;
+//     outFile.open("recording.txt");
+//     printf("open \n");
     
-    while(!Controller1.ButtonA.pressing()){
-      // std::printf("inert: %.2f\tangle: %.2f\tdiff: %.2f\n",InertialSensor.rotation(),robotAngle, InertialSensor.rotation()-robotAngle,rawLeftDist, rawRightDist);
-      // std::printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",robotAngle,InertialSensor.rotation(), InertialSensor.rotation()-robotAngle,rawLeftDist, rawRightDist);
+//     while(!Controller1.ButtonA.pressing()){
+//       // std::printf("inert: %.2f\tangle: %.2f\tdiff: %.2f\n",InertialSensor.rotation(),robotAngle, InertialSensor.rotation()-robotAngle,rawLeftDist, rawRightDist);
+//       std::printf("%.2f, %.2f, %.2f, %.2f, %.2f \n",robotAngle,InertialSensor.rotation(), InertialSensor.rotation()-robotAngle,leftDist,rightDist);
       
-      // outFile << robotX << "\t" << robotY << "\t" << "\n";
-      vex::task::sleep(100);
-    }
-    printf("closed\n");
-    outFile.close();
-});
+//       // outFile << robotX << "\t" << robotY << "\t" << "\n";
+//       vex::task::sleep(100);
+//     }
+//     printf("closed\n");
+//     outFile.close();
+// });
 
 
   if(Brain.SDcard.isInserted()){

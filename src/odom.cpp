@@ -97,66 +97,23 @@ class Circle{
 double heading=0;
 
 // Assigned in the Heading function but never read
-double robotAngle=0;
-double robotX=0, robotY=0;
+long double robotAngle=0;
+long double robotX=0, robotY=0;
 // Get rid of magic numbers
 // These can also be constexpr
-const double wheelDiam=2.75,robotWidth=10.+1./2.;
-const double wheelCirc=wheelDiam*M_PI;
+const long double wheelDiam=2.75,robotWidth=10.+1./2.;
+const long double wheelCirc=wheelDiam*M_PI;
 
 // This does not get a new value every time it is read, instead it just reads a (most likley garbage) value at the start of the program only.
 // I am not sure if the encoder objects technically have to exist at this point either so it might randomly fail to link one day
-double rawRightDist=RightEncoder.position(rev)*wheelCirc;
-double rawLeftDist=LeftEncoder.position(rev)*wheelCirc;
+long double rawRightDist=RightEncoder.position(rev)*wheelCirc;
+long double rawLeftDist=LeftEncoder.position(rev)*wheelCirc;
 
 // These are also not used
-double oldRightDist=rawRightDist, oldLeftDist=rawLeftDist;
-
-// What???? When is this set to something other than zero??? Causes 0/x in the move functions
-float rotationsLeft=0, rotationsRight=0;
-
-// Change arguments to (float left, float right) for clarity
-// This is also usless because it has an overshoot problem that is fixed by the pid drive function
-// Was the intended function spinBase(float leftSpeed, float rightSpeed);?
-void moveDistance(float dist, bool left){
-  LeftEncoder.resetPosition();
-  if(left){
-    while (LeftEncoder.position(rev) * wheelDiam < dist){
-      // max(min(x)) can be replaced by clamp
-      LeftFront.spin(forward,std::max(std::min(rotationsLeft/rotationsRight,100.f),-100.f),percent);
-      LeftMiddle.spin(forward,std::max(std::min(rotationsLeft/rotationsRight,100.f),-100.f),percent);
-      LeftRear.spin(forward,std::max(std::min(rotationsLeft/rotationsRight,100.f),-100.f),percent);
-    }
-  }
-  else{
-    while(RightEncoder.position(rev)*wheelDiam<dist){
-      // max(min(x)) can be replaced by clamp
-      RightFront.spin(forward,std::max(std::min(rotationsRight/rotationsLeft,100.f),-100.f),percent);
-      RightMiddle.spin(forward,std::max(std::min(rotationsRight/rotationsLeft,100.f),-100.f),percent);
-      RightRear.spin(forward,std::max(std::min(rotationsRight/rotationsLeft,100.f),-100.f),percent);
-    }
-  }
-  StopDriveTrain();
-
-}
-
-// Same feedback as moveDistance
-void moveTo(float left, float right){
-  // Move this to a normal function so it can be used in other places, maybe put it in a helper/utils/math namespace?
-  auto clamp=[](float val,float low,float high){return std::min(std::max(low,val),high);};
-
-  float rotationsR = right/(encoder_wheel_circumference*gear_ratio);
-  float rotationsL = left/(encoder_wheel_circumference*gear_ratio);
-  LeftFront.spinFor (forward, rotationsL, rev, clamp(rotationsL/rotationsR,-100,100), velocityUnits::pct, false);
-  LeftMiddle.spinFor (forward, rotationsL, rev, clamp(rotationsL/rotationsR,-100,100), velocityUnits::pct, false);
-  LeftRear.spinFor (forward, rotationsL, rev, clamp(rotationsL/rotationsR,-100,100), velocityUnits::pct, false);
-  RightFront.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, false);
-  RightMiddle.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, false);
-  RightRear.spinFor (forward, rotationsR, rev, clamp(rotationsR/rotationsL,-100,100), velocityUnits::pct, true);
-}
+long double oldRightDist=rawRightDist, oldLeftDist=rawLeftDist;
 
 // I would make a seprate enum for the side of the base, as the turntype enum is supposed to be used for turns (not a big issue)
-double getMotorPosition(vex::turnType direction){
+long double getMotorPosition(vex::turnType direction){
   if(direction==vex::turnType::left){
     return (LeftFront.position(rev)+LeftMiddle.position(rev)+LeftRear.position(rev))/3.0;
    
@@ -165,35 +122,34 @@ double getMotorPosition(vex::turnType direction){
     return (RightFront.position(rev)+RightMiddle.position(rev)+RightRear.position(rev))/3.0;
   }
 }
-
+long double rightDist=rawRightDist-oldRightDist;
+long double leftDist=rawLeftDist-oldLeftDist;
 // From what I remember if this function is not ran continuously with the results summed up it will diverge from the actual value
 // If there is no odom thread to do that + a mechinism to get the value out of it just use an inertial sensor
 // Otherwise this math looks correct from what I remember, the name of the function is a bit misleading though (see above ^)
 double Heading(){
   
     //Establish return variables
-    double angle=0,xDist=0,yDist=0,rawX=0,rawY=0; // These are never used
+    long double angle=0,xDist=0,yDist=0,rawX=0,rawY=0; // These are never used
 
     //Get left and right dist
     rawRightDist=getMotorPosition(right)*wheelCirc;
     rawLeftDist=getMotorPosition(left)*wheelCirc;
 
-    double rightDist=rawRightDist;
-    double leftDist=rawLeftDist;
+    rightDist=rawRightDist-oldRightDist;
+    leftDist=rawLeftDist-oldLeftDist;
 
-    double r=(leftDist*robotWidth)/(rightDist-leftDist);
-    double r_left=r+robotWidth;
-    double centralAngle=(rightDist/r_left)*180.0/M_PI;
-
+    long double r=(leftDist*robotWidth)/(rightDist-leftDist);
+    long double r_left=r+robotWidth;
+    long double centralAngle=(rightDist/r_left)*180.0/M_PI;
+    //reminder: floating point precision pmo me off
     if(centralAngle!=centralAngle){
       centralAngle=0;
     }
-    centralAngle*=2./3.;
-    
-    robotAngle=-centralAngle;
-
+        
+    robotAngle-=centralAngle;
+    oldRightDist=rawRightDist;
+    oldLeftDist=rawLeftDist;
     return centralAngle;
 
 }
-
-// If this is not read (and UNDERSTOOD!!!!) by this friday your gurt will be skinched
