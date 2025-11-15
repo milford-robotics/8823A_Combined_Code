@@ -77,24 +77,37 @@ void Drive (int dist, int speed){ // Drive function
   RightRear.spinFor (forward, rotations, degrees, speed, velocityUnits::pct, true);
 }
 
-PID_Controller mainControl=PID_Controller(0.3,0.04,0.2);
-
 void Turn (int angle){ // Turn function
-  mainControl.reset();
-  float spd=0;
-  do{
-    spd=mainControl.calculate(angle);
-    LeftFront.spin(forward,spd,percent);
-    LeftMiddle.spin(forward,spd,percent);
-    LeftRear.spin(forward,spd,percent);
-    RightFront.spin(reverse,spd,percent);
-    RightMiddle.spin(reverse,spd,percent);
-    RightRear.spin(reverse,spd,percent); 
-    vex::task::sleep(50);
+  int top_speed = 50;
+  float speed;
+  float sumError = 0;
+  float error = 999;
+  float Kp = 0.3;
+  double Ki = 0.04;
 
-  }while(spd!=6741);
+  double startingRot=InertialSensor.rotation();
+
+  while (fabs (error) > 0.55){
+    printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
+    
+    error = angle - (InertialSensor.rotation()-startingRot);
+    if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
+    speed = Kp*error + Ki*sumError; // slows down as it approaches destination
+
+    if(speed > top_speed) speed = top_speed; // doesn't get too fast
+    if(speed < -top_speed) speed = -top_speed; // doesn't get too slow
+
+    LeftFront.spin (forward, speed, pct); // motors on
+    LeftMiddle.spin (forward, speed, pct);
+    LeftRear.spin (forward, speed, pct);
+    RightFront.spin (forward, -speed, pct);
+    RightMiddle.spin (forward, -speed, pct);
+    RightRear.spin (forward, -speed, pct);
+    wait(20,msec);
+  }
+  StopDriveTrain(); // stop motors
+  InertialSensor.resetRotation();
 }
-
 
 /*void TurnToHeading (int angle){ // Turn function
   int top_speed = 50;
@@ -220,7 +233,7 @@ void autonomous(void) {
       vex::task::sleep(100);
     }
   });*/
-  autonSelection="RightSide";
+  autonSelection="LeftSide";
   if(autonSelection=="RightSide"){
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
@@ -240,13 +253,13 @@ void autonomous(void) {
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-49,30);
+  Drive(-50,30);
   vex::task::sleep(25);
   // TurnToHeading(-123);
   // vex::task::sleep(75);
-  Turn(-131);
+  Turn(-136);
   vex::task::sleep(50);
-  Drive(-18,30);
+  Drive(-19,25);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
@@ -256,15 +269,15 @@ void autonomous(void) {
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(30,50);
-  vex::task::sleep(1500);
+  Drive(30,40);
+  vex::task::sleep(1000);
   MiddleIntake.stop();
   UpperIntake.stop();
   Drive(-32,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
-  vex::task::sleep(500);
+  vex::task::sleep(1500);
   MiddleIntake.stop();
   UpperIntake.stop();
   }
@@ -272,9 +285,9 @@ void autonomous(void) {
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(32,25);
+  Drive(28,25);
   vex::task::sleep(50);
-  MiddleIntake.stop();
+  MiddleIntake.spin(forward,10,pct);
   UpperIntake.stop();
   Turn(73);
   vex::task::sleep(25);
@@ -289,7 +302,7 @@ void autonomous(void) {
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-47,40);
+  Drive(-49,40);
   Tongue.set(false);
   vex::task::sleep(25);
   // TurnToHeading(123);
@@ -459,7 +472,7 @@ void autonomous(void) {
 
     int J1;
     int J3;
-    InertialSensor.calibrate();
+    // InertialSensor.calibrate();
     while(InertialSensor.isCalibrating());
 
     thread colorThread([](){
