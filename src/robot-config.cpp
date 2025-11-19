@@ -120,9 +120,9 @@ rotation RightEncoder = rotation(PORT4, false);
 rotation BackEncoder = rotation(PORT9, true);
 inertial InertialSensor = inertial(PORT15);
 digital_out Tongue = digital_out(Brain.ThreeWirePort.A);
-digital_out BasketPiston = digital_out(Brain.ThreeWirePort.A);
-digital_out DingleA = digital_out(Brain.ThreeWirePort.A);
-digital_out DingleB = digital_out(Brain.ThreeWirePort.A);
+digital_out Wings = digital_out(Brain.ThreeWirePort.B);
+// digital_out RightWing = digital_out(Brain.ThreeWirePort.B);
+// digital_out LeftWing = digital_out(Brain.ThreeWirePort.C);
 
 optical OpticalSensor1 = optical(PORT2);
 optical OpticalSensor2 = optical(PORT3);

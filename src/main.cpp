@@ -36,6 +36,9 @@ vex::competition Competition;
 
 // Makes so if button is pressed once, the Tongue mechanism is enabled, but when button is pressed again, it is disabled
 void flipTongue(){ Tongue.set(!Tongue.value()); }
+void flipWings(){ Wings.set(!Wings.value()); }
+// void flipRightWing(){ RightWing.set(!RightWing.value()); }
+// void flipLeftWing(){ LeftWing.set(!LeftWing.value()); }
 
 
 enum sc{
@@ -44,14 +47,14 @@ enum sc{
 };
 sc wrongColor= sc::blue;
 
-void flipSpitColor(){
+/*void flipSpitColor(){
   if(wrongColor==sc::blue){
     wrongColor=sc::red;
   }
   else if(wrongColor==sc::red){
     wrongColor=sc::blue;
   }
-}
+}*/
 
 bool colorSort=false;
 
@@ -78,16 +81,16 @@ void Drive (int dist, int speed){ // Drive function
 }
 
 void Turn (int angle){ // Turn function
-  int top_speed = 50;
+  int top_speed = 45;
   float speed;
   float sumError = 0;
   float error = 999;
   float Kp = 0.3;
-  double Ki = 0.04;
+  double Ki = 0.038;
 
   double startingRot=InertialSensor.rotation();
 
-  while (fabs (error) > 0.55){
+  while (fabs (error) > 0.50){
     printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
     
     error = angle - (InertialSensor.rotation()-startingRot);
@@ -188,6 +191,8 @@ void Turn (int angle){ // Turn function
 
 void pre_auton(void) {
 
+  Wings.set(true);
+
   InertialSensor.calibrate();
 
   while (InertialSensor.isCalibrating()){
@@ -235,6 +240,7 @@ void autonomous(void) {
   });*/
   autonSelection="LeftSide";
   if(autonSelection=="RightSide"){
+  Wings.set(true);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
@@ -280,20 +286,24 @@ void autonomous(void) {
   vex::task::sleep(1500);
   MiddleIntake.stop();
   UpperIntake.stop();
+  Drive(10,75);
+  vex::task::sleep(25);
+  Drive(-15,100);
   }
   else if(autonSelection=="LeftSide"){
+  Wings.set(true);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(28,25);
-  vex::task::sleep(50);
+  Drive(27,25);
+  vex::task::sleep(800);
   MiddleIntake.spin(forward,10,pct);
   UpperIntake.stop();
-  Turn(73);
+  Turn(75);
   vex::task::sleep(25);
   Tongue.set(true);
   vex::task::sleep(1000);
-  Drive(15,30);
+  Drive(16,30);
   vex::task::sleep(25);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
@@ -302,14 +312,14 @@ void autonomous(void) {
   LowerIntake.stop();
   MiddleIntake.stop();
   UpperIntake.stop();
-  Drive(-49,40);
+  Drive(-51,40);
   Tongue.set(false);
   vex::task::sleep(25);
   // TurnToHeading(123);
   // vex::task::sleep(75);
-  Turn(131);
-  vex::task::sleep(25);
-  Drive(-18,30);
+  Turn(130);
+  vex::task::sleep(500);
+  Drive(-20,30);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
@@ -319,7 +329,11 @@ void autonomous(void) {
   LowerIntake.spin(forward,90,pct);
   MiddleIntake.spin(forward,65,pct);
   UpperIntake.spin(forward,15,pct);
-  Drive(30,40);
+  Drive(23,35);
+  vex::task::sleep(20);
+  Turn(2);
+  vex::task::sleep(20);
+  Drive(8,50);
   vex::task::sleep(2000);
   MiddleIntake.stop();
   UpperIntake.stop();
@@ -327,11 +341,21 @@ void autonomous(void) {
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,100,pct);
   UpperIntake.spin(forward,100,pct);
+  vex::task::sleep(1500);
+  MiddleIntake.stop();
+  UpperIntake.stop();
+  Drive(10,75);
+  vex::task::sleep(25);
+  Turn(12);
+  vex::task::sleep(25);
+  Drive(-15,100);
   }
   else if(autonSelection=="MoveForward"){
+    Wings.set(true);
     Drive(6,30);
   }
   else{ // Skills
+  Wings.set(true);
   LowerIntake.spin(forward,100,pct);
   MiddleIntake.spin(forward,75,pct);
   UpperIntake.spin(forward,15,pct);
@@ -463,7 +487,10 @@ void autonomous(void) {
 
     // User control code here, inside the loop
     Controller1.ButtonB.pressed(flipTongue);
-    Controller1.ButtonA.pressed(flipSpitColor);
+    Controller1.ButtonY.pressed(flipWings);
+    // Controller1.ButtonY.pressed(flipRightWing);
+    // Controller1.ButtonRight.pressed(flipLeftWing);
+    // Controller1.ButtonA.pressed(flipSpitColor);
     Controller1.ButtonLeft.pressed([](){
       colorSort=!colorSort;
     });
@@ -544,15 +571,14 @@ void autonomous(void) {
       }
 
       // Un-Middle Goal
-      if(Controller1.ButtonDown.pressing()){
+      if(Controller1.ButtonX.pressing()){
         LowerIntake.spin(reverse,50,pct);
         MiddleIntake.spin(reverse,75,pct);
         UpperIntake.spin(forward,85,pct);
       }
 
-
       // Unstucky
-      if(Controller1.ButtonY.pressing()){
+      if(Controller1.ButtonDown.pressing()){
         LowerIntake.spin(reverse,100,pct);
         MiddleIntake.spin(forward,100,pct);
       }

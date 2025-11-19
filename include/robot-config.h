@@ -19,6 +19,9 @@ extern rotation RightEncoder;
 extern rotation BackEncoder;
 extern inertial InertialSensor;
 extern digital_out Tongue;
+extern digital_out Wings;
+// extern digital_out RightWing;
+// extern digital_out LeftWing;
 extern optical OpticalSensor2;
 extern optical OpticalSensor1;
 
