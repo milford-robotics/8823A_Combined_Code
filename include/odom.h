@@ -88,14 +88,14 @@ class PID_Tuner
         //starting vars
         double startkp, startki,startwind;
         //other
-        double too_small=0.01,starting_step=2;
+        double too_small=0.001,starting_step=1;
 
         double pidStart, runtime;
     public:
         PID_Tuner(double overshootVal,double timeVal,double flipVal, double errorVal){
-            startkp=0.5;
-            startki=0.5;
-            startwind=0.5;
+            startkp=0.3;
+            startki=0.038;
+            startwind=0.2;
             this->overshootVal=overshootVal;
             this->timeVal=timeVal;
             this->flipVal=flipVal;
@@ -145,8 +145,8 @@ class PID_Tuner
             float spd=control.calculate(90);
             pidStart=control.getError();
 
-            while(spd!=0){ //while error is not in acceptable margin
-                float spd=control.calculate(90); //main inertial turn loop
+            while(spd!=0.0){ //while error is not in acceptable margin
+                spd=control.calculate(90); //main inertial turn loop
                 LeftFront.spin(forward,spd,percent);
                 LeftMiddle.spin(forward,spd,percent);
                 LeftRear.spin(forward,spd,percent);
@@ -159,7 +159,7 @@ class PID_Tuner
                 control.addFitness(runtime++*timeVal); //add to runtime and punish based on time taken
                 if(pidStart<0!=control.getError()<0) control.addFitness(control.getError()*overshootVal); //if the signs of the start and current errors don't match, punish for overshoot
                 if(control.getError()<0!=control.getOldError()<0) control.addFitness(flipVal); //if the sign of the error just flipped, punish for flipping
-                if(runtime>=300) {control.addFitness(1000000000*pow(control.getError(),2)); printf("DNF %i %f \n",runtime,control.getError()); break;};
+                if(runtime>=300) {control.addFitness(100000000*pow(control.getError(),2)); printf("DNF %i %f \n",runtime,control.getError()); break;};
                 vex::task::sleep(50); //give motors time to respond
             }
             StopDriveTrain(); //after loop, stop
