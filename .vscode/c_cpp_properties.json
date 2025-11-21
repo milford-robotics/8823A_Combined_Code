@@ -17,12 +17,20 @@
 		{
 			"name": "Win32",
 			"includePath": [
-				"${vex_sdkIncludes}"
+				"${vex_sdkIncludes}",
+				"c:\\Users\\wilde\\Documents\\vex-vscode-projects\\8823A_Perhaps_Odometry\\include"
 			],
-			"compilerPath": "${vex_compilerPath}",
-			"cStandard": "gnu99",
-			"cppStandard": "gnu++11",
-			"intelliSenseMode": "windows-clang-x86"
+			"compilerPath": "c:\\Users\\wilde\\AppData\\Roaming\\Code\\User\\globalStorage\\sigbots.pros\\install\\pros-toolchain-windows\\usr\\bin\\arm-none-eabi-g++",
+			"cStandard": "gnu11",
+			"cppStandard": "gnu++20",
+			"intelliSenseMode": "gcc-arm",
+			"browse": {
+				"path": [
+					"c:\\Users\\wilde\\Documents\\vex-vscode-projects\\8823A_Perhaps_Odometry"
+				],
+				"limitSymbolsToIncludedHeaders": true,
+				"databaseFilename": ""
+			}
 		},
 		{
 			"name": "Mac",

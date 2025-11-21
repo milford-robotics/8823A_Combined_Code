@@ -532,8 +532,7 @@ void autonomous(void) {
     });
   
     while (hawktuah){
-      if(Controller1.ButtonLeft.pressing() && Controller1.ButtonRight.pressing() && Controller1.ButtonX.pressing() && Controller1.ButtonB.pressing()) tune();
-      vex::task::sleep (100);
+     vex::task::sleep (100);
   
       // Comms
       J1 = 0.5*Controller1.Axis1.position (percent); //slow down turns
